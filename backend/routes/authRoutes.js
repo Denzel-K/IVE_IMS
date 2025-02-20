@@ -28,7 +28,7 @@ router.get('/lab_manager', authMiddleware(['lab_manager']), (req, res) => {
 router.get('/pending-users', authMiddleware(['admin']), (req, res) => {
     console.log("🔍 User Requesting Data:", req.user);
     const sql = 'SELECT id, name, email, role FROM users WHERE approved = false';
-
+    
     db.query(sql, (err, results) => {
         if (err) {
             console.error("❌ Database Error:", err);
