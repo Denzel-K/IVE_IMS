@@ -14,6 +14,7 @@ const { sendMaintenanceReminders } = require('./controllers/maintenanceControlle
 const path = require('path');
 const hbs = require('express-handlebars');
 const Handlebars = require('handlebars');
+const morgan = require('morgan');
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 

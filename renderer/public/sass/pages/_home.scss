@@ -1,1 +1,6 @@
-@use "../abstracts" as abstracts;
+@use "../abstracts" as *;
+
+.landingPage{
+  width: 100%;
+  
+}

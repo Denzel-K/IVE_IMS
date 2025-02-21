@@ -6,13 +6,6 @@
   align-items: $align;
 }
 
-// Grid Mixin
-@mixin grid($columns: 12, $gap: 20px) {
-  display: grid;
-  grid-template-columns: repeat($columns, 1fr);
-  gap: $gap;
-}
-
 // Font Settings
 @mixin fontSettings($size: 16px, $weight: normal, $color: $text-color) {
   font-size: $size;

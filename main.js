@@ -10,7 +10,7 @@ const isMac = process.platform === 'darwin';
 
 let mainWindow;
 let backendProcess;
-const port = process.env.PORT || 3500; // Default to 3500 if not set
+const port = process.env.PORT || 3500; 
 
 // Kill any process using the port before starting the backend
 function killPortProcess(port) {
@@ -22,7 +22,7 @@ function killPortProcess(port) {
     }
     console.log(`Cleared port ${port} before starting the backend.`);
   } catch (err) {
-    console.warn(`⚠️ No process was using port ${port}, skipping kill.`);
+    console.warn(`No process was using port ${port}, skipping kill.`);
   }
 }
 
@@ -83,8 +83,8 @@ function createMainWindow() {
 
   // Suppress Autofill warnings in DevTools
   mainWindow.webContents.on('console-message', (event, level, message) => {
-    if (message.includes('Autofill')) {
-      event.preventDefault();
+    if (message.includes('Autofill') || message.includes('Autofill.setAddresses')) {
+      return; // Prevent it from logging
     }
   });
 
