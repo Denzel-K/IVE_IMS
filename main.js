@@ -57,7 +57,7 @@ function startBackend() {
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: isDev ? 1200 : 800,
-    height: 700,
+    height: 840,
     resizable: isDev,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -106,39 +106,25 @@ app.whenReady().then(() => {
 
 // Menu template
 const menu = [
-  ...(isMac
-    ? [{ label: app.name, submenu: [{ label: 'About' }] }]
-    : []),
-  { role: 'fileMenu' },
-  { role: 'editMenu' },
   {
-    label: 'Help',
-    submenu: [{ label: 'Documentation', click: () => console.log('Docs Opened') }],
+    label: 'Reload',
+    role: 'reload',
   },
   {
     label: 'Quit',
-    submenu: [
-      {
-        label: 'Exit',
-        click: () => app.quit(),
-        accelerator: 'CmdOrCtrl+W',
-      },
-    ],
+    click: () => app.quit(),
+    accelerator: 'CmdOrCtrl+W',
   },
   ...(isDev
     ? [
         {
-          label: 'Developer',
-          submenu: [
-            { role: 'reload' },
-            { role: 'forcereload' },
-            { type: 'separator' },
-            { role: 'toggledevtools' },
-          ],
+          label: 'Toggle Developer Tools',
+          role: 'toggledevtools',
         },
       ]
     : []),
 ];
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

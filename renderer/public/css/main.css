@@ -25,9 +25,10 @@ input {
 .container {
   position: relative;
   width: 100%;
+  max-width: 1600px;
   background-color: #f5f5f5;
-  min-height: 100vh;
   overflow: hidden;
+  min-height: 100vh;
 }
 
 .forms-container {
@@ -40,7 +41,7 @@ input {
 
 .signin-signup {
   position: absolute;
-  top: 50%;
+  top: 40%;
   transform: translate(-50%, -50%);
   left: 75%;
   width: 50%;
@@ -49,11 +50,21 @@ input {
   grid-template-columns: 1fr;
   z-index: 5;
 }
+@media (max-width: 1440px) {
+  .signin-signup {
+    top: 43%;
+  }
+}
+@media (max-width: 1040px) {
+  .signin-signup {
+    top: 50%;
+  }
+}
 
 form {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   flex-direction: column;
   padding: 0rem 5rem;
   transition: all 0.2s 0.7s;
@@ -71,10 +82,60 @@ form.sign-in-form {
   z-index: 2;
 }
 
+.app_logo_head_signin {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+}
+.app_logo_head_signin span:nth-child(1) {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #5a7180;
+}
+.app_logo_head_signin span:nth-child(2) {
+  width: 50px;
+  margin-left: 0.45rem;
+}
+.app_logo_head_signin span:nth-child(2) img {
+  width: 100%;
+}
+@media (max-width: 780px) {
+  .app_logo_head_signin {
+    display: none;
+  }
+}
+
+.app_logo_head_signup {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}
+.app_logo_head_signup span:nth-child(1) {
+  width: 50px;
+  margin-left: 0.45rem;
+}
+.app_logo_head_signup span:nth-child(1) img {
+  width: 100%;
+}
+.app_logo_head_signup span:nth-child(2) {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #5a7180;
+}
+@media (max-width: 780px) {
+  .app_logo_head_signup {
+    display: none;
+  }
+}
+
 .title {
-  font-size: 2.2rem;
-  color: #444;
-  margin-bottom: 10px;
+  font-size: 1.8rem;
+  color: hsl(12, 75%, 57%);
+  margin: 3rem 0 10px 0;
 }
 
 .input-field {
@@ -82,8 +143,8 @@ form.sign-in-form {
   width: 100%;
   background-color: #f0f0f0;
   margin: 10px 0;
-  height: 55px;
-  border-radius: 55px;
+  height: 46px;
+  border-radius: 46px;
   display: grid;
   grid-template-columns: 15% 85%;
   padding: 0 0.4rem;
@@ -159,18 +220,11 @@ form.sign-in-form {
   max-width: 380px;
   width: 100%;
 }
-.role_options .role_opt_head {
-  padding: 0.75rem 0.85rem;
-  font-weight: 700;
-  color: rgb(49, 197, 255);
-  font-size: 0.9rem;
-  border-bottom: 1.5px solid rgb(218, 218, 218);
-}
 .role_options .role_opt {
   padding: 0.65rem 0.85rem;
   font-weight: 700;
   font-size: 0.9rem;
-  color: rgb(60, 72, 88);
+  color: rgb(78, 93, 109);
   border-bottom: 1.5px solid rgb(218, 218, 218);
   transition: 0.25s ease;
 }
@@ -202,7 +256,6 @@ form.sign-in-form {
   cursor: pointer;
   transition: 0.5s;
 }
-
 .btn:hover {
   background-color: hsl(10, 88%, 61%);
 }
@@ -267,7 +320,12 @@ form.sign-in-form {
   color: rgb(235, 235, 235);
   font-weight: 600;
   line-height: 1;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
+}
+@media (max-width: 1040px) {
+  .panel .content h3 {
+    font-size: 1rem;
+  }
 }
 .panel .content p {
   color: rgb(218, 218, 218);
@@ -275,25 +333,38 @@ form.sign-in-form {
   margin: 1rem 0;
   opacity: 0.8;
 }
-
-.left-panel {
-  pointer-events: all;
-  padding: 3rem 17% 2rem 12%;
+@media (max-width: 1040px) {
+  .panel .content p {
+    font-size: 0.75rem;
+  }
 }
-
-.right-panel {
-  pointer-events: none;
-  padding: 3rem 12% 2rem 17%;
-}
-
-.btn.transparent {
+.panel .content .btn.transparent {
   margin: 0;
   background: none;
   border: 2px solid #cfcfcf;
   color: #cfcfcf;
   font-weight: 600;
   font-size: 0.8rem;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 1rem;
+  transition: 0.25s ease;
+}
+@media (max-width: 1040px) {
+  .panel .content .btn.transparent {
+    padding: 0.35rem 1rem;
+  }
+}
+.panel .content .btn.transparent:hover {
+  background: hsla(0, 0%, 87%, 0.2);
+}
+
+.left-panel {
+  pointer-events: all;
+  padding: 3rem 12% 2rem 17%;
+}
+
+.right-panel {
+  pointer-events: none;
+  padding: 3rem 12% 2rem 17%;
 }
 
 .right-panel .image,

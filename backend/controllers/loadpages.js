@@ -1,5 +1,5 @@
 exports.landingPage = (req, res) => {
-  res.render('index', {pageTitle: "Welcome"});
+  res.render('index', {pageTitle: "Welcome aboard"});
 }
 
 exports.signupGet = (req, res) => {

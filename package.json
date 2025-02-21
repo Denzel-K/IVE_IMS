@@ -1,7 +1,7 @@
 {
   "name": "ive_ims",
   "version": "1.0.0",
-  "productName": "Information Management System",
+  "productName": "TechBridge IMS",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

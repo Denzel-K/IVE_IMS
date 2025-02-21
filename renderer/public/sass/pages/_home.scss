@@ -13,9 +13,10 @@ input {
 .container {
   position: relative;
   width: 100%;
+  max-width: 1600px;
   background-color: #f5f5f5;
-  min-height: 100vh;
   overflow: hidden;
+  min-height: 100vh;
 }
 
 .forms-container {
@@ -28,7 +29,7 @@ input {
 
 .signin-signup {
   position: absolute;
-  top: 50%;
+  top: 40%;
   transform: translate(-50%, -50%);
   left: 75%;
   width: 50%;
@@ -36,12 +37,19 @@ input {
   display: grid;
   grid-template-columns: 1fr;
   z-index: 5;
+
+  @media(max-width: 1440px){
+    top: 43%;
+  }
+  @media(max-width: 1040px){
+    top: 50%;
+  }
 }
 
 form {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   flex-direction: column;
   padding: 0rem 5rem;
   transition: all 0.2s 0.7s;
@@ -59,10 +67,54 @@ form.sign-in-form {
   z-index: 2;
 }
 
+.app_logo_head_signin{
+  width: 100%;
+  @include flex(row, end, center);
+
+  span:nth-child(1){
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #5a7180;
+  }
+  span:nth-child(2){
+    width: 50px;
+    margin-left: .45rem;
+
+    img{
+      width: 100%;
+    }
+  }
+  @media(max-width: 780px){
+    display: none;
+  }
+}
+
+.app_logo_head_signup{
+  width: 100%;
+  @include flex(row, start, center);
+
+  span:nth-child(1){
+    width: 50px;
+    margin-left: .45rem;
+
+    img{
+      width: 100%;
+    }
+  }
+  span:nth-child(2){
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #5a7180;
+  }
+  @media(max-width: 780px){
+    display: none;
+  }
+}
+
 .title {
-  font-size: 2.2rem;
-  color: #444;
-  margin-bottom: 10px;
+  font-size: 1.8rem;
+  color: $form-title;
+  margin: 3rem 0 10px 0;
 }
 
 .input-field {
@@ -70,8 +122,8 @@ form.sign-in-form {
   width: 100%;
   background-color: #f0f0f0;
   margin: 10px 0;
-  height: 55px;
-  border-radius: 55px;
+  height: 46px;
+  border-radius: 46px;
   display: grid;
   grid-template-columns: 15% 85%;
   padding: 0 0.4rem;
@@ -156,18 +208,18 @@ form.sign-in-form {
   max-width: 380px;
   width: 100%;
 
-  .role_opt_head{
-    padding: .75rem .85rem;
-    font-weight: 700;
-    color: rgb(49, 197, 255);
-    font-size: .9rem;
-    border-bottom: 1.5px solid rgb(218, 218, 218);
-  }
+  // .role_opt_head{
+  //   padding: .75rem .85rem;
+  //   font-weight: 700;
+  //   color: rgb(136, 137, 139);
+  //   font-size: .9rem;
+  //   border-bottom: 1.5px solid rgb(218, 218, 218);
+  // }
   .role_opt{
     padding: .65rem .85rem;
     font-weight: 700;
     font-size: .9rem;
-    color: rgb(60, 72, 88);
+    color: rgb(78, 93, 109);
     border-bottom: 1.5px solid rgb(218, 218, 218);
     transition: .25s ease;
 
@@ -190,7 +242,7 @@ form.sign-in-form {
 .btn {
   width: 150px;
   //background-color: #5995fd;
-  background-color: hsl(10, 79%, 65%);
+  background-color: $primary;
   border: none;
   outline: none;
   height: 49px;
@@ -201,15 +253,14 @@ form.sign-in-form {
   margin: 10px 0;
   cursor: pointer;
   transition: 0.5s;
-}
 
-.btn:hover {
-  //background-color: #4d84e2;
-  background-color: hsl(10, 88%, 61%);
+  &:hover {
+    background-color: $primary-bright;
+  }
 }
 
 .errors {
-  color: rgb(241, 70, 99);
+  color: $errors-light;
   font-size: 14px;
   font-weight: 500;
   margin-top: 5px;
@@ -218,7 +269,7 @@ form.sign-in-form {
 .error-message {
   background: #ffdddd;
   padding: 5px 10px;
-  border-left: 3px solid rgb(255, 0, 85);
+  border-left: 3px solid $errors-strong;
   margin-bottom: 5px;
 }
 
@@ -240,7 +291,8 @@ form.sign-in-form {
   top: -10%;
   right: 48%;
   transform: translateY(-50%);
-  background-image: linear-gradient(to left top, #1f262b, #1d2327, #1c2123, #1a1e20, #191b1c);  transition: 1.8s ease-in-out;
+  background-image: linear-gradient(to left top, #1f262b, #1d2327, #1c2123, #1a1e20, #191b1c);  
+  transition: 1.8s ease-in-out;
   border-radius: 50%;
   z-index: 6;
 }
@@ -267,35 +319,51 @@ form.sign-in-form {
       color: rgb(235, 235, 235);
       font-weight: 600;
       line-height: 1;
-      font-size: 1.5rem;
+      font-size: 1.35rem;
+
+      @media(max-width: 1040px){
+        font-size: 1rem;
+      }
     }
     p {
       color: rgb(218, 218, 218);
       font-size: 0.95rem;
       margin: 1rem 0;
       opacity: .8;
+
+      @media(max-width: 1040px){
+        font-size: 0.75rem;
+      }
+    }
+    .btn.transparent {
+      margin: 0;
+      background: none;
+      border: 2px solid #cfcfcf;
+      color: #cfcfcf;
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: .45rem 1rem;
+      transition: .25s ease;
+
+      @media(max-width: 1040px){
+        padding: .35rem 1rem;
+      }
+    
+      &:hover{
+        background: hsl(0, 0%, 87%, .2);
+      }
     }
   }
 }
 
 .left-panel {
   pointer-events: all;
-  padding: 3rem 17% 2rem 12%;
+  padding: 3rem 12% 2rem 17%;
 }
 
 .right-panel {
   pointer-events: none;
   padding: 3rem 12% 2rem 17%;
-}
-
-.btn.transparent {
-  margin: 0;
-  background: none;
-  border: 2px solid #cfcfcf;
-  color: #cfcfcf;
-  font-weight: 600;
-  font-size: 0.8rem;
-  padding: .5rem 1rem;
 }
 
 .right-panel .image,
