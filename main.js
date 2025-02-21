@@ -59,6 +59,7 @@ function createMainWindow() {
     width: isDev ? 1200 : 800,
     height: 840,
     resizable: isDev,
+    icon: `${__dirname}/assets/icons/app_logo.png`,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false, // Security best practice
