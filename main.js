@@ -1,24 +1,40 @@
 const path = require('path');
 const { app, BrowserWindow, Menu } = require('electron');
 const waitOn = require('wait-on');
-const { spawn } = require('child_process');
+const { spawn, execSync } = require('child_process');
+const dotenv = require('dotenv');
+dotenv.config({ path: path.join(__dirname, './backend/.env') });
 
 const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 
 let mainWindow;
 let backendProcess;
+const port = process.env.PORT || 3500; // Default to 3500 if not set
+
+// Kill any process using the port before starting the backend
+function killPortProcess(port) {
+  try {
+    if (process.platform === 'win32') {
+      execSync(`netstat -ano | findstr :${port} | findstr LISTENING | for /f "tokens=5" %a in ('more') do taskkill /PID %a /F`, { stdio: 'ignore' });
+    } else {
+      execSync(`lsof -ti:${port} | xargs kill -9`, { stdio: 'ignore' });
+    }
+    console.log(`Cleared port ${port} before starting the backend.`);
+  } catch (err) {
+    console.warn(`⚠️ No process was using port ${port}, skipping kill.`);
+  }
+}
 
 // Start Backend Server (Express)
 function startBackend() {
-  // Starts the backend server as a separate child process.
-  backendProcess = spawn('node', ['backend/server.js'], 
-    {
-      cwd: __dirname,   // Run the backend from the current Electron project directory
-      shell: true,      // Allows using shell commands inside the script
-      detached: true,   // Runs the process separately from the main Electron process
-    }
-  );
+  killPortProcess(port); // Ensure the port is free before starting the backend
+
+  backendProcess = spawn('node', ['backend/server.js'], {
+    cwd: __dirname, // Run the backend from the Electron project directory
+    shell: true, // Enables shell execution
+    detached: true, // Allows backend to run independently of Electron
+  });
 
   backendProcess.stdout.on('data', (data) => {
     console.log(`Backend: ${data}`);
@@ -30,6 +46,10 @@ function startBackend() {
 
   backendProcess.on('close', (code) => {
     console.log(`Backend process exited with code ${code}`);
+  });
+
+  backendProcess.on('error', (err) => {
+    console.error(`Failed to start backend: ${err}`);
   });
 }
 
@@ -45,28 +65,39 @@ function createMainWindow() {
       contextIsolation: true, // Prevents direct access to Node.js
     },
   });
-  
-  // Load Express Server
-  mainWindow.loadURL('http://localhost:3000');
+
+  // Wait for backend before loading Electron window
+  waitOn({ resources: [`http://localhost:${port}`], timeout: 60000 }) // 60 sec max wait
+    .then(() => {
+      mainWindow.loadURL(`http://localhost:${port}`);
+      console.log(`Browser window loaded on port: ${port}`);
+    })
+    .catch(err => {
+      console.error(`Backend did not start in time: ${err}`);
+      app.quit();
+    });
 
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
 
+  // Suppress Autofill warnings in DevTools
+  mainWindow.webContents.on('console-message', (event, level, message) => {
+    if (message.includes('Autofill')) {
+      event.preventDefault();
+    }
+  });
+
   mainWindow.on('closed', () => (mainWindow = null));
 }
+
+//  Disable Hardware Acceleration in Electron (n linux)
+app.disableHardwareAcceleration();
 
 // When the app is ready, start backend & create the window
 app.whenReady().then(() => {
   startBackend();
-
-  // Wait for backend to be available on port 3000
-  waitOn({ resources: ['http://localhost:3000'], timeout: 30000 }) // 30 sec max wait
-    .then(createMainWindow)
-    .catch(err => {
-      console.error('Backend did not start in time:', err);
-      app.quit();
-    });
+  createMainWindow();
 
   const mainMenu = Menu.buildFromTemplate(menu);
   Menu.setApplicationMenu(mainMenu);

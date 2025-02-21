@@ -14,7 +14,7 @@ const path = require('path');
 const hbs = require('express-handlebars');
 const Handlebars = require('handlebars');
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 
@@ -76,4 +76,11 @@ cron.schedule('0 9 * * *', () => {
 });
 
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+const port = process.env.PORT || 3500;
+app.listen(port, () => console.log(`Server running on port ${port}`)).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${port} is already in use. Trying another port...`);
+  } else {
+    throw err;
+  }
+});
