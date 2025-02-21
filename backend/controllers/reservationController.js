@@ -1,8 +1,6 @@
 const Reservation = require('../models/reservation');
 
 exports.createReservation = (req, res) => {
-    console.log("🔍 Received User:", req.user); // ✅ LOG USER INFO
-
     const { equipment_id, project_id, start_time, end_time } = req.body;
     const reserved_by = req.user?.id; // Ensure user exists before accessing ID
 

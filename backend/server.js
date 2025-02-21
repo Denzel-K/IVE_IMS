@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const inventoryRoutes = require('./routes/inventoryRoutes');
 const maintenanceRoutes = require('./routes/maintenanceRoutes');
 const assetRoutes = require('./routes/assetRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
 const cron = require('node-cron');
 const { sendMaintenanceReminders } = require('./controllers/maintenanceController');
 const path = require('path');
@@ -60,6 +61,7 @@ app.set('views', path.join(__dirname, '../renderer/views'));
 
 // Middleware
 app.use(cors());
+app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, '../renderer/public')));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -68,6 +70,7 @@ app.use('/api', authRoutes);
 app.use('/api/assets', assetRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
+app.use(reservationRoutes); // ✅ Register Reservation Routes
 
 // Setup Cron schedule - Run every day at 9 AM
 cron.schedule('0 9 * * *', () => {
