@@ -71,7 +71,7 @@ app.use('/api', authRoutes);
 app.use('/api/assets', assetRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
-app.use(reservationRoutes); // ✅ Register Reservation Routes
+app.use(reservationRoutes);
 
 // Setup Cron schedule - Run every day at 9 AM
 cron.schedule('0 9 * * *', () => {

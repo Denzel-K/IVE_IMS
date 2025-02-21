@@ -37,11 +37,11 @@ function startBackend() {
   });
 
   backendProcess.stdout.on('data', (data) => {
-    console.log(`Backend: ${data}`);
+    console.log(`Backend log >> ${data}`);
   });
 
   backendProcess.stderr.on('data', (data) => {
-    console.error(`Backend Error: ${data}`);
+    console.error(`Backend Error =X= ${data}`);
   });
 
   backendProcess.on('close', (code) => {
@@ -70,16 +70,17 @@ function createMainWindow() {
   waitOn({ resources: [`http://localhost:${port}`], timeout: 60000 }) // 60 sec max wait
     .then(() => {
       mainWindow.loadURL(`http://localhost:${port}`);
-      console.log(`Browser window loaded on port: ${port}`);
+      console.log(`Electron --> Browser window loaded on port:${port}`);
+      console.log('--------')
     })
     .catch(err => {
       console.error(`Backend did not start in time: ${err}`);
       app.quit();
     });
 
-  if (isDev) {
-    mainWindow.webContents.openDevTools();
-  }
+  // if (isDev) {
+  //   mainWindow.webContents.openDevTools();
+  // }
 
   // Suppress Autofill warnings in DevTools
   mainWindow.webContents.on('console-message', (event, level, message) => {

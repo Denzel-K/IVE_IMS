@@ -1,13 +1,17 @@
+CREATE DATABASE infomgt;
+
+USE infomgt;
+
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
+    phone VARCHAR(255)  UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role ENUM('admin', 'technician', 'student', 'lab_manager') NOT NULL,
+    approved BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-ALTER TABLE users ADD COLUMN approved BOOLEAN DEFAULT FALSE;
 
 CREATE TABLE equipment (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -101,4 +105,3 @@ CREATE TABLE usage_history (
     FOREIGN KEY (equipment_id) REFERENCES equipment(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-

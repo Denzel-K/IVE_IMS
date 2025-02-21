@@ -27,10 +27,10 @@ const generateToken = (user, res) => {
 
 // **Register User**
 exports.register = (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, phone, password, role } = req.body;
 
-    if (!name || !email || !password) {
-        return res.status(400).json({ message: 'Name, email, and password are required' });
+    if (!name || !email || !phone || !password) {
+        return res.status(400).json({ message: 'Name, email, phone and password are required' });
     }
 
     const checkUserCount = 'SELECT COUNT(*) AS count FROM users';
@@ -44,14 +44,15 @@ exports.register = (req, res) => {
         bcrypt.hash(password, 10, (err, hashedPassword) => {
             if (err) return res.status(500).json({ message: 'Error hashing password' });
 
-            const sql = 'INSERT INTO users (name, email, password, role, approved) VALUES (?, ?, ?, ?, ?)';
-            db.query(sql, [name, email, hashedPassword, assignedRole, isApproved], (err, result) => {
+            const sql = 'INSERT INTO users (name, email, phone, password, role, approved) VALUES (?, ?, ?, ?, ?, ?)';
+            db.query(sql, [name, email, phone, hashedPassword, assignedRole, isApproved], (err, result) => {
                 if (err) return res.status(500).json({ message: 'Error registering user' });
 
                 const newUser = {
                     id: result.insertId,
                     name,
                     email,
+                    phone,
                     role: assignedRole,
                     approved: isApproved
                 };
