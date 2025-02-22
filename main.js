@@ -56,8 +56,8 @@ function startBackend() {
 // Create Main Window
 function createMainWindow() {
   mainWindow = new BrowserWindow({
-    width: isDev ? 1200 : 800,
-    height: 840,
+    width: 1000,
+    height: 700,
     resizable: isDev,
     icon: `${__dirname}/assets/icons/app_logo.png`,
     webPreferences: {
