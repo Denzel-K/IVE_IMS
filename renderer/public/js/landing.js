@@ -119,7 +119,7 @@ regForm.addEventListener("submit", async (e) => {
     if (!response.ok) throw new Error(data.message || "Registration failed.");
 
     regForm.reset(); // Clear form
-    window.location.href = "/dashboard";
+    window.location.href = "/dashboardGet";
   } 
   catch (error) {
     displayErrors(errorsDiv, [error.message]);
@@ -157,7 +157,7 @@ loginForm.addEventListener("submit", async (e) => {
     if (!response.ok) throw new Error(data.message || "Login failed.");
 
     loginForm.reset(); // Clear form
-    window.location.href = "/dashboard"; 
+    window.location.href = "/dashboardGet"; 
   } 
   catch (error) {
     displayErrors(errorsDiv, [error.message]);

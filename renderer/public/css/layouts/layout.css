@@ -188,7 +188,7 @@ body {
 .skeleton .sidebar .pages .page_link:hover > span:nth-child(2) {
   color: rgb(223, 227, 227);
 }
-.skeleton .sidebar .pages > a:nth-child(10) {
+.skeleton .sidebar .pages > a:nth-child(5) {
   margin-top: auto;
 }
 .skeleton .parent_container {

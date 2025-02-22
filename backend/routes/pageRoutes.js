@@ -6,7 +6,11 @@ const db = require('../config/db.js');
 const router = express.Router();
 
 router.get('/', loadPages.landingPage);
-router.get('/dashboard', loadPages.dashboardGet);
-router.get('/inventory', loadPages.inventoryGet);
+router.get('/dashboardGet', loadPages.dashboardGet);
+router.get('/inventoryGet', loadPages.inventoryGet);
+router.get('/projectsGet', loadPages.projectsGet);
+router.get('/bookingsGet', loadPages.bookingsGet);
+router.get('/settingsGet', loadPages.settingsGet);
+router.get('/accountsGet', loadPages.accountsGet);
 
 module.exports = router;
