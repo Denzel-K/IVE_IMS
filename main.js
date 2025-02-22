@@ -56,8 +56,8 @@ function startBackend() {
 // Create Main Window
 function createMainWindow() {
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
+    width: 1020,
+    height: 740,
     minWidth: 800, 
     minHeight: 700,
     icon: `${__dirname}/assets/icons/app_logo.png`,

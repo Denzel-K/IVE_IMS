@@ -512,12 +512,12 @@ input {
 }
 @media (max-width: 1440px) {
   .signin-signup {
-    top: 45%;
+    top: 41.75%;
   }
 }
 @media (max-width: 1040px) {
   .signin-signup {
-    top: 50%;
+    top: 47.55%;
   }
 }
 
@@ -561,7 +561,7 @@ form.sign-in-form {
 .app_logo_head_signin span:nth-child(2) img {
   width: 100%;
 }
-@media (max-width: 900px) {
+@media (max-width: 800px) {
   .app_logo_head_signin {
     display: none;
   }
@@ -677,8 +677,11 @@ form.sign-in-form {
   padding: 0;
   border-radius: 1rem;
   background-color: #eeeeee;
-  max-width: 380px;
+  max-width: 360px;
   width: 100%;
+  position: absolute;
+  bottom: -1.3rem;
+  z-index: 100;
 }
 .role_options .role_opt {
   padding: 0.65rem 0.85rem;

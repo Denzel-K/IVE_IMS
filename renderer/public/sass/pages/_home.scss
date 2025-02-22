@@ -38,10 +38,10 @@ input {
   z-index: 5;
 
   @media(max-width: 1440px){
-    top: 45%;
+    top: 41.75%;
   }
   @media(max-width: 1040px){
-    top: 50%;
+    top: 47.55%;
   }
 }
 
@@ -83,7 +83,7 @@ form.sign-in-form {
       width: 100%;
     }
   }
-  @media(max-width: 900px){
+  @media(max-width: 800px){
     display: none;
   }
 }
@@ -204,8 +204,11 @@ form.sign-in-form {
   padding: 0;
   border-radius: 1rem;
   background-color: #eeeeee;
-  max-width: 380px;
+  max-width: 360px;
   width: 100%;
+  position: absolute;
+  bottom: -1.3rem;
+  z-index: 100;
 
   // .role_opt_head{
   //   padding: .75rem .85rem;
