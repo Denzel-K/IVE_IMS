@@ -15,6 +15,8 @@ const path = require('path');
 const hbs = require('express-handlebars');
 const Handlebars = require('handlebars');
 const morgan = require('morgan');
+const workspaceRoutes = require("./routes/workspaceRoutes");
+
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 
@@ -72,6 +74,8 @@ app.use('/api/assets', assetRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
 app.use(reservationRoutes);
+app.use("/api/workspaces", workspaceRoutes);
+
 
 // Setup Cron schedule - Run every day at 9 AM
 cron.schedule('0 9 * * *', () => {
