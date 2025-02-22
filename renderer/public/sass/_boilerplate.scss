@@ -1,4 +1,4 @@
-@use "./abstracts" as abstracts;
+@use "./abstracts" as *;
 
 * {
   box-sizing: border-box;
@@ -7,6 +7,12 @@
 }
 
 body{
-  @include abstracts.flex(column, center, center);
+  @include flex(column, center, center);
   min-height: 100vh;
+  background-color: #dbdbdb;
+}
+
+
+a{
+  text-decoration: none;
 }

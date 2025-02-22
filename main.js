@@ -58,7 +58,8 @@ function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 700,
-    resizable: isDev,
+    minWidth: 800, 
+    minHeight: 700,
     icon: `${__dirname}/assets/icons/app_logo.png`,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

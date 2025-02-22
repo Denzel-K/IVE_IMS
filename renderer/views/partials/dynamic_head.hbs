@@ -1,0 +1,38 @@
+<div class="dynamic_head">
+  <div class="dynamic_title">
+    {{pageTitle}}
+  </div>
+
+  <div class="dynamic_profile">
+    <div class="bell_box">
+      <img src="assets/icons/notification.svg" alt="notification">
+    </div>
+
+    <div class="profile_box">
+      <div class="p-box-head">
+        <div class="company_img">
+          <img src="assets/icons/account.svg" alt="company">
+        </div>
+        
+        <div class="drop_container dropdown-btn">
+          <img src="assets/icons/dropdown.svg" alt="dropdown">
+        </div>
+      </div>
+
+      <div class="p-box-reveal hidden">
+        <div class="client-credentials">
+          <div class="name-cred">{{clientCredentials.companyName}}</div>
+          <div class="email-cred">{{clientCredentials.companyEmail}}</div>
+        </div>
+
+        <div class="logout_box">
+          <a href="/logout">
+            <img src="assets/icons/logout.svg" alt="logout">
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
