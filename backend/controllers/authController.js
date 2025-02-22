@@ -13,8 +13,8 @@ const generateToken = (user, res) => {
         { expiresIn: '1h' }
     );
 
-    console.log("JWT: ", token); // Debugging, remove in production
-
+    console.log("JWT created successfully :)");
+    
     res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // Secure in production
@@ -62,7 +62,7 @@ exports.register = (req, res) => {
 
                 // Send email notification
                 sendEmail(email, 
-                    'IvE IMS Registration Successful', 
+                    'IVE IMS Registration Successful', 
                     `Hello ${name},\n\nYour registration was successful. Please wait for admin approval.`,
                     `<p>Hello ${name},</p><p>Your registration was successful. Please wait for admin approval.</p>`
                 );

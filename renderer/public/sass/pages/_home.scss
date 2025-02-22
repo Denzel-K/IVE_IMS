@@ -38,10 +38,10 @@ input {
   z-index: 5;
 
   @media(max-width: 1440px){
-    top: 41.75%;
+    top: 41.05%;
   }
   @media(max-width: 1040px){
-    top: 47.55%;
+    top: 47.85%;
   }
 }
 
@@ -228,7 +228,7 @@ form.sign-in-form {
     &:hover{
       cursor: pointer;
       background-color: #c0c0c0;
-      color: black;
+      color: $bg;
     }
   }
   .first{
@@ -245,12 +245,9 @@ form.sign-in-form {
 }
 
 .btn {
-  //width: 150px;
   background-color: $primary;
   border: none;
   outline: none;
-  // height: 46px;
-  // border-radius: 46px;
   border-radius: 20px;
   padding: .75rem 1.25rem;
   color: #fff;

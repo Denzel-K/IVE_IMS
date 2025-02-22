@@ -3,25 +3,66 @@ exports.landingPage = (req, res) => {
 }
 
 exports.dashboardGet = (req, res) => {
-  res.render('dashboard', {pageTitle: "Dashboard"});
+  const { id, name, email, role } = req.user;
+
+  res.render('dashboard', {
+    pageTitle: "Dashboard",
+    credentials: {
+      id, name, email, role
+    }
+  });
 }
 
 exports.inventoryGet = (req, res) => {
-  res.render('inventory', {pageTitle: "Inventory"});
+  const { id, name, email, role } = req.user;
+
+  res.render('inventory', {
+    pageTitle: "Inventory", 
+    credentials: {
+    id, name, email, role
+  }});
 }
 
 exports.projectsGet = (req, res) => {
-  res.render('projects', {pageTitle: "Projects"});
+  const { id, name, email, role } = req.user;
+
+  res.render('projects', {
+    pageTitle: "Projects", 
+    credentials: {
+      id, name, email, role
+    }
+  });
 }
 
 exports.bookingsGet = (req, res) => {
-  res.render('bookings', {pageTitle: "Bookings"});
+  const { id, name, email, role } = req.user;
+
+  res.render('bookings', {
+    pageTitle: "Bookings", 
+    credentials: {
+      id, name, email, role
+    }
+  });
 }
 
 exports.settingsGet = (req, res) => {
-  res.render('settings', {pageTitle: "Settings"});
+  const { id, name, email, role } = req.user;
+
+  res.render('settings', {
+    pageTitle: "Settings", 
+    credentials: {
+      id, name, email, role
+    }
+  });
 }
 
 exports.accountsGet = (req, res) => {
-  res.render('accounts', {pageTitle: "Account Management"});
+  const { id, name, email, role } = req.user;
+
+  res.render('accounts', {
+    pageTitle: "Account Management", 
+    credentials: {
+      id, name, email, role
+    }
+  });
 }

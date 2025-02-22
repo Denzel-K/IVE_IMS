@@ -5,10 +5,10 @@ dotenv.config();
 // Unified authentication and authorization middleware
 exports.authMiddleware = (roles = []) => {
     return (req, res, next) => {
-        console.log("🔍 Received Cookies:", req.cookies); // ✅ LOG COOKIES
+        console.log("🔍 => Received Cookies."); 
 
         const token = req.cookies.token;
-        console.log("🔍 Extracted Token:", token || "❌ No Token Found"); // ✅ LOG TOKEN
+        console.log("🔍 => Extracted Token:", token || "❌ No Token Found");
 
         if (!token) {
             return res.status(401).json({ message: 'Access denied. No token provided.' });
@@ -17,7 +17,7 @@ exports.authMiddleware = (roles = []) => {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             req.user = decoded; // ✅ Attach user info to request
-            console.log("✅ Decoded Token:", decoded); // ✅ LOG USER INFO
+            console.log("✅ Decoded Token:", decoded); 
 
             // Check if role-based authorization is required
             if (roles.length && !roles.includes(decoded.role)) {

@@ -74,11 +74,12 @@ body {
   flex-direction: row;
   flex-wrap: nowrap;
   width: 100%;
-  padding-left: 1rem;
+  padding-left: 0.65rem;
+  border-bottom: 1.5px solid #383838;
 }
 @media (max-width: 600px) {
   .skeleton .sidebar .logo .techbridge {
-    padding-left: 0.65rem;
+    padding-left: 0.45rem;
   }
 }
 .skeleton .sidebar .logo .techbridge > span:nth-child(1) {
@@ -92,11 +93,16 @@ body {
   font-weight: 700;
   margin-left: 0.75rem;
   opacity: 0.8;
-  color: rgb(187, 187, 187);
+  color: rgb(214, 214, 214);
 }
 @media (max-width: 1040px) {
   .skeleton .sidebar .logo .techbridge > span:nth-child(2) {
     display: none;
+  }
+}
+@media (max-width: 780px) {
+  .skeleton .sidebar .logo .techbridge > span:nth-child(2) {
+    font-size: 1rem;
   }
 }
 .skeleton .sidebar .logo .sidebar_toggle {
@@ -167,6 +173,7 @@ body {
   align-items: center;
   flex-direction: row;
   flex-wrap: nowrap;
+  transition: 0.25s ease;
 }
 .skeleton .sidebar .pages .page_link > span:nth-child(1) {
   width: 24px;
@@ -182,13 +189,16 @@ body {
   }
 }
 .skeleton .sidebar .pages .page_link > span:nth-child(1) img {
+  transition: 0.3s ease;
+  opacity: 0.85;
   width: 100%;
 }
 .skeleton .sidebar .pages .page_link > span:nth-child(2) {
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   margin-left: 1.25rem;
-  color: rgb(202, 207, 208);
+  color: rgb(247, 219, 208);
+  transition: 0.25s ease;
 }
 @media (max-width: 1040px) {
   .skeleton .sidebar .pages .page_link > span:nth-child(2) {
@@ -202,10 +212,13 @@ body {
   }
 }
 .skeleton .sidebar .pages .page_link:hover {
-  background-color: rgb(28, 28, 29);
+  background-color: rgb(19, 19, 19);
 }
 .skeleton .sidebar .pages .page_link:hover > span:nth-child(2) {
-  color: rgb(223, 227, 227);
+  color: rgb(255, 159, 121);
+}
+.skeleton .sidebar .pages .page_link:hover > span:nth-child(1) img {
+  opacity: 1;
 }
 .skeleton .sidebar .pages > a:nth-child(5) {
   margin-top: auto;
@@ -512,12 +525,12 @@ input {
 }
 @media (max-width: 1440px) {
   .signin-signup {
-    top: 41.75%;
+    top: 41.05%;
   }
 }
 @media (max-width: 1040px) {
   .signin-signup {
-    top: 47.55%;
+    top: 47.85%;
   }
 }
 
@@ -594,7 +607,7 @@ form.sign-in-form {
 
 .title {
   font-size: 1.8rem;
-  color: hsl(12, 75%, 57%);
+  color: hsl(2, 73%, 68%);
   margin: 3rem 0 10px 0;
 }
 
@@ -701,7 +714,7 @@ form.sign-in-form {
 .role_options .role_opt:hover {
   cursor: pointer;
   background-color: #c0c0c0;
-  color: black;
+  color: hsl(205, 16%, 15%);
 }
 .role_options .first {
   border-radius: 1rem 1rem 0 0;
