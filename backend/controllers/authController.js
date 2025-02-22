@@ -131,5 +131,5 @@ exports.logout = (req, res) => {
         expires: new Date(0) // Expire the cookie
     });
 
-    res.json({ message: 'Logged out successfully' });
+    console.log('Logged out successfully')
 };

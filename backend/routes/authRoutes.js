@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login, checkAuthStatus } = require('../controllers/authController');
+const { register, login, checkAuthStatus, logout } = require('../controllers/authController');
 const { authMiddleware } = require('../middleware/authMiddleware.js');
 const db = require('../config/db.js');
 const sendEmail = require('../config/emailService.js');
@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post('/register', register);
 router.post('/login', login);
+router.get('/logout', logout);
 
 router.get('/admin', authMiddleware(['admin']), (req, res) => {
     res.json({ message: 'Welcome Admin!', user: req.user });

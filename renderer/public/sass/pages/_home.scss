@@ -210,13 +210,13 @@ form.sign-in-form {
   bottom: -1.3rem;
   z-index: 100;
 
-  // .role_opt_head{
-  //   padding: .75rem .85rem;
-  //   font-weight: 700;
-  //   color: rgb(136, 137, 139);
-  //   font-size: .9rem;
-  //   border-bottom: 1.5px solid rgb(218, 218, 218);
-  // }
+  .role_opt_head{
+    padding: .75rem .85rem;
+    font-weight: 700;
+    color: rgb(112, 191, 255);
+    font-size: .9rem;
+    border-bottom: 1.5px solid rgb(218, 218, 218);
+  }
   .role_opt{
     padding: .65rem .85rem;
     font-weight: 700;
