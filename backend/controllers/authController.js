@@ -131,5 +131,7 @@ exports.logout = (req, res) => {
         expires: new Date(0) // Expire the cookie
     });
 
-    console.log('Logged out successfully')
+    console.log('Logged out successfully');
+
+    res.redirect('/');
 };
