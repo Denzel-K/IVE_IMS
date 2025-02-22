@@ -16,7 +16,7 @@ exports.authMiddleware = (roles = []) => {
 
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = decoded; // ✅ Attach user info to request
+            req.user = decoded; // Attach user info to request
             console.log("✅ Decoded Token:", decoded); 
 
             // Check if role-based authorization is required
