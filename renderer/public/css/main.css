@@ -48,7 +48,7 @@ body {
   bottom: 0;
   z-index: 100;
 }
-@media (max-width: 1040px) {
+@media (max-width: 1440px) {
   .skeleton .sidebar {
     width: 60px;
   }
@@ -95,7 +95,7 @@ body {
   opacity: 0.8;
   color: rgb(214, 214, 214);
 }
-@media (max-width: 1040px) {
+@media (max-width: 1440px) {
   .skeleton .sidebar .logo .techbridge > span:nth-child(2) {
     display: none;
   }
@@ -113,7 +113,7 @@ body {
   flex-direction: row;
   flex-wrap: nowrap;
 }
-@media (max-width: 1040px) {
+@media (max-width: 1440px) {
   .skeleton .sidebar .logo .sidebar_toggle {
     margin-left: 18px;
   }
@@ -143,7 +143,7 @@ body {
   background-color: rgb(204, 201, 201);
   transition: 1s ease;
 }
-@media (min-width: 1025px) {
+@media (min-width: 1441px) {
   .skeleton .sidebar .logo .sidebar_toggle .black_box span {
     display: none;
   }
@@ -194,16 +194,15 @@ body {
   width: 100%;
 }
 .skeleton .sidebar .pages .page_link > span:nth-child(2) {
-  font-size: 0.9rem;
+  font-size: 14px;
   font-weight: 600;
-  margin-left: 1.25rem;
+  margin: 0 0 4px 1.25rem;
   color: rgb(247, 219, 208);
   transition: 0.25s ease;
 }
-@media (max-width: 1040px) {
+@media (max-width: 1440px) {
   .skeleton .sidebar .pages .page_link > span:nth-child(2) {
     display: none;
-    font-size: 14px;
   }
 }
 @media (max-width: 780px) {
@@ -241,7 +240,7 @@ body {
   flex-wrap: nowrap;
   padding-left: 220px;
 }
-@media (max-width: 1040px) {
+@media (max-width: 1440px) {
   .skeleton .parent_container {
     padding-left: 60px;
   }
@@ -268,7 +267,7 @@ body {
   padding-left: 220px;
   z-index: 10;
 }
-@media (max-width: 1040px) {
+@media (max-width: 1440px) {
   .skeleton .parent_container .dynamic_head {
     padding-left: 60px;
   }
