@@ -1,38 +1,55 @@
 const signinPasswordInput = document.getElementById("signinPassword");
 const signupPasswordInput = document.getElementById("signupPassword");
+const newPasswordInput = document.getElementById("newPassword");
 const toggleSignupPassword = document.getElementById("toggleSignupPassword");
 const toggleSigninPassword = document.getElementById("toggleSigninPassword");
+const toggleNewPassword = document.getElementById("toggleNewPassword");
 
 toggleSignupPassword.addEventListener("click", function () {
   if (signupPasswordInput.type === "password") {
     signupPasswordInput.type = "text";
-    toggleSignupPassword.src = "assets/icons/hide.svg"; // Switch to hide icon
+    toggleSignupPassword.src = "assets/icons/hide.svg";
   } else {
     signupPasswordInput.type = "password";
-    toggleSignupPassword.src = "assets/icons/show.svg"; // Switch back to show icon
+    toggleSignupPassword.src = "assets/icons/show.svg"; 
   }
 });
 
 toggleSigninPassword.addEventListener("click", function () {
   if (signinPasswordInput.type === "password") {
     signinPasswordInput.type = "text";
-    toggleSigninPassword.src = "assets/icons/hide.svg"; // Switch to hide icon
+    toggleSigninPassword.src = "assets/icons/hide.svg";
   } else {
     signinPasswordInput.type = "password";
-    toggleSigninPassword.src = "assets/icons/show.svg"; // Switch back to show icon
+    toggleSigninPassword.src = "assets/icons/show.svg";
   }
 });
 
+toggleNewPassword.addEventListener("click", function () {
+  if (newPasswordInput.type === "password") {
+    newPasswordInput.type = "text";
+    toggleNewPassword.src = "assets/icons/hide.svg";
+  } else {
+    newPasswordInput.type = "password";
+    toggleNewPassword.src = "assets/icons/show.svg";
+  }
+});
 
 const sign_in_btn = document.querySelector("#sign-in-btn");
 const sign_up_btn = document.querySelector("#sign-up-btn");
 const container = document.querySelector(".container");
 
 sign_up_btn.addEventListener("click", () => {
+  const loginForm = document.getElementById("login_form");
+  loginForm.reset();
+
   container.classList.add("sign-up-mode");
 });
 
 sign_in_btn.addEventListener("click", () => {
+  const regForm = document.getElementById("reg_form");
+  regForm.reset();
+
   container.classList.remove("sign-up-mode");
 });
 
@@ -162,4 +179,20 @@ loginForm.addEventListener("submit", async (e) => {
   catch (error) {
     displayErrors(errorsDiv, [error.message]);
   }
+});
+
+
+// Reset pasword modal
+const init_pass_reset = document.querySelector('#init-pass-reset');
+const pass_reset_modal = document.querySelector('.pass_reset_modal');
+const close_pass_reset = document.querySelector('#close-pass-reset');
+const reset_pass_form = document.querySelector('#reset_pass_form');
+
+init_pass_reset.addEventListener('click', () => {
+  pass_reset_modal.classList.remove('hidden');
+});
+
+close_pass_reset.addEventListener('click', () => {
+  reset_pass_form.reset();
+  pass_reset_modal.classList.add('hidden');
 });

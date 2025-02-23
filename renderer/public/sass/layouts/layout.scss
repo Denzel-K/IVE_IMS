@@ -179,7 +179,18 @@ body{
         }
 
         &:hover{
-          background-color: rgb(19, 19, 19);
+          background-color: rgb(51, 49, 54);
+
+          & > span:nth-child(2){
+            color: rgb(255, 159, 121);
+          }
+          & > span:nth-child(1){
+            img{opacity: 1;}
+          }
+        }
+        &.curr_page{
+          background-color: rgb(51, 49, 54);
+          border-right: 4px solid $primary;
 
           & > span:nth-child(2){
             color: rgb(255, 159, 121);
@@ -244,7 +255,7 @@ body{
 
         .bell_box{
           width: 28px;
-          margin-right: 1rem;
+          margin: 4px 1rem 0 0;
 
           @media(max-width: 780px){
             //width: 26px;
@@ -361,9 +372,13 @@ body{
               & > div:nth-child(1){
                 font-size: 14px;
                 font-weight: 600;
+                opacity: .8;
               }
               & > div:nth-child(2){
                 font-size: 12px;
+                margin-top: .35rem;
+                font-weight: 600;
+                opacity: .8;
               }
             }
 
@@ -371,18 +386,14 @@ body{
               width: 100%;
               margin-top: 1rem;
 
-              // @media(min-width: 600px){
-              //   margin-top: 0;
-              // }
-
               a{
                 width: 130px;
                 @include flexbox(space-around, center, row);
                 border-radius: 10px;
-                padding: .45rem 1rem;
+                padding: .35rem 1rem;
                 margin: 0 auto;
                 background-color: #cccaca;
-                border: 1.6px solid rgb(15, 15, 15);
+                border: 1.6px solid rgb(40, 40, 44);
                 transition: .2s ease;
 
                 img{
@@ -393,20 +404,20 @@ body{
                 }
                 span{
                   transition: .2s ease;
-                  font-size: 14px;
+                  font-size: 12.5px;
                   color: rgb(32, 32, 32);
                   font-weight: 600;
                 }
 
                 &:hover{
-                  background-color: rgb(15, 15, 15);
+                  background-color: $bg;
                   
                   img{
                     opacity: 1;
                   }
                   span{
                     font-size: 14px;
-                    color: rgb(235, 231, 231);
+                    color: rgb(245, 245, 245);
                   }
                 }
               }

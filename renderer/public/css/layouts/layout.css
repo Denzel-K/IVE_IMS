@@ -193,12 +193,22 @@ body {
   }
 }
 .skeleton .sidebar .pages .page_link:hover {
-  background-color: rgb(19, 19, 19);
+  background-color: rgb(51, 49, 54);
 }
 .skeleton .sidebar .pages .page_link:hover > span:nth-child(2) {
   color: rgb(255, 159, 121);
 }
 .skeleton .sidebar .pages .page_link:hover > span:nth-child(1) img {
+  opacity: 1;
+}
+.skeleton .sidebar .pages .page_link.curr_page {
+  background-color: rgb(51, 49, 54);
+  border-right: 4px solid hsl(10, 79%, 65%);
+}
+.skeleton .sidebar .pages .page_link.curr_page > span:nth-child(2) {
+  color: rgb(255, 159, 121);
+}
+.skeleton .sidebar .pages .page_link.curr_page > span:nth-child(1) img {
   opacity: 1;
 }
 .skeleton .sidebar .pages > a:nth-child(5) {
@@ -269,7 +279,7 @@ body {
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .bell_box {
   width: 28px;
-  margin-right: 1rem;
+  margin: 4px 1rem 0 0;
 }
 @media (max-width: 780px) {
   .skeleton .parent_container .dynamic_head .dynamic_profile .bell_box {
@@ -399,9 +409,13 @@ body {
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .client-credentials > div:nth-child(1) {
   font-size: 14px;
   font-weight: 600;
+  opacity: 0.8;
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .client-credentials > div:nth-child(2) {
   font-size: 12px;
+  margin-top: 0.35rem;
+  font-weight: 600;
+  opacity: 0.8;
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box {
   width: 100%;
@@ -415,10 +429,10 @@ body {
   flex-direction: row;
   flex-wrap: nowrap;
   border-radius: 10px;
-  padding: 0.45rem 1rem;
+  padding: 0.35rem 1rem;
   margin: 0 auto;
   background-color: #cccaca;
-  border: 1.6px solid rgb(15, 15, 15);
+  border: 1.6px solid rgb(40, 40, 44);
   transition: 0.2s ease;
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box a img {
@@ -429,19 +443,19 @@ body {
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box a span {
   transition: 0.2s ease;
-  font-size: 14px;
+  font-size: 12.5px;
   color: rgb(32, 32, 32);
   font-weight: 600;
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box a:hover {
-  background-color: rgb(15, 15, 15);
+  background-color: hsl(205, 16%, 15%);
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box a:hover img {
   opacity: 1;
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box a:hover span {
   font-size: 14px;
-  color: rgb(235, 231, 231);
+  color: rgb(245, 245, 245);
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .hidden {
   display: none;

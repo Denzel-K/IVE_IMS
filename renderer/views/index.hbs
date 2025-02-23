@@ -20,6 +20,10 @@
           <input type="password" placeholder="Password" id="signinPassword"/>
         </div>
 
+        <div class="forgotPassword">
+          <button type="button" id="init-pass-reset">Forgot password?</button>
+        </div>
+
         <div class="signup_errors errors">
           {{!-- Errors will dynamically appear here --}}
         </div>
@@ -48,7 +52,7 @@
 
         <div class="input-field">
           <img src="assets/icons/phone.svg" alt="form_icon">
-          <input type="text" placeholder="Phone number" name="phone" />
+          <input type="text" placeholder="Phone (+2547... | 07...)" name="phone" />
         </div>
 
         <div class="custom_option">
@@ -66,7 +70,7 @@
 
         <div class="input-field">
           <img src="assets/icons/show.svg" alt="form_icon" id="toggleSignupPassword">
-          <input type="password" placeholder="Create Password" name="password" id="signupPassword"/>
+          <input type="password" placeholder="Password (Min - 6 chars)" name="password" id="signupPassword"/>
         </div>
 
         <div class="signup_errors errors">
@@ -110,7 +114,34 @@
 
       <img src="assets/backgrounds/signin.svg" class="panel_image" alt="signin" />
     </div>
-</div>
+  </div>
+
+  <div class="custom_modal pass_reset_modal hidden">
+    <div class="password-reset-box dialog">
+      <div class="modal_head">
+        <h3>Reset password</h3>
+        <span class="close_modal" id="close-pass-reset">
+          <img src="assets/icons/close-circle.svg" alt="close-circle">
+        </span>
+      </div>
+
+      <div class="modal_body">
+        <form id="reset_pass_form">
+          <div class="input-field">
+            <img src="assets/icons/envelope.svg" alt="form_icon">
+            <input type="email" placeholder="Email Address" name="email" />
+          </div>
+
+          <div class="input-field">
+            <img src="assets/icons/show.svg" alt="form_icon" id="toggleNewPassword">
+            <input type="password" placeholder="New Password (Min - 6 chars)" name="password" id="newPassword"/>
+          </div>
+
+          <button type="submit" id="submit_reset">Reset password</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script src="js/landing.js"></script>

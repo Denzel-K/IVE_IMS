@@ -38,10 +38,10 @@ input {
   z-index: 5;
 
   @media(max-width: 1440px){
-    top: 41.05%;
+    top: 41.45%;
   }
   @media(max-width: 1040px){
-    top: 47.85%;
+    top: 47.75%;
   }
 }
 
@@ -141,7 +141,7 @@ form.sign-in-form {
     border: none;
     line-height: 1;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 14px;
     color: #333;
 
     &::placeholder {
@@ -204,18 +204,20 @@ form.sign-in-form {
   padding: 0;
   border-radius: 1rem;
   background-color: #eeeeee;
+  border: 1.5px solid rgb(219, 218, 218);
   max-width: 360px;
   width: 100%;
   position: absolute;
   bottom: -1.3rem;
-  z-index: 100;
+  z-index: 1000;
 
   .role_opt_head{
-    padding: .75rem .85rem;
+    padding: .45rem .85rem;
     font-weight: 700;
-    color: rgb(112, 191, 255);
+    color: $form-title;
     font-size: .9rem;
     border-bottom: 1.5px solid rgb(218, 218, 218);
+    background-color: #dedcdc;
   }
   .role_opt{
     padding: .65rem .85rem;
@@ -227,7 +229,7 @@ form.sign-in-form {
 
     &:hover{
       cursor: pointer;
-      background-color: #c0c0c0;
+      background-color: #eecca7;
       color: $bg;
     }
   }
@@ -253,7 +255,7 @@ form.sign-in-form {
   color: #fff;
   text-transform: uppercase;
   font-weight: 600;
-  margin: 10px 0;
+  margin: 16px 0 0 0;
   cursor: pointer;
   transition: 0.5s;
 
@@ -265,6 +267,37 @@ form.sign-in-form {
 .auth_btn{
   width: 150px;
 }
+
+.forgotPassword{
+  width: 100%;
+  max-width: 380px;
+  @include flex(row, end, center);
+  padding-right: .5rem;
+
+  button{
+    font-size: 12px;
+    font-weight: 600;
+    color: $form-title;
+    transition: .25s ease;
+    cursor: pointer;
+    border: none; 
+    background: none;
+
+    &:hover{
+      text-decoration: underline;
+      color: rgb(250, 106, 39);
+    }
+  }
+
+  @media(max-width: 380px){
+    max-width: 360px;
+  }
+  @media(max-width: 325px){
+    max-width: 310px;
+  }
+}
+
+
 
 .errors {
   color: $errors-light;
@@ -541,12 +574,12 @@ form.sign-in-form {
   }
 
   .container:before {
-    bottom: 67%;
+    bottom: 69%;
     left: 50%;
   }
 
   .container.sign-up-mode:before {
-    bottom: 32%;
+    bottom: 30%;
     left: 50%;
   }
 }

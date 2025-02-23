@@ -1,1 +1,116 @@
 @use "../abstracts" as *;
+
+/* Fade-in animation for dialog */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Fade-in animation for backdrop */
+@keyframes backdropFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.custom_modal{
+  @include flex(column, center, center);
+  width: 100%;
+  position: absolute;
+  min-height: 100vh;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(2px);
+  animation: backdropFade 0.3s ease;
+
+  .dialog{
+    max-width: 500px;
+    width: 100%;
+    background-color: $light-bg;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    animation: fadeIn 0.3s ease;
+    @include flex(column, start, center);
+  
+    .modal_head{
+      width: 100%;
+      @include flex(row, space-between, center);
+      padding: .5rem;
+  
+      h3{
+        font-size: 1.15rem;
+        color: rgb(94, 94, 94);
+        margin-left: .5rem;
+
+        @media(max-width: 900px){
+          font-size: 1rem;
+        }
+      }
+      span{
+        width: 30px;
+        @include flex(row, center, center);
+        cursor: pointer;
+  
+        img{
+          width: 28px;
+          opacity: .75;
+          transition: .3s ease;
+        }
+    
+        &:hover{
+          scale: 1.15;
+    
+          img{
+            opacity: .9;
+          }
+        }
+      }
+    }
+  
+    .modal_body{
+      margin-top: 1rem;
+      width: 100%;
+      @include flex(column, start, center);
+    }
+  
+    @media(max-width: 600px){
+      width: 95%;
+    }
+  }
+}
+
+.password-reset-box{
+  #reset_pass_form{
+    width: 100%;
+
+    .input-field{
+      border-radius: 10px;
+      width: 100%;
+    }
+
+    #submit_reset{
+      padding: .5rem 1.25rem;
+      margin: 1.25rem 0  1.45rem 0;
+      border-radius: 12px;
+      background-color: rgb(238, 170, 93);
+      border: 1.6px solid lightgray;
+      cursor: pointer;
+      color: $bg;
+      transition: .25s ease;
+    
+      &:hover{
+        background-color: rgb(248, 146, 79);
+      }
+    }
+  }
+}

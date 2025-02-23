@@ -212,12 +212,22 @@ body {
   }
 }
 .skeleton .sidebar .pages .page_link:hover {
-  background-color: rgb(19, 19, 19);
+  background-color: rgb(51, 49, 54);
 }
 .skeleton .sidebar .pages .page_link:hover > span:nth-child(2) {
   color: rgb(255, 159, 121);
 }
 .skeleton .sidebar .pages .page_link:hover > span:nth-child(1) img {
+  opacity: 1;
+}
+.skeleton .sidebar .pages .page_link.curr_page {
+  background-color: rgb(51, 49, 54);
+  border-right: 4px solid hsl(10, 79%, 65%);
+}
+.skeleton .sidebar .pages .page_link.curr_page > span:nth-child(2) {
+  color: rgb(255, 159, 121);
+}
+.skeleton .sidebar .pages .page_link.curr_page > span:nth-child(1) img {
   opacity: 1;
 }
 .skeleton .sidebar .pages > a:nth-child(5) {
@@ -288,7 +298,7 @@ body {
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .bell_box {
   width: 28px;
-  margin-right: 1rem;
+  margin: 4px 1rem 0 0;
 }
 @media (max-width: 780px) {
   .skeleton .parent_container .dynamic_head .dynamic_profile .bell_box {
@@ -418,9 +428,13 @@ body {
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .client-credentials > div:nth-child(1) {
   font-size: 14px;
   font-weight: 600;
+  opacity: 0.8;
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .client-credentials > div:nth-child(2) {
   font-size: 12px;
+  margin-top: 0.35rem;
+  font-weight: 600;
+  opacity: 0.8;
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box {
   width: 100%;
@@ -434,10 +448,10 @@ body {
   flex-direction: row;
   flex-wrap: nowrap;
   border-radius: 10px;
-  padding: 0.45rem 1rem;
+  padding: 0.35rem 1rem;
   margin: 0 auto;
   background-color: #cccaca;
-  border: 1.6px solid rgb(15, 15, 15);
+  border: 1.6px solid rgb(40, 40, 44);
   transition: 0.2s ease;
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box a img {
@@ -448,19 +462,19 @@ body {
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box a span {
   transition: 0.2s ease;
-  font-size: 14px;
+  font-size: 12.5px;
   color: rgb(32, 32, 32);
   font-weight: 600;
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box a:hover {
-  background-color: rgb(15, 15, 15);
+  background-color: hsl(205, 16%, 15%);
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box a:hover img {
   opacity: 1;
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .logout_box a:hover span {
   font-size: 14px;
-  color: rgb(235, 231, 231);
+  color: rgb(245, 245, 245);
 }
 .skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .hidden {
   display: none;
@@ -484,6 +498,124 @@ body {
 }
 .skeleton.active .sidebar .pages .page_link > span:nth-child(2) {
   display: block;
+}
+
+/* Fade-in animation for dialog */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* Fade-in animation for backdrop */
+@keyframes backdropFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.custom_modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: absolute;
+  min-height: 100vh;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  animation: backdropFade 0.3s ease;
+}
+.custom_modal .dialog {
+  max-width: 500px;
+  width: 100%;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin: auto;
+  animation: fadeIn 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+.custom_modal .dialog .modal_head {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+}
+.custom_modal .dialog .modal_head h3 {
+  font-size: 1.15rem;
+  color: rgb(94, 94, 94);
+  margin-left: 0.5rem;
+}
+@media (max-width: 900px) {
+  .custom_modal .dialog .modal_head h3 {
+    font-size: 1rem;
+  }
+}
+.custom_modal .dialog .modal_head span {
+  width: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.custom_modal .dialog .modal_head span img {
+  width: 28px;
+  opacity: 0.75;
+  transition: 0.3s ease;
+}
+.custom_modal .dialog .modal_head span:hover {
+  scale: 1.15;
+}
+.custom_modal .dialog .modal_head span:hover img {
+  opacity: 0.9;
+}
+.custom_modal .dialog .modal_body {
+  margin-top: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .custom_modal .dialog {
+    width: 95%;
+  }
+}
+
+.password-reset-box #reset_pass_form {
+  width: 100%;
+}
+.password-reset-box #reset_pass_form .input-field {
+  border-radius: 10px;
+  width: 100%;
+}
+.password-reset-box #reset_pass_form #submit_reset {
+  padding: 0.5rem 1.25rem;
+  margin: 1.25rem 0 1.45rem 0;
+  border-radius: 12px;
+  background-color: rgb(238, 170, 93);
+  border: 1.6px solid lightgray;
+  cursor: pointer;
+  color: hsl(205, 16%, 15%);
+  transition: 0.25s ease;
+}
+.password-reset-box #reset_pass_form #submit_reset:hover {
+  background-color: rgb(248, 146, 79);
 }
 
 .landingPage {
@@ -525,12 +657,12 @@ input {
 }
 @media (max-width: 1440px) {
   .signin-signup {
-    top: 41.05%;
+    top: 41.45%;
   }
 }
 @media (max-width: 1040px) {
   .signin-signup {
-    top: 47.85%;
+    top: 47.75%;
   }
 }
 
@@ -635,7 +767,7 @@ form.sign-in-form {
   border: none;
   line-height: 1;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 14px;
   color: #333;
 }
 .input-field input::placeholder {
@@ -690,18 +822,20 @@ form.sign-in-form {
   padding: 0;
   border-radius: 1rem;
   background-color: #eeeeee;
+  border: 1.5px solid rgb(219, 218, 218);
   max-width: 360px;
   width: 100%;
   position: absolute;
   bottom: -1.3rem;
-  z-index: 100;
+  z-index: 1000;
 }
 .role_options .role_opt_head {
-  padding: 0.75rem 0.85rem;
+  padding: 0.45rem 0.85rem;
   font-weight: 700;
-  color: rgb(112, 191, 255);
+  color: hsl(2, 73%, 68%);
   font-size: 0.9rem;
   border-bottom: 1.5px solid rgb(218, 218, 218);
+  background-color: #dedcdc;
 }
 .role_options .role_opt {
   padding: 0.65rem 0.85rem;
@@ -713,7 +847,7 @@ form.sign-in-form {
 }
 .role_options .role_opt:hover {
   cursor: pointer;
-  background-color: #c0c0c0;
+  background-color: #eecca7;
   color: hsl(205, 16%, 15%);
 }
 .role_options .first {
@@ -737,7 +871,7 @@ form.sign-in-form {
   color: #fff;
   text-transform: uppercase;
   font-weight: 600;
-  margin: 10px 0;
+  margin: 16px 0 0 0;
   cursor: pointer;
   transition: 0.5s;
 }
@@ -747,6 +881,39 @@ form.sign-in-form {
 
 .auth_btn {
   width: 150px;
+}
+
+.forgotPassword {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  padding-right: 0.5rem;
+}
+.forgotPassword button {
+  font-size: 12px;
+  font-weight: 600;
+  color: hsl(2, 73%, 68%);
+  transition: 0.25s ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+.forgotPassword button:hover {
+  text-decoration: underline;
+  color: rgb(250, 106, 39);
+}
+@media (max-width: 380px) {
+  .forgotPassword {
+    max-width: 360px;
+  }
+}
+@media (max-width: 325px) {
+  .forgotPassword {
+    max-width: 310px;
+  }
 }
 
 .errors {
@@ -1005,11 +1172,11 @@ form.sign-in-form {
     padding: 1.5rem;
   }
   .container:before {
-    bottom: 67%;
+    bottom: 69%;
     left: 50%;
   }
   .container.sign-up-mode:before {
-    bottom: 32%;
+    bottom: 30%;
     left: 50%;
   }
 }
