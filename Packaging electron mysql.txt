@@ -1,0 +1,146 @@
+✅ Packaging Your Offline Electron App with MySQL
+
+Since your Information Management System (IMS) is an offline app built with Electron.js, Node.js, and MySQL, you have two main options to bundle MySQL so it works without requiring the user to install it separately.
+🔹 1. Options for Running MySQL Offline
+✅ Option 1: Bundle MySQL with Your App (Recommended)
+
+    Package MySQL Server within your app so users don’t need to install it manually.
+    Start MySQL automatically when the Electron app launches.
+
+How?
+
+    Include MySQL binaries in your packaged app.
+    Run MySQL as a local service when the app starts.
+    Use a pre-configured database inside the app folder.
+
+✅ Option 2: Use an Embedded Database (SQLite) (Alternative)
+
+    If you don’t need MySQL’s full power, use SQLite instead.
+    SQLite doesn’t require installation—it runs as a simple file.
+
+🔹 2. Setting Up MySQL to Run Offline (Without Installation)
+✅ Step 1: Download and Include MySQL Binaries
+
+    Download portable MySQL (Windows: Download).
+    Extract the MySQL folder inside your app directory, e.g.:
+
+    IVE_IMS/
+    ├── backend/
+    │   ├── mysql/    ← Include MySQL portable here
+    │   ├── server.js
+    ├── renderer/
+    ├── main.js
+
+✅ Step 2: Start MySQL Automatically When the App Starts
+
+Modify main.js to start MySQL automatically:
+
+const { spawn } = require("child_process");
+const path = require("path");
+
+function startMySQL() {
+  const mysqlPath = path.join(__dirname, "backend", "mysql", "bin", "mysqld");
+
+  const mysqlProcess = spawn(mysqlPath, ["--defaults-file=my.ini"], {
+    cwd: path.join(__dirname, "backend", "mysql"),
+    detached: true,
+    stdio: "ignore",
+  });
+
+  mysqlProcess.unref(); // Allows MySQL to keep running in the background
+  console.log("✅ MySQL server started locally.");
+}
+
+app.whenReady().then(() => {
+  startMySQL(); // Start MySQL before launching Electron
+  createMainWindow();
+});
+
+✅ Step 3: Configure MySQL to Use a Local Database
+
+    Inside backend/mysql/, create a my.ini file:
+
+[mysqld]
+port=3306
+datadir=./data
+socket=./mysql.sock
+
+Initialize MySQL inside the app folder (run this once):
+
+    cd IVE_IMS/backend/mysql/bin
+    mysqld --initialize-insecure
+
+✅ Step 4: Connect to the Local MySQL Server
+
+Modify db.js to connect to your embedded MySQL:
+
+const mysql = require("mysql2");
+
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "", // Empty password (since it's offline)
+  database: "ive_ims",
+  port: 3306,
+  socketPath: "./backend/mysql/mysql.sock",
+});
+
+db.connect((err) => {
+  if (err) {
+    console.error("❌ MySQL Connection Failed: ", err);
+  } else {
+    console.log("✅ Connected to local MySQL database.");
+  }
+});
+
+module.exports = db;
+
+🔹 3. Packaging the App with Electron
+✅ Step 1: Use Electron Packager
+
+After setting up MySQL, package the app using:
+
+npx electron-packager . IVE_IMS --platform=win32 --arch=x64 --out=release-build --overwrite
+
+✅ Step 2: Make Sure MySQL Runs on Start
+
+Electron apps can’t run .exe binaries directly, so use a script to start MySQL before launching the app.
+
+Modify your package.json:
+
+"scripts": {
+  "start": "node start-mysql.js && electron .",
+  "package": "electron-packager . IVE_IMS --platform=win32 --arch=x64 --out=release-build --overwrite"
+}
+
+Create start-mysql.js:
+
+const { spawn } = require("child_process");
+const path = require("path");
+
+const mysqlPath = path.join(__dirname, "backend", "mysql", "bin", "mysqld");
+
+const mysqlProcess = spawn(mysqlPath, ["--defaults-file=my.ini"], {
+  cwd: path.join(__dirname, "backend", "mysql"),
+  detached: true,
+  stdio: "ignore",
+});
+
+mysqlProcess.unref();
+console.log("✅ MySQL server started locally.");
+
+🎯 Final Result
+
+✅ Your Electron app starts MySQL automatically.
+✅ Users don’t need to install MySQL manually.
+✅ Data is stored locally inside your app’s backend/mysql/ folder.
+✅ Your IMS runs offline, fully packaged. 🎉
+💡 Alternative: Use SQLite Instead
+
+If this setup is too complex, you can use SQLite, which stores data in a file without requiring MySQL.
+
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database("./backend/data/ims.db");
+
+If you’re not handling large-scale data, SQLite might be a simpler solution.
+

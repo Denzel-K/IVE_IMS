@@ -1,0 +1,202 @@
+✅ Implementing Online Data Sync with a Central MySQL Server
+
+Using a central MySQL server for syncing allows labs to push local changes and pull updates whenever they reconnect to the internet. This ensures that data remains consistent across all labs without requiring a local network (LAN).
+🔹 1. How It Works (Push & Pull Mechanism)
+
+Each lab has a local MySQL database, and all changes are:
+
+    Pushed to the central MySQL server (cloud or on-premise) when online.
+    Pulled from the central MySQL server to update local databases.
+
+✅ Flow Diagram
+
+Lab A (Offline)  → Syncs changes →  🌍 Central MySQL Server  ← Syncs changes ← Lab B (Offline)
+Lab C (Offline)  → Syncs changes →  
+
+🔹 2. Setting Up the Central MySQL Server
+
+A remote MySQL server should be deployed on a cloud provider (AWS, DigitalOcean, or a private server).
+✅ Step 1: Configure MySQL for Remote Access
+
+Modify the MySQL configuration file (my.cnf or my.ini) on the central server:
+
+[mysqld]
+bind-address = 0.0.0.0  # Allows remote connections
+
+Restart MySQL:
+
+systemctl restart mysql
+
+Create a user for remote access:
+
+CREATE USER 'sync_user'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON ive_ims.* TO 'sync_user'@'%';
+FLUSH PRIVILEGES;
+
+🔹 3. Connecting to the Central Server
+
+Modify db.js to switch between local and remote MySQL automatically:
+
+const mysql = require("mysql2");
+
+// Local database (offline)
+const localDB = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "ive_ims_local",
+});
+
+// Remote (central) database (online)
+const remoteDB = mysql.createConnection({
+  host: "your-central-server.com",
+  user: "sync_user",
+  password: "password",
+  database: "ive_ims",
+});
+
+// Try connecting to the remote database first
+remoteDB.connect((err) => {
+  if (err) {
+    console.warn("⚠️ Central database offline. Using local database.");
+    localDB.connect((err) => {
+      if (err) console.error("❌ Local database connection failed!");
+      else console.log("✅ Connected to local database.");
+    });
+  } else {
+    console.log("✅ Connected to central database.");
+  }
+});
+
+module.exports = { localDB, remoteDB };
+
+🔹 4. Syncing Data (Push & Pull)
+✅ Step 1: Log Changes Locally for Syncing
+
+Modify backend/server.js to track changes:
+
+function logSync(table, recordId, action) {
+  localDB.query(
+    "INSERT INTO sync_log (table_name, record_id, action) VALUES (?, ?, ?)",
+    [table, recordId, action]
+  );
+}
+
+✅ Step 2: Push Data to Central Server
+
+Create backend/pushSync.js:
+
+const { localDB, remoteDB } = require("./db");
+
+function pushData() {
+  localDB.query("SELECT * FROM sync_log", (err, changes) => {
+    if (err) return console.error("Sync error:", err);
+
+    changes.forEach(({ table_name, record_id, action }) => {
+      localDB.query(`SELECT * FROM ${table_name} WHERE id = ?`, [record_id], (err, result) => {
+        if (!err && result.length > 0) {
+          const record = result[0];
+
+          if (action === "INSERT") {
+            remoteDB.query(`INSERT INTO ${table_name} SET ?`, record);
+          } else if (action === "UPDATE") {
+            remoteDB.query(`UPDATE ${table_name} SET ? WHERE id = ?`, [record, record_id]);
+          } else if (action === "DELETE") {
+            remoteDB.query(`DELETE FROM ${table_name} WHERE id = ?`, [record_id]);
+          }
+        }
+      });
+
+      // Remove from sync log after syncing
+      localDB.query("DELETE FROM sync_log WHERE id = ?", [record_id]);
+    });
+  });
+}
+
+// Run push every 30 minutes
+setInterval(pushData, 1800000);
+
+✅ Step 3: Pull Data from Central Server
+
+Create backend/pullSync.js:
+
+const { localDB, remoteDB } = require("./db");
+
+function pullData() {
+  remoteDB.query("SELECT * FROM sync_log", (err, changes) => {
+    if (err) return console.error("Pull sync error:", err);
+
+    changes.forEach(({ table_name, record_id, action }) => {
+      remoteDB.query(`SELECT * FROM ${table_name} WHERE id = ?`, [record_id], (err, result) => {
+        if (!err && result.length > 0) {
+          const record = result[0];
+
+          if (action === "INSERT") {
+            localDB.query(`INSERT INTO ${table_name} SET ?`, record);
+          } else if (action === "UPDATE") {
+            localDB.query(`UPDATE ${table_name} SET ? WHERE id = ?`, [record, record_id]);
+          } else if (action === "DELETE") {
+            localDB.query(`DELETE FROM ${table_name} WHERE id = ?`, [record_id]);
+          }
+        }
+      });
+    });
+  });
+}
+
+// Run pull every 30 minutes
+setInterval(pullData, 1800000);
+
+🔹 5. Resolving Sync Conflicts
+✅ Option 1: "Last Edit Wins" Strategy
+
+Store timestamps for each update and keep the latest version.
+
+ALTER TABLE inventory ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+Modify pushSync.js to only sync newer records:
+
+const syncQuery = `
+  UPDATE inventory SET ? WHERE id = ? AND updated_at < ?
+`;
+remoteDB.query(syncQuery, [record, record_id, record.updated_at]);
+
+✅ Option 2: Manual Conflict Resolution
+
+If a record has conflicting changes, log them for admin review:
+
+function logConflict(table, recordId, localData, remoteData) {
+  localDB.query(
+    "INSERT INTO conflict_log (table_name, record_id, local_data, remote_data) VALUES (?, ?, ?, ?)",
+    [table, recordId, JSON.stringify(localData), JSON.stringify(remoteData)]
+  );
+}
+
+An admin can later approve or reject changes.
+🔹 6. Final Setup
+
+✅ Deploy a Central MySQL Server (Cloud or On-Premise)
+✅ Modify db.js to switch between Local & Remote MySQL
+✅ Implement Push (pushSync.js) and Pull (pullSync.js)
+✅ Resolve Conflicts via Timestamps or Admin Review
+🎯 Best Approach for You
+
+💡 Use an online MySQL server if:
+✔️ Labs connect to the internet at least once a day
+✔️ You need real-time updates across labs
+✔️ You want fully automated sync without USB/manual effort
+
+💡 Use LAN Sync + USB Backup if:
+✔️ Labs are mostly offline and connect infrequently
+✔️ You need data syncing even without internet access
+🚀 Conclusion
+
+For Kenyatta University's OIMS, a Hybrid Approach is best: ✅ Push & Pull Syncing when internet is available
+✅ Offline Mode when internet is unavailable
+✅ Admin Conflict Resolution for critical changes
+🚀 Next Steps
+
+1️⃣ Set up the central MySQL server
+2️⃣ Test pushSync.js and pullSync.js for automatic sync
+3️⃣ Implement conflict resolution if needed
+4️⃣ Deploy your app with online sync support!

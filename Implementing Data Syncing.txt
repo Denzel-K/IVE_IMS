@@ -1,0 +1,204 @@
+Implementing Data Syncing for Multiple Labs in an Offline IMS
+
+Since your Offline Information Management System (OIMS) will be used by multiple people across three different labs (Design Studio, Cezeri Lab, MedTech Lab), you need a way to sync data when devices reconnect.
+🔹 1. Choosing the Best Syncing Strategy
+
+Since the app is offline, here are three possible approaches:
+Approach	Pros	Cons
+Local Network Sync (LAN)	Fast, real-time sync within the same network	Only works when labs are connected
+Peer-to-Peer (P2P) Syncing	Direct device-to-device syncing without a central server	Difficult to manage conflicts
+Periodic Sync via USB/External Drive	Simple and works fully offline	Requires manual intervention
+
+For OIMS in three labs, the best solution is a Hybrid Approach:
+✅ Use LAN syncing when computers are connected.
+✅ Sync via USB/external drive when completely offline.
+✅ Use conflict resolution strategies (timestamps, last edit wins, etc.).
+🔹 2. Setting Up Local Network Sync (LAN)
+✅ Step 1: Turn One Computer into a "Local Server"
+
+One computer in each lab can act as a local MySQL server, and others sync data with it.
+
+    Lab A (Main Server) → 192.168.1.10
+    Lab B & Lab C (Clients) → Connect & sync with Lab A
+
+✅ Step 2: Configure MySQL for Network Access
+
+Modify my.ini (on the main server machine) to allow connections:
+
+[mysqld]
+bind-address=0.0.0.0  # Allow connections from other devices
+port=3306
+
+Restart MySQL:
+
+mysqladmin -u root -p shutdown
+mysqld --defaults-file=my.ini
+
+✅ Step 3: Connect Clients to the Main Server
+
+Modify db.js to detect when the local server is available:
+
+const mysql = require("mysql2");
+
+// Try connecting to the main server first
+const db = mysql.createConnection({
+  host: "192.168.1.10", // Replace with the actual local server IP
+  user: "root",
+  password: "",
+  database: "ive_ims",
+  port: 3306,
+});
+
+// If the main server is offline, fall back to local MySQL
+db.connect((err) => {
+  if (err) {
+    console.warn("⚠️ Main server offline. Switching to local database.");
+    db = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password: "",
+      database: "ive_ims_local",
+      port: 3306,
+    });
+    db.connect((err) => {
+      if (err) console.error("❌ Both local and main servers are offline!");
+      else console.log("✅ Connected to local offline database.");
+    });
+  } else {
+    console.log("✅ Connected to main database server.");
+  }
+});
+
+module.exports = db;
+
+🔹 3. Handling Automatic Syncing
+
+When a lab's computer goes offline, data is stored locally. Once it reconnects, we sync changes.
+✅ Step 1: Add a Sync Table
+
+In MySQL, create a sync_log table to track changes:
+
+CREATE TABLE sync_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    table_name VARCHAR(255),
+    record_id INT,
+    action ENUM('INSERT', 'UPDATE', 'DELETE'),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+✅ Step 2: Log Changes Automatically
+
+Modify backend/server.js to track every database change:
+
+const db = require("./db");
+
+// Function to log changes for syncing
+function logSync(table, recordId, action) {
+  const sql = "INSERT INTO sync_log (table_name, record_id, action) VALUES (?, ?, ?)";
+  db.query(sql, [table, recordId, action], (err) => {
+    if (err) console.error("Sync log error:", err);
+  });
+}
+
+// Example: Log an update to inventory
+function updateInventory(id, newData) {
+  db.query("UPDATE inventory SET ? WHERE id = ?", [newData, id], (err) => {
+    if (!err) logSync("inventory", id, "UPDATE");
+  });
+}
+
+✅ Step 3: Sync Data When Reconnected
+
+Modify backend/sync.js to check for pending changes and sync them:
+
+const db = require("./db");
+
+// Function to sync data when connected
+function syncData() {
+  db.query("SELECT * FROM sync_log", (err, changes) => {
+    if (err) return console.error("Sync error:", err);
+
+    changes.forEach((change) => {
+      const { table_name, record_id, action } = change;
+      
+      // Apply changes to the main server
+      db.query(`SELECT * FROM ${table_name} WHERE id = ?`, [record_id], (err, result) => {
+        if (!err && result.length > 0) {
+          const record = result[0];
+
+          // Insert or update the record on the main server
+          if (action === "INSERT") {
+            db.query(`INSERT INTO ${table_name} SET ?`, record);
+          } else if (action === "UPDATE") {
+            db.query(`UPDATE ${table_name} SET ? WHERE id = ?`, [record, record_id]);
+          }
+        }
+      });
+
+      // Remove the sync log entry after syncing
+      db.query("DELETE FROM sync_log WHERE id = ?", [change.id]);
+    });
+  });
+}
+
+// Run sync every 30 seconds
+setInterval(syncData, 30000);
+
+🔹 4. USB/Manual Data Syncing (Offline)
+
+If labs never connect to the same network, you can sync data via USB/external drive.
+✅ Step 1: Export Unsynced Data
+
+Run this on the offline computer:
+
+mysqldump -u root -p ive_ims_local > backup.sql
+
+Copy backup.sql to a USB drive.
+✅ Step 2: Import Data on the Main Server
+
+Plug the USB into the main lab’s server and run:
+
+mysql -u root -p ive_ims < backup.sql
+
+This merges data from offline labs into the main system.
+🔹 5. Resolving Conflicts
+
+When two labs update the same record, how do we handle conflicts?
+✅ Option 1: "Last Edit Wins" Strategy
+
+Always keep the latest timestamp change.
+
+UPDATE inventory 
+SET name = 'New Item Name', updated_at = NOW()
+WHERE id = 5 AND updated_at < '2024-02-21 10:00:00';
+
+✅ Option 2: Manual Conflict Resolution
+
+Show the admin a "Conflicting Changes" page, allowing them to approve or reject updates.
+🔹 6. Final Setup
+
+✅ Use LAN Sync when connected
+✅ Use USB Sync when completely offline
+✅ Automatically detect when MySQL is online
+✅ Track changes using a sync_log table
+✅ Resolve conflicts using timestamps or admin review
+🎯 Conclusion
+
+For an Offline IMS across three labs, this system ensures:
+🚀 Real-time LAN syncing when connected
+💾 Offline mode with local storage when disconnected
+🔄 USB syncing for full offline backups
+🛠️ Automatic data conflict handling
+
+💡 Best Approach?
+
+    If labs connect often → Use LAN syncing.
+    If labs are rarely connected → Use USB backups.
+    If you need full offline capability → Hybrid Approach (LAN + USB).
+
+🚀 Next Steps
+
+1️⃣ Set up MySQL networking for LAN sync.
+2️⃣ Implement sync_log to track changes.
+3️⃣ Test auto-sync when reconnecting.
+4️⃣ Implement USB export/import for full offline use.
