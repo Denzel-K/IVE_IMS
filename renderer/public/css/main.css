@@ -665,12 +665,12 @@ input {
 }
 @media (max-width: 1440px) {
   .signin-signup {
-    top: 41.45%;
+    top: 41.75%;
   }
 }
 @media (max-width: 1040px) {
   .signin-signup {
-    top: 47.75%;
+    top: 48.35%;
   }
 }
 
