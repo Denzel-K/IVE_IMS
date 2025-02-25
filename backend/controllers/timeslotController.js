@@ -29,7 +29,7 @@ exports.checkSlotAvailability = (req, res) => {
     const query = 'SELECT * FROM timeslots WHERE resource_id = ? AND DATE(start_time) = ?';
     db.query(query, [resourceId, date], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json({ available: results.length === 0 });
+        res.json({ availabel: results.length === 0 });
     });
 };
 

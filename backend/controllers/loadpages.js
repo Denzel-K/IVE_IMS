@@ -1,3 +1,5 @@
+const Project = require('../models/project');
+
 exports.landingPage = (req, res) => {
   res.render('index', {pageTitle: "Welcome aboard"});
 }
@@ -23,16 +25,20 @@ exports.inventoryGet = (req, res) => {
   }});
 }
 
+
 exports.projectsGet = (req, res) => {
   const { id, name, email, role } = req.user;
 
-  res.render('projects', {
-    pageTitle: "Projects", 
-    credentials: {
-      id, name, email, role
-    }
+  Project.getAllProjects((err, projects) => {
+    if (err) return res.status(500).json({ message: "Database error" });
+
+    res.render('projects', {
+      pageTitle: "Project Management",
+      credentials: { id, name, email, role },
+      projects,
+    });
   });
-}
+};
 
 exports.bookingsGet = (req, res) => {
   const { id, name, email, role } = req.user;

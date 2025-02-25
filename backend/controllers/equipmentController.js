@@ -11,7 +11,7 @@ exports.addEquipment = (req, res) => {
 
     const uniqueCode = `EQ-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    Equipment.addEquipment(name, lab, uniqueCode, currentLocation, 'available', (err, result) => {
+    Equipment.addEquipment(name, lab, uniqueCode, currentLocation, 'availabel', (err, result) => {
         if (err) 
             
             {
@@ -54,7 +54,7 @@ exports.updateEquipmentStatus = (req, res) => {
     const { id } = req.params;
     const { status, currentLocation } = req.body;
 
-    if (!['available', 'in use', 'maintenance', 'damaged'].includes(status)) {
+    if (!['availabel', 'in use', 'maintenance', 'damaged'].includes(status)) {
         return res.status(400).json({ message: 'Invalid status' });
     }
 

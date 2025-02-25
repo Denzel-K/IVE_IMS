@@ -51,7 +51,7 @@ IVE_IMS/
 
 ✅ Step 2: Modify db.js to Detect the Bundled MySQL
 
-Update db.js to first try local MySQL, and if unavailable, start the bundled MySQL instance:
+Update db.js to first try local MySQL, and if unavailabel, start the bundled MySQL instance:
 
 const mysql = require("mysql2");
 const path = require("path");
@@ -182,7 +182,7 @@ This will generate an executable .exe file that contains both MySQL and your app
 
 ✅ During development, you use a locally installed MySQL.
 ✅ For production, you bundle MySQL inside the app and start it automatically.
-✅ Database connection (db.js) detects whether local or bundled MySQL is available.
+✅ Database connection (db.js) detects whether local or bundled MySQL is availabel.
 ✅ Migrate data by exporting (mysqldump) and importing into the bundled MySQL.
 ✅ Electron automatically starts the bundled MySQL before running the app.
 🚀 How Easy Is the Migration?

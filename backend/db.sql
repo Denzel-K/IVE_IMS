@@ -17,7 +17,7 @@ CREATE TABLE equipment (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     lab VARCHAR(100) NOT NULL,  -- Which lab owns this item
-    status ENUM('available', 'in use', 'maintenance', 'damaged') DEFAULT 'available',
+    status ENUM('availabel', 'in use', 'maintenance', 'damaged') DEFAULT 'availabel',
     unique_code VARCHAR(255) UNIQUE NOT NULL, -- Barcode/QR Code scanning
     current_location VARCHAR(255) NOT NULL, -- Tracks where the item is
     last_maintenance DATE DEFAULT NULL,
@@ -60,6 +60,24 @@ CREATE TABLE projects (
     owner_id INT NOT NULL,
     FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- Step 1: Add a new column with the updated ENUM values
+ALTER TABLE projects 
+ADD COLUMN new_status ENUM('active', 'completed', 'terminated') DEFAULT 'active';
+
+-- Step 2: Copy data from old column to new column
+UPDATE projects SET new_status = 
+    CASE 
+        WHEN status = 'pending' THEN 'active' 
+        ELSE status 
+    END;
+
+-- Step 3: Drop the old column
+ALTER TABLE projects DROP COLUMN status;
+
+-- Step 4: Rename the new column to match the original column name
+ALTER TABLE projects CHANGE new_status status ENUM('active', 'completed', 'terminated') DEFAULT 'active';
+
 
 CREATE TABLE reservations (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -113,7 +131,7 @@ CREATE TABLE workspaces (
     name VARCHAR(255) NOT NULL,
     location VARCHAR(255) NOT NULL,
     capacity INT NOT NULL,
-    available BOOLEAN DEFAULT TRUE
+    availabel BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE workspace_reservations (

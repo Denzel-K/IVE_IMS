@@ -36,7 +36,7 @@ mysqld --defaults-file=my.ini
 
 ✅ Step 3: Connect Clients to the Main Server
 
-Modify db.js to detect when the local server is available:
+Modify db.js to detect when the local server is availabel:
 
 const mysql = require("mysql2");
 

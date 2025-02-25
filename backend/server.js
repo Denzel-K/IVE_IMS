@@ -9,6 +9,7 @@ const inventoryRoutes = require('./routes/inventoryRoutes');
 const maintenanceRoutes = require('./routes/maintenanceRoutes');
 const assetRoutes = require('./routes/assetRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
+const projectsRoutes = require('./routes/projectRoutes');
 const cron = require('node-cron');
 const { sendMaintenanceReminders } = require('./controllers/maintenanceController');
 const path = require('path');
@@ -73,6 +74,7 @@ app.use('/api', authRoutes);
 app.use('/api/assets', assetRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
+app.use('/api/projects', projectsRoutes);
 app.use(reservationRoutes);
 app.use("/api/workspaces", workspaceRoutes);
 

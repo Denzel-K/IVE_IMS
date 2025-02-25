@@ -202,7 +202,7 @@ body {
 }
 .skeleton .sidebar .pages .page_link.curr_page {
   background-color: rgb(51, 49, 54);
-  border-right: 4px solid hsl(10, 79%, 65%);
+  border-right: 4px solid #ec775f;
 }
 .skeleton .sidebar .pages .page_link.curr_page > span:nth-child(2) {
   color: rgb(255, 159, 121);

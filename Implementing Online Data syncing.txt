@@ -191,8 +191,8 @@ An admin can later approve or reject changes.
 ✔️ You need data syncing even without internet access
 🚀 Conclusion
 
-For Kenyatta University's OIMS, a Hybrid Approach is best: ✅ Push & Pull Syncing when internet is available
-✅ Offline Mode when internet is unavailable
+For Kenyatta University's OIMS, a Hybrid Approach is best: ✅ Push & Pull Syncing when internet is availabel
+✅ Offline Mode when internet is unavailabel
 ✅ Admin Conflict Resolution for critical changes
 🚀 Next Steps
 

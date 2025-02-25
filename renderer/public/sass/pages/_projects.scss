@@ -1,0 +1,321 @@
+@use "sass:color";
+@use "../abstracts" as *;
+
+.projects-container {
+  width: 100%;
+  margin: auto;
+  padding: 1.5rem 1rem;
+
+  .project_head{
+    width: 100%;
+    @include flex(row, space-between, center);
+
+    h2{
+      color: rgb(91, 93, 107);
+      font-size: 1.25rem;
+      margin-top: -4px;
+    }
+    .new_project_btn{
+      background-color: rgb(245, 247, 248);
+      border: 2px solid #00afd4;
+      border-radius: 8px;
+      padding: .35rem .55rem;
+      @include flex(row, space-between, center);
+      transition: .25s ease;
+
+      span:nth-child(1){
+        svg{
+          width: 20px;
+          height: 20px;
+          transition: .25s ease;
+          opacity: .85;
+        }
+      }
+      span:nth-child(2){
+        margin-left: .7rem;
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: -2.6px;
+        transition: .25s ease;
+        color: #086375;
+      }
+      .add_svg_path{
+        transition: .25s ease;
+      }
+
+      &:hover{
+        cursor: pointer;
+        background-color: #00afd4;
+        border: 2px solid #1f788a;
+
+        span:nth-child(1){
+          svg{
+            scale: 1.065;
+            opacity: 1;
+          }
+        }
+        span:nth-child(2){
+          color: #f7f7f7;
+        }
+        .add_svg_path{
+          fill: $light-bg;
+        }
+      }
+    }
+  }
+
+  .project-filters {
+    @include flex(row, start, center);
+    gap: 12px;
+    margin: 25px 0;
+
+    .filter-btn {
+      padding: .35rem .8rem;
+      border: 1px solid $filter-btn;
+      background: rgb(241, 241, 241);
+      color: $filter-btn;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      font-weight: bold;
+
+      &.active {
+        background: $filter-btn;
+        color: white;
+      }
+
+      &:hover {
+        background: color.scale($filter-btn, $lightness: 10%);
+        color: white;
+      }
+    }
+  }
+
+  .projects-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+
+    @media(max-width: 1440px){
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    @media(max-width: 1040px){
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .project-card {
+      min-width: 300px;
+      background: rgb(245, 243, 243);
+      padding: 20px;
+      border-radius: 10px;
+      border-left: 6px solid $primary;
+      @include boxShadow(0px 4px 12px rgba(0, 0, 0, 0.1));
+      transition: all 0.3s ease;
+
+      &:hover {
+        cursor: pointer;
+        transform: translateY(-3px);
+        @include boxShadow(0px 6px 15px rgba(0, 0, 0, 0.15));
+      }
+
+      .project-card-head {
+        @include flex(row, space-between, center);
+        width: 100%;
+      
+        h4 {
+          font-size: 1.3rem;
+          margin-bottom: 8px;
+          color: $primary;
+          max-width: 70%; // Ensure it doesn't take up full space
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          position: relative;
+          cursor: pointer;
+
+          @media(max-width: 1040px){
+            font-size: 1rem;
+          }
+      
+          &:hover::after {
+            content: attr(data-fullname); // Show full name
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            z-index: 10;
+          }
+        }
+      
+        .status-label {
+          padding: 6px 12px;
+          border-radius: 6px;
+          font-size: 14px;
+          font-weight: bold;
+          margin-top: -4px;
+
+          @media(max-width: 1040px){
+            font-size: 12px;
+            margin-top: -6px;
+          }
+        }
+      }
+      
+
+      p {
+        font-size: 1rem;
+        color: color.scale($light-bg, $lightness: -30%);
+        margin-top: 12px;
+      }
+
+      &[data-status="active"] .status-label {
+        background-color: color.scale($primary, $lightness: 45%);
+        color: $primary;
+      }
+
+      &[data-status="completed"] .status-label {
+        background-color: color.scale(rgb(80, 180, 80), $lightness: 40%);
+        color: rgb(30, 130, 30);
+      }
+
+      &[data-status="terminated"] .status-label {
+        background-color: color.scale($errors-light, $lightness: 50%);
+        color: $errors-strong;
+      }
+
+      .update_p_stat_box{
+        margin-top: 1rem;
+        h5{
+          font-size: 1rem;
+          color: gray;
+        }
+        select {
+          margin-top: .5rem;
+          max-width: 300px;
+          width: 100%;
+          padding: 10px;
+          border-radius: 8px;
+          font-size: 1rem;
+          border: 1px solid color.scale($primary, $lightness: 10%);
+          background: color.scale($light-bg, $lightness: 5%);
+        }
+      }
+    }
+  }
+
+  .no_projects{
+    width: 100%;
+    height: 500px;
+    margin-top: 1rem;
+    border: 2px dashed rgb(201, 201, 199);
+    border-radius: 12px;
+    @include flex(column, center, center);
+
+    @media(max-width: 1440px){
+      height: 380px;
+    }
+
+    p{
+      color: $bg;
+      opacity: .7;
+      font-size: 14px;
+    }
+    img{
+      width: 65px;
+      margin-top: 1rem;
+    }
+  }
+}
+
+.create-project-form {
+  width: 90%;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  @include boxShadow(0px 4px 12px rgba(0, 0, 0, 0.08));
+  @include flex(column, start, start);
+  margin: 1.5rem 0 2rem 0;
+
+  h3 {
+    font-size: 1.6rem;
+    color: $form-title;
+    text-align: center;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: .75rem .8rem;
+    border: 1px solid rgb(223, 223, 223);
+    border-radius: 8px;
+    font-size: 14px;
+    background: rgb(248, 248, 248);;
+    transition: all 0.3s ease;
+    margin-bottom: 1.25rem;
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 5px color.scale($primary, $lightness: 30%);
+    }
+  }
+
+  label{
+    color: rgb(65, 64, 64);
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .hidden{
+    display: none;
+  }
+
+  textarea{
+    min-height: 100px;
+  }
+
+  .date-fields {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    
+    span{
+      @include flex(column, start, start);
+
+      input {
+        width: 100%;
+        opacity: .85;
+      }
+    }
+  }
+
+  .submit_box{
+    width: 100%;
+    @include flex(center, center);
+    margin-top: 1rem;
+
+    button {
+      background-color: $modal-btn;
+      color: white;
+      padding: 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      margin: 0 auto;
+  
+      &:hover {
+        background-color: $modal-btn-hover;
+        transform: scale(1.05);
+      }
+    }
+  }
+}
