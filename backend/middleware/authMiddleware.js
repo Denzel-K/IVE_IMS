@@ -11,7 +11,8 @@ exports.authMiddleware = (roles = []) => {
         console.log("🔍 => Extracted Token:", token || "❌ No Token Found");
 
         if (!token) {
-            return res.status(401).json({ message: 'Access denied. No token provided.' });
+            console.log('Access denied. No token provided.');
+            res.redirect('/');
         }
 
         try {
@@ -21,13 +22,14 @@ exports.authMiddleware = (roles = []) => {
 
             // Check if role-based authorization is required
             if (roles.length && !roles.includes(decoded.role)) {
-                return res.status(403).json({ message: 'Forbidden: Access denied' });
+                console.log('Forbidden: Access denied.');
+                res.redirect('/');
             }
 
             next();
         } catch (err) {
             console.error("❌ Token Verification Error:", err.message);
-            return res.status(401).json({ message: 'Invalid or expired token' });
+            res.redirect('/');
         }
     };
 };

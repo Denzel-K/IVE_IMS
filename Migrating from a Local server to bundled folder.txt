@@ -1,0 +1,197 @@
+✅ Migrating from a Local MySQL Server to a Bundled MySQL Folder (Standalone)
+
+You can continue developing with a locally installed MySQL server and later package MySQL inside your app folder when moving to production. The migration is easy if planned well.
+🔹 1. How Easy Is the Migration?
+
+✅ Very easy! The only things that will change are:
+
+    Database connection settings → Update db.js to point to the bundled MySQL instance.
+    MySQL initialization → Set up a MySQL instance inside the app folder.
+    Data migration → Export your local database and import it into the bundled MySQL.
+
+🔹 2. Current Development Setup (Using Installed MySQL)
+
+During development, you are likely using this type of connection in db.js:
+
+const mysql = require("mysql2");
+
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "ive_ims",
+  port: 3306,
+});
+
+db.connect((err) => {
+  if (err) console.error("❌ MySQL Connection Failed:", err);
+  else console.log("✅ Connected to Local MySQL Server.");
+});
+
+module.exports = db;
+
+🔹 3. Switching to a Bundled MySQL Instance
+
+Once you package your app, the MySQL database must run from the app folder.
+✅ Step 1: Add MySQL to Your App Folder
+
+Download a portable version of MySQL:
+
+    Windows: Download MySQL ZIP
+    Linux/macOS: Use MySQL binaries (no installer required).
+
+Extract it into your app folder:
+
+IVE_IMS/
+├── backend/
+│   ├── mysql/    ← Contains MySQL binaries & data folder
+│   ├── server.js
+├── renderer/
+├── main.js
+
+✅ Step 2: Modify db.js to Detect the Bundled MySQL
+
+Update db.js to first try local MySQL, and if unavailable, start the bundled MySQL instance:
+
+const mysql = require("mysql2");
+const path = require("path");
+const { exec } = require("child_process");
+
+const localDBConfig = {
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "ive_ims",
+  port: 3306,
+};
+
+const bundledDBConfig = {
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "ive_ims",
+  port: 3307, // Use a different port to avoid conflicts
+  socketPath: path.join(__dirname, "mysql/mysql.sock"),
+};
+
+let db;
+
+// Try connecting to the local MySQL server first
+db = mysql.createConnection(localDBConfig);
+db.connect((err) => {
+  if (err) {
+    console.warn("⚠️ Local MySQL not found. Starting bundled MySQL...");
+
+    // Start the bundled MySQL instance
+    exec(
+      `"${path.join(__dirname, "mysql/bin/mysqld")}" --defaults-file=${path.join(
+        __dirname,
+        "mysql/my.ini"
+      )}`,
+      (err, stdout, stderr) => {
+        if (err) {
+          console.error("❌ Failed to start bundled MySQL:", stderr);
+        } else {
+          console.log("✅ Bundled MySQL started.");
+
+          // Connect to the bundled MySQL after starting it
+          db = mysql.createConnection(bundledDBConfig);
+          db.connect((err) => {
+            if (err) console.error("❌ Bundled MySQL Connection Failed:", err);
+            else console.log("✅ Connected to Bundled MySQL.");
+          });
+        }
+      }
+    );
+  } else {
+    console.log("✅ Connected to Local MySQL Server.");
+  }
+});
+
+module.exports = db;
+
+✅ Step 3: Initialize the Bundled MySQL Database
+
+    Navigate to backend/mysql/bin/ inside your app folder.
+
+    Run this command to initialize the MySQL data directory:
+
+mysqld --initialize-insecure
+
+(This creates an empty MySQL database.)
+
+Create a configuration file backend/mysql/my.ini:
+
+    [mysqld]
+    port=3307
+    datadir=./data
+    socket=./mysql.sock
+
+✅ Step 4: Migrate Your Data from Local MySQL
+
+Once you're done developing and want to move your data to the bundled MySQL, follow these steps:
+📌 Export Data from Local MySQL
+
+Run this command on your local MySQL:
+
+mysqldump -u root -p ive_ims > database_backup.sql
+
+(This exports all your tables into a SQL file.)
+📌 Import Data into Bundled MySQL
+
+    Copy database_backup.sql to backend/mysql/ inside your app folder.
+    Run this command to import it into your bundled MySQL:
+
+    mysql -u root -p ive_ims < database_backup.sql
+
+🔹 4. Running MySQL in Production
+
+Once you package the app with Electron, your bundled MySQL must start before the app runs.
+
+Modify main.js to start MySQL first before launching the app:
+
+const { spawn } = require("child_process");
+const path = require("path");
+
+function startMySQL() {
+  const mysqlPath = path.join(__dirname, "backend/mysql/bin/mysqld");
+  
+  const mysqlProcess = spawn(mysqlPath, ["--defaults-file=my.ini"], {
+    cwd: path.join(__dirname, "backend/mysql"),
+    detached: true,
+    stdio: "ignore",
+  });
+
+  mysqlProcess.unref();
+  console.log("✅ MySQL server started locally.");
+}
+
+app.whenReady().then(() => {
+  startMySQL(); // Start MySQL before launching Electron
+  createMainWindow();
+});
+
+🔹 5. Packaging the App with MySQL
+
+After setting up MySQL, package the app using:
+
+npx electron-packager . IVE_IMS --platform=win32 --arch=x64 --out=release-build --overwrite
+
+This will generate an executable .exe file that contains both MySQL and your app.
+🎯 Summary
+
+✅ During development, you use a locally installed MySQL.
+✅ For production, you bundle MySQL inside the app and start it automatically.
+✅ Database connection (db.js) detects whether local or bundled MySQL is available.
+✅ Migrate data by exporting (mysqldump) and importing into the bundled MySQL.
+✅ Electron automatically starts the bundled MySQL before running the app.
+🚀 How Easy Is the Migration?
+
+✅ Very easy! Since we designed the system to detect MySQL automatically, no code changes are needed—just package MySQL inside your app!
+💡 Next Steps
+
+1️⃣ Continue development with local MySQL.
+2️⃣ Set up bundled MySQL inside your app folder.
+3️⃣ Modify db.js to check both local and bundled MySQL.
+4️⃣ Migrate data using mysqldump once development is complete.
+5️⃣ Package the final app with Electron and test!
