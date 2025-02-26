@@ -5,8 +5,6 @@ dotenv.config();
 // Unified authentication and authorization middleware
 exports.authMiddleware = (roles = []) => {
     return (req, res, next) => {
-        console.log("🔍 => Received Cookies."); 
-
         const token = req.cookies.token;
         console.log("🔍 => Extracted Token:", token || "❌ No Token Found");
 
