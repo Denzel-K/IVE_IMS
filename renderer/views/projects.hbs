@@ -38,7 +38,7 @@
 
                 <p>{{description}}</p>
 
-                {{#if (eq ../credentials.role "admin")}}
+                {{!-- {{#if (eq ../credentials.role "admin")}}
                   <div class="update_p_stat_box">
                     <h5>Update status</h5>
                     <select class="update-status">
@@ -49,7 +49,7 @@
                       <option value="terminated" {{#if (eq status "terminated")}}selected{{/if}}>Terminated</option>
                     </select>
                   </div>
-                {{/if}}
+                {{/if}} --}}
               </div>
             {{/each}}
           </div>
