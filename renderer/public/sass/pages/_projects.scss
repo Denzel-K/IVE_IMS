@@ -96,6 +96,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 20px;
+    font-family: 'Roboto', sans-serif;
 
     @media(max-width: 1440px){
       grid-template-columns: 1fr 1fr 1fr;
@@ -322,22 +323,6 @@
 
 
 .new_inventory_btn{
-  // & > span:nth-child(1){
-  //   .add_svg_path{
-  //     transition: .25s ease;
-  //   }
-  // }
-  
-  // &:hover{
-  //   & > span:nth-child(1){
-  //     .add_svg_path{
-  //       fill: $light-bg;
-  //     }
-  //   }
-  // }
-  // span:nth-child(2){
-  //   color: #f7f7f7;
-  // }
   background-color: rgb(245, 247, 248);
   border: 2px solid #00afd4;
   border-radius: 8px;
