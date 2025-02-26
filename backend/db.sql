@@ -54,30 +54,15 @@ CREATE TABLE projects (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    status ENUM('pending', 'active', 'completed') DEFAULT 'pending',
+    status ENUM('active', 'completed', 'terminated') DEFAULT 'active',
     start_date DATE,
     end_date DATE,
     owner_id INT NOT NULL,
     FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Step 1: Add a new column with the updated ENUM values
-ALTER TABLE projects 
-ADD COLUMN new_status ENUM('active', 'completed', 'terminated') DEFAULT 'active';
-
--- Step 2: Copy data from old column to new column
-UPDATE projects SET new_status = 
-    CASE 
-        WHEN status = 'pending' THEN 'active' 
-        ELSE status 
-    END;
-
--- Step 3: Drop the old column
-ALTER TABLE projects DROP COLUMN status;
-
--- Step 4: Rename the new column to match the original column name
-ALTER TABLE projects CHANGE new_status status ENUM('active', 'completed', 'terminated') DEFAULT 'active';
-
+ALTER TABLE projects ADD COLUMN admin_approval ENUM('pending', 'approved', 'denied') DEFAULT 'pending';
+ALTER TABLE projects ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 CREATE TABLE reservations (
     id INT AUTO_INCREMENT PRIMARY KEY,

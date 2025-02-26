@@ -8,7 +8,7 @@
       {{!-- Your sections and divs go here --}}
       <section class="projects-container">
         <div class="project_head">
-          <h2>My projects</h2>
+          <h2> {{#if (eq credentials.role "admin")}}All{{else}}My{{/if}} projects</h2>
           <button type="button" class="new_project_btn">
             <span>
               {{!-- <img src="assets/icons/new-project.svg" alt="new"> --}}
@@ -28,18 +28,45 @@
         </div>
 
         {{#if projects.length}}
-          <div class="projects-list">
-            {{#each projects}}
-              <div class="project-card" data-status="{{status}}" data-id="{{id}}">
-                <div class="project-card-head">
-                  <h4>{{name}}</h4>
-                  <span class="status-label">{{capitalizeFirst status}}</span>
-                </div>
+          {{#if (eq credentials.role "admin")}}
+            <table class="projects-table">
+              <thead>
+                  <tr>
+                    {{!-- <th>#</th> --}}
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Owner</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {{#each projects}}
+                      <tr data-id="{{id}}" data-status="{{status}}">
+                        {{!-- <td>{{id}}</td> --}}
+                        <td class="name_td">{{name}}</td>
+                        <td>{{description}}</td>
+                        <td><span class="status-label">{{capitalizeFirst status}}</span></td>
+                        <td>{{formatDate start_date}}</td>
+                        <td>{{formatDate end_date}}</td>
+                        <td>{{owner_name}}</td>
+                      </tr>
+                  {{/each}}
+              </tbody>
+            </table>
+          {{else}}
+            <div class="projects-list">
+              {{#each projects}}
+                <div class="project-card" data-status="{{status}}" data-id="{{id}}">
+                  <div class="project-card-head">
+                    <h4>{{name}}</h4>
+                    <span class="status-label">{{capitalizeFirst status}}</span>
+                  </div>
 
-                <p>{{description}}</p>
+                  <p>{{description}}</p>
 
-                {{!-- {{#if (eq ../credentials.role "admin")}}
-                  <div class="update_p_stat_box">
+                  {{!-- <div class="update_p_stat_box">
                     <h5>Update status</h5>
                     <select class="update-status">
                       <option value="active" {{#if (eq status "active")}}selected{{/if}}>Active</option>
@@ -48,11 +75,11 @@
 
                       <option value="terminated" {{#if (eq status "terminated")}}selected{{/if}}>Terminated</option>
                     </select>
-                  </div>
-                {{/if}} --}}
-              </div>
-            {{/each}}
-          </div>
+                  </div> --}}
+                </div>
+              {{/each}}
+            </div>
+          {{/if}}
         {{else}}
           <div class="no_projects">
             <p>You have no projects yet</p>

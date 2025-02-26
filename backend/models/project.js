@@ -5,8 +5,29 @@ function formatDate(date) {
 }
 
 const Project = {
-    getAllProjects: (callback) => {
-        db.query("SELECT * FROM projects", callback);
+    getAllProjects: (userRole, userId, callback) => {
+        let sql;
+        let params = [];
+
+        if (userRole === "admin") {
+            sql = `
+                SELECT projects.*, users.name AS owner_name 
+                FROM projects
+                JOIN users ON projects.owner_id = users.id
+                ORDER BY projects.created_at DESC
+            `;
+        } else {
+            sql = `
+                SELECT projects.*, users.name AS owner_name 
+                FROM projects
+                JOIN users ON projects.owner_id = users.id
+                WHERE projects.owner_id = ?
+                ORDER BY projects.created_at DESC
+            `;
+            params.push(userId);
+        }
+
+        db.query(sql, params, callback);
     },
 
     createProject: (name, description, owner_id, start_date, end_date, status, callback) => {

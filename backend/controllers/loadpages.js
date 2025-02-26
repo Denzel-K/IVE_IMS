@@ -29,7 +29,7 @@ exports.inventoryGet = (req, res) => {
 exports.projectsGet = (req, res) => {
   const { id, name, email, role } = req.user;
 
-  Project.getAllProjects((err, projects) => {
+  Project.getAllProjects(role, id, (err, projects) => {
     if (err) return res.status(500).json({ message: "Database error" });
 
     res.render('projects', {

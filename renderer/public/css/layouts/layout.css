@@ -223,9 +223,8 @@ body {
 }
 .skeleton .sidebar .pages .page_group {
   width: 100%;
-  padding: 0.25rem 0 0 0;
+  border-top: 1.5px solid rgba(243, 217, 183, 0.2274509804);
   border-bottom: 1.5px solid rgba(243, 217, 183, 0.2274509804);
-  margin: 1rem 0;
 }
 .skeleton .sidebar .pages .ndlast {
   margin-top: auto;
@@ -497,7 +496,7 @@ body {
   display: block;
 }
 .skeleton.active .sidebar .pages .page_group {
-  border-top: none;
+  padding: 0.65rem 0 0 0;
 }
 .skeleton.active .sidebar .pages .page_link > span:nth-child(2) {
   display: block;

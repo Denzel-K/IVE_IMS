@@ -243,9 +243,8 @@ body {
 }
 .skeleton .sidebar .pages .page_group {
   width: 100%;
-  padding: 0.25rem 0 0 0;
+  border-top: 1.5px solid rgba(243, 217, 183, 0.2274509804);
   border-bottom: 1.5px solid rgba(243, 217, 183, 0.2274509804);
-  margin: 1rem 0;
 }
 .skeleton .sidebar .pages .ndlast {
   margin-top: auto;
@@ -517,7 +516,7 @@ body {
   display: block;
 }
 .skeleton.active .sidebar .pages .page_group {
-  border-top: none;
+  padding: 0.65rem 0 0 0;
 }
 .skeleton.active .sidebar .pages .page_link > span:nth-child(2) {
   display: block;
@@ -1334,9 +1333,8 @@ form.sign-in-form {
 }
 .projects-container .projects-list .project-card .project-card-head h4 {
   font-size: 1.3rem;
-  margin-bottom: 8px;
   color: rgb(84, 89, 114);
-  max-width: 70%;
+  max-width: 65%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1362,7 +1360,7 @@ form.sign-in-form {
   z-index: 10;
 }
 .projects-container .projects-list .project-card .project-card-head .status-label {
-  padding: 6px 12px;
+  padding: 5px 10px;
   border-radius: 6px;
   font-size: 14px;
   font-weight: bold;
@@ -1376,16 +1374,16 @@ form.sign-in-form {
 }
 .projects-container .projects-list .project-card p {
   font-size: 1rem;
-  color: rgb(171.5, 171.5, 171.5);
+  color: rgb(122.5, 122.5, 122.5);
   margin-top: 12px;
 }
 .projects-container .projects-list .project-card[data-status=active] .status-label {
-  background-color: rgb(244.55, 180.2, 167);
-  color: rgb(236, 119, 95);
+  background-color: lightgreen;
+  color: darkgreen;
 }
 .projects-container .projects-list .project-card[data-status=completed] .status-label {
-  background-color: #96d296;
-  color: rgb(30, 130, 30);
+  background-color: lightblue;
+  color: navy;
 }
 .projects-container .projects-list .project-card[data-status=terminated] .status-label {
   background-color: rgb(248, 162.5, 177);
@@ -1407,6 +1405,52 @@ form.sign-in-form {
   font-size: 1rem;
   border: 1px solid rgb(237.9, 132.6, 111);
   background: rgb(245.5, 245.5, 245.5);
+}
+.projects-container .projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.projects-container .projects-table th, .projects-container .projects-table td {
+  border: 1px solid #ddd;
+  padding: 1rem 0.8rem;
+  text-align: left;
+}
+.projects-container .projects-table td {
+  color: rgb(70, 70, 70);
+}
+.projects-container .projects-table .name_td {
+  font-weight: 600;
+  color: rgb(46, 46, 54);
+}
+.projects-container .projects-table th {
+  background-color: #f4f4f4;
+  color: rgb(73, 73, 73);
+}
+.projects-container .projects-table .status-label {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.projects-container .projects-table tr[data-status=active] .status-label {
+  background-color: lightgreen;
+  color: darkgreen;
+}
+.projects-container .projects-table tr[data-status=completed] .status-label {
+  background-color: lightblue;
+  color: navy;
+}
+.projects-container .projects-table tr[data-status=terminated] .status-label {
+  background-color: rgb(248, 162.5, 177);
+  color: rgb(255, 0, 85);
+}
+@media (max-width: 768px) {
+  .projects-container .projects-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }
 .projects-container .no_projects {
   width: 100%;

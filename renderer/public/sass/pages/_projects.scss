@@ -126,9 +126,8 @@
       
         h4 {
           font-size: 1.3rem;
-          margin-bottom: 8px;
           color: rgb(84, 89, 114);
-          max-width: 70%; // Ensure it doesn't take up full space
+          max-width: 65%; // Ensure it doesn't take up full space
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -155,7 +154,7 @@
         }
       
         .status-label {
-          padding: 6px 12px;
+          padding: 5px 10px;
           border-radius: 6px;
           font-size: 14px;
           font-weight: bold;
@@ -171,18 +170,18 @@
 
       p {
         font-size: 1rem;
-        color: color.scale($light-bg, $lightness: -30%);
+        color: color.scale($light-bg, $lightness: -50%);
         margin-top: 12px;
       }
 
       &[data-status="active"] .status-label {
-        background-color: color.scale($primary, $lightness: 45%);
-        color: $primary;
+        background-color: lightgreen;
+        color: darkgreen;
       }
 
       &[data-status="completed"] .status-label {
-        background-color: color.scale(rgb(80, 180, 80), $lightness: 40%);
-        color: rgb(30, 130, 30);
+        background-color: lightblue;
+      color: navy;
       }
 
       &[data-status="terminated"] .status-label {
@@ -209,6 +208,59 @@
       }
     }
   }
+
+  .projects-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 1rem .8rem;
+      text-align: left;
+    }
+    td{
+      color: rgb(70, 70, 70);
+    }
+    .name_td{
+      font-weight: 600;
+      color: rgb(46, 46, 54);
+    }
+
+    th {
+      background-color: #f4f4f4;
+      color: rgb(73, 73, 73);
+    }
+
+    .status-label {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    tr[data-status="active"] .status-label {
+      background-color: lightgreen;
+      color: darkgreen;
+    }
+
+    tr[data-status="completed"] .status-label {
+      background-color: lightblue;
+      color: navy;
+    }
+
+    tr[data-status="terminated"] .status-label {
+      background-color: color.scale($errors-light, $lightness: 50%);
+      color: $errors-strong;
+    }
+
+    @media (max-width: 768px) {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+  }
+
 
   .no_projects{
     width: 100%;
