@@ -19,7 +19,7 @@ exports.inventoryGet = (req, res) => {
   const { id, name, email, role } = req.user;
 
   res.render('inventory', {
-    pageTitle: "Inventory", 
+    pageTitle: "Inventory Management", 
     credentials: {
     id, name, email, role
   }});
@@ -67,6 +67,42 @@ exports.accountsGet = (req, res) => {
 
   res.render('accounts', {
     pageTitle: "Account Management", 
+    credentials: {
+      id, name, email, role
+    }
+  });
+}
+
+
+exports.assetsharingGet = (req, res) => {
+  const { id, name, email, role } = req.user;
+
+  res.render('asset_sharing', {
+    pageTitle: "Asset sharing", 
+    credentials: {
+      id, name, email, role
+    }
+  });
+}
+
+
+exports.consumablesGet = (req, res) => {
+  const { id, name, email, role } = req.user;
+
+  res.render('consumables', {
+    pageTitle: "Consumables", 
+    credentials: {
+      id, name, email, role
+    }
+  });
+}
+
+
+exports.inventorylogsGet = (req, res) => {
+  const { id, name, email, role } = req.user;
+
+  res.render('inventory_logs', {
+    pageTitle: "Inventory Logs", 
     credentials: {
       id, name, email, role
     }

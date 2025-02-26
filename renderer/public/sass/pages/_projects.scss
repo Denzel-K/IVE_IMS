@@ -319,3 +319,68 @@
     }
   }
 }
+
+
+.new_inventory_btn{
+  // & > span:nth-child(1){
+  //   .add_svg_path{
+  //     transition: .25s ease;
+  //   }
+  // }
+  
+  // &:hover{
+  //   & > span:nth-child(1){
+  //     .add_svg_path{
+  //       fill: $light-bg;
+  //     }
+  //   }
+  // }
+  // span:nth-child(2){
+  //   color: #f7f7f7;
+  // }
+  background-color: rgb(245, 247, 248);
+  border: 2px solid #00afd4;
+  border-radius: 8px;
+  padding: .35rem .55rem;
+  @include flex(row, space-between, center);
+  transition: .25s ease;
+
+  span:nth-child(1){
+    svg{
+      width: 20px;
+      height: 20px;
+      transition: .25s ease;
+      opacity: .85;
+    }
+  }
+  span:nth-child(2){
+    margin-left: .7rem;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: -2.6px;
+    transition: .25s ease;
+    color: #086375;
+  }
+  .add_svg_path{
+    transition: .25s ease;
+  }
+
+  &:hover{
+    cursor: pointer;
+    background-color: #00afd4;
+    border: 2px solid #1f788a;
+
+    span:nth-child(1){
+      svg{
+        scale: 1.065;
+        opacity: 1;
+      }
+    }
+    span:nth-child(2){
+      color: #f7f7f7;
+    }
+    .add_svg_path{
+      fill: $light-bg;
+    }
+  }
+}

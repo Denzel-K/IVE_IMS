@@ -1497,4 +1497,48 @@ form.sign-in-form {
   background-color: rgb(247, 160, 61);
   transform: scale(1.05);
 }
+
+.new_inventory_btn {
+  background-color: rgb(245, 247, 248);
+  border: 2px solid #00afd4;
+  border-radius: 8px;
+  padding: 0.35rem 0.55rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.25s ease;
+}
+.new_inventory_btn span:nth-child(1) svg {
+  width: 20px;
+  height: 20px;
+  transition: 0.25s ease;
+  opacity: 0.85;
+}
+.new_inventory_btn span:nth-child(2) {
+  margin-left: 0.7rem;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: -2.6px;
+  transition: 0.25s ease;
+  color: #086375;
+}
+.new_inventory_btn .add_svg_path {
+  transition: 0.25s ease;
+}
+.new_inventory_btn:hover {
+  cursor: pointer;
+  background-color: #00afd4;
+  border: 2px solid #1f788a;
+}
+.new_inventory_btn:hover span:nth-child(1) svg {
+  scale: 1.065;
+  opacity: 1;
+}
+.new_inventory_btn:hover span:nth-child(2) {
+  color: #f7f7f7;
+}
+.new_inventory_btn:hover .add_svg_path {
+  fill: #f5f5f5;
+}
 /*# sourceMappingURL=main.css.map */
