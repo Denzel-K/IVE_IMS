@@ -385,12 +385,9 @@ body{
               @include flexbox(center, center, column);
               width: 100%;
 
-              & > div:nth-child(1){
-                font-size: 14px;
-                font-weight: 600;
-                opacity: .8;
-              }
-              & > div:nth-child(2){
+              & > div{
+                width: 100%;
+                text-align: left;
                 font-size: 12px;
                 margin-top: .35rem;
                 font-weight: 600;

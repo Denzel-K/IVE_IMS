@@ -421,12 +421,9 @@ body {
   flex-wrap: nowrap;
   width: 100%;
 }
-.skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .client-credentials > div:nth-child(1) {
-  font-size: 14px;
-  font-weight: 600;
-  opacity: 0.8;
-}
-.skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .client-credentials > div:nth-child(2) {
+.skeleton .parent_container .dynamic_head .dynamic_profile .profile_box .p-box-reveal .client-credentials > div {
+  width: 100%;
+  text-align: left;
   font-size: 12px;
   margin-top: 0.35rem;
   font-weight: 600;
