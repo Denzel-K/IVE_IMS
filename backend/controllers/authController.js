@@ -28,54 +28,59 @@ const generateToken = (user, res) => {
 
 // **Register User**
 exports.register = (req, res) => {
-    const { name, email, phone, password, lab, role } = req.body;
+    try{
+        const { name, email, phone, password, lab, role } = req.body;
 
-    if (!name || !email || !phone || !password) {
-        return res.status(400).json({ message: 'Name, email, phone and password are required' });
-    }
-
-    const checkUserCount = 'SELECT COUNT(*) AS count FROM users';
-    db.query(checkUserCount, (err, results) => {
-        if (err) return res.status(500).json({ message: 'Database error' });
-
-        const userCount = results[0].count;
-        let assignedRole = userCount === 0 ? 'admin' : role;
-        let isApproved = userCount === 0; // First user auto-approved
-
-        bcrypt.hash(password, 10, (err, hashedPassword) => {
-            if (err) return res.status(500).json({ message: 'Error hashing password' });
-
-            const sql = 'INSERT INTO users (name, email, phone, password, role, approved) VALUES (?, ?, ?, ?, ?, ?)';
-            db.query(sql, [name, email, phone, hashedPassword, assignedRole, isApproved], (err, result) => {
-                if (err) return res.status(500).json({ message: 'Error registering user' });
-
-                const newUser = {
-                    id: result.insertId,
-                    name,
-                    email,
-                    phone,
-                    lab,
-                    role: assignedRole,
-                    approved: isApproved
-                };
-
-                // Generate JWT and store it in cookies
-                generateToken(newUser, res);
-
-                // Send email notification
-                sendEmail(email, 
-                    'IVE IMS Registration Successful', 
-                    `Hello ${name},\n\nYour registration was successful. Please wait for admin approval.`,
-                    `<p>Hello ${name},</p><p>Your registration was successful. Please wait for admin approval.</p>`
-                );
-
-                res.status(201).json({ 
-                    message: 'Registration successful, awaiting admin approval.', 
-                    user: newUser
+        if (!name || !email || !phone || !password) {
+            return res.status(400).json({ message: 'Name, email, phone and password are required' });
+        }
+    
+        const checkUserCount = 'SELECT COUNT(*) AS count FROM users';
+        db.query(checkUserCount, (err, results) => {
+            if (err) return res.status(500).json({ message: 'Database error' });
+    
+            const userCount = results[0].count;
+            let assignedRole = userCount === 0 ? 'admin' : role;
+            let isApproved = userCount === 0; // First user auto-approved
+    
+            bcrypt.hash(password, 10, (err, hashedPassword) => {
+                if (err) return res.status(500).json({ message: 'Error hashing password' });
+    
+                const sql = 'INSERT INTO users (name, email, phone, password, role, lab, approved) VALUES (?, ?, ?, ?, ?, ?, ?)';
+                db.query(sql, [name, email, phone, hashedPassword, assignedRole, lab, isApproved], (err, result) => {
+                    if (err) return res.status(500).json({ message: 'Error registering user', err });
+    
+                    const newUser = {
+                        id: result.insertId,
+                        name,
+                        email,
+                        phone,
+                        lab,
+                        role: assignedRole,
+                        approved: isApproved
+                    };
+    
+                    // Generate JWT and store it in cookies
+                    generateToken(newUser, res);
+    
+                    // Send email notification
+                    sendEmail(email, 
+                        'IVE IMS Registration Successful', 
+                        `Hello ${name},\n\nYour registration was successful. Please wait for admin approval.`,
+                        `<p>Hello ${name},</p><p>Your registration was successful. Please wait for admin approval.</p>`
+                    );
+    
+                    res.status(201).json({ 
+                        message: 'Registration successful, awaiting admin approval.', 
+                        user: newUser
+                    });
                 });
             });
-        });
-    });
+        });    
+    }
+    catch (err){
+        console.log(err);
+    }
 };
 
 
