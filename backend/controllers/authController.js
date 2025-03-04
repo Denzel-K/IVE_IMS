@@ -30,9 +30,10 @@ const generateToken = (user, res) => {
 exports.register = (req, res) => {
     try{
         const { name, email, phone, password, lab, role } = req.body;
+        console.log(req.body);
 
-        if (!name || !email || !phone || !password) {
-            return res.status(400).json({ message: 'Name, email, phone and password are required' });
+        if (!name || !email || !phone || !password || !lab) {
+            return res.status(400).json({ message: 'Name, email, phone, lab and password are required' });
         }
     
         const checkUserCount = 'SELECT COUNT(*) AS count FROM users';
@@ -48,7 +49,7 @@ exports.register = (req, res) => {
     
                 const sql = 'INSERT INTO users (name, email, phone, password, role, lab, approved) VALUES (?, ?, ?, ?, ?, ?, ?)';
                 db.query(sql, [name, email, phone, hashedPassword, assignedRole, lab, isApproved], (err, result) => {
-                    if (err) return res.status(500).json({ message: 'Error registering user', err });
+                    if (err) return res.status(500).json({ message: 'Error registering user:', err });
     
                     const newUser = {
                         id: result.insertId,

@@ -129,9 +129,34 @@ regForm.addEventListener("submit", async (e) => {
   const email = regForm.email.value.trim();
   const phone = regForm.phone.value.trim();
   const role = regForm.role.value.trim();
-  const lab = regForm.lab.value.trim()
+  const lab = regForm.lab.value.trim();
   const password = regForm.password.value.trim();
   const errorsDiv = regForm.querySelector(".signup_errors");
+
+  // Ensure strig consistency for lab
+  let newLab;
+  if (lab == "Design Studio"){
+    newLab = "design_studio";
+  }
+  else if (lab == "Cezeri"){
+    newLab = "cezeri";
+  }
+  else if (lab == "MedTech"){
+    newLab = "medtech";
+  }
+
+  // Ensure strig consistency for role
+  let newRole;
+  if (role == "Lab Manager"){
+    newRole = "lab_manager";
+  }
+  else if (role == "Student"){
+    newRole = "student";
+  }
+  else if (role == "Technician"){
+    newRole = "technician";
+  }
+
 
   let errors = [];
 
@@ -153,12 +178,14 @@ regForm.addEventListener("submit", async (e) => {
     const response = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, phone, password, lab, role }),
+      body: JSON.stringify({ name, email, phone, password, lab: newLab, role: newRole }),
     });
 
     const data = await response.json();
-    if (!response.ok) throw new Error(data.message || "Registration failed.");
-
+    if (!response.ok){
+      console.log("Registration failed.");
+      throw new Error(data.message || "Registration failed.");
+    }
     regForm.reset(); // Clear form
     window.location.href = "/dashboardGet";
   } 

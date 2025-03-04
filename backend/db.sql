@@ -18,7 +18,7 @@ CREATE TABLE equipment (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     lab VARCHAR(100) NOT NULL,  -- Which lab owns this item
-    status ENUM('availabel', 'in use', 'maintenance', 'damaged') DEFAULT 'availabel',
+    status ENUM('available', 'in use', 'maintenance', 'damaged') DEFAULT 'availabel',
     unique_code VARCHAR(255) UNIQUE NOT NULL, -- Barcode/QR Code scanning
     current_location VARCHAR(255) NOT NULL, -- Tracks where the item is
     last_maintenance DATE DEFAULT NULL,
