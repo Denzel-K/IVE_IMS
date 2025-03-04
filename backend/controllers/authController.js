@@ -8,7 +8,7 @@ dotenv.config();
 // Function to generate and store token in cookies
 const generateToken = (user, res) => {
     const token = jwt.sign(
-        { id: user.id, name: user.name, email: user.email, role: user.role },
+        { id: user.id, name: user.name, email: user.email, lab: user.lab, role: user.role },
         process.env.JWT_SECRET,
         { expiresIn: '1h' }
     );
@@ -27,7 +27,7 @@ const generateToken = (user, res) => {
 
 // **Register User**
 exports.register = (req, res) => {
-    const { name, email, phone, password, role } = req.body;
+    const { name, email, phone, password, lab, role } = req.body;
 
     if (!name || !email || !phone || !password) {
         return res.status(400).json({ message: 'Name, email, phone and password are required' });
@@ -53,6 +53,7 @@ exports.register = (req, res) => {
                     name,
                     email,
                     phone,
+                    lab,
                     role: assignedRole,
                     approved: isApproved
                 };

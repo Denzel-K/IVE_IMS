@@ -153,99 +153,108 @@ form.sign-in-form {
   }
 }
 
-.custom_option{
+.custom_fields{
+  @include flex(row, space-between, center);
   max-width: 380px;
   width: 100%;
-  background-color: #f0f0f0;
-  margin: 10px 0;
-  height: 55px;
-  border-radius: 55px;
-  display: grid;
-  grid-template-columns: 15% 70% 15%;
-  padding: 0 0.4rem;
-  position: relative;
-  border: 1.5px solid #d4d4d4;
 
-  img {
-    transition: 0.5s;
-    width: 24px;
-    margin: auto;
+  & > div {
+    width: 48%;
   }
 
-  input {
-    background: none;
-    outline: none;
-    border: none;
-    line-height: 1;
-    font-weight: 600;
-    font-size: 1rem;
-    color: #333;
-
-    &::placeholder {
-      color: #aaa;
-      font-weight: 500;
+  .custom_option{
+    width: 100%;
+    background-color: #f0f0f0;
+    height: 55px;
+    border-radius: 55px;
+    display: grid;
+    grid-template-columns: 15% 70% 15%;
+    padding: 0 0.4rem;
+    position: relative;
+    border: 1.5px solid #d4d4d4;
+  
+    img {
+      transition: 0.5s;
+      width: 20px;
+      margin: auto;
+    }
+  
+    input {
+      background: none;
+      outline: none;
+      border: none;
+      line-height: 1;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #333;
+      margin-left: .45rem;
+  
+      &::placeholder {
+        color: #aaa;
+        font-weight: 500;
+      }
+    }
+  
+    .dropdown{
+      opacity: .7;
+      transition: .5s ease;
+  
+      &:hover{
+        cursor: pointer;
+        opacity: .85;
+      }
+    }
+  
+    .dropdown.dropped{
+      transform: rotateZ(180deg);
     }
   }
-
-  .dropdown{
-    opacity: .7;
-    transition: .5s ease;
-
-    &:hover{
-      cursor: pointer;
-      opacity: .85;
+  
+  .drop_options{
+    padding: 0;
+    border-radius: 1rem;
+    background-color: #eeeeee;
+    border: 1.5px solid rgb(219, 218, 218);
+    max-width: 190px;
+    width: 100%;
+    position: absolute;
+    bottom: -2.95rem;
+    z-index: 1000;
+  
+    .role_opt_head, .lab_opt_head{
+      padding: .45rem .85rem;
+      font-weight: 700;
+      color: $form-title;
+      font-size: .9rem;
+      border-bottom: 1.5px solid rgb(218, 218, 218);
+      background-color: #dedcdc;
+    }
+    .role_opt, .lab_opt{
+      padding: .65rem .85rem;
+      font-weight: 700;
+      font-size: .9rem;
+      color: rgb(78, 93, 109);
+      border-bottom: 1.5px solid rgb(218, 218, 218);
+      transition: .25s ease;
+  
+      &:hover{
+        cursor: pointer;
+        background-color: #eecca7;
+        color: $bg;
+      }
+    }
+    .first{
+      border-radius: 1rem 1rem 0 0;
+    }
+    .last{
+      border-bottom: none;
+      border-radius: 0 0 1rem 1rem;
     }
   }
-
-  .dropdown.dropped{
-    transform: rotateZ(180deg);
+  
+  .hidden{
+    display: none;
   }
-}
-
-.role_options{
-  padding: 0;
-  border-radius: 1rem;
-  background-color: #eeeeee;
-  border: 1.5px solid rgb(219, 218, 218);
-  max-width: 360px;
-  width: 100%;
-  position: absolute;
-  bottom: -1.3rem;
-  z-index: 1000;
-
-  .role_opt_head{
-    padding: .45rem .85rem;
-    font-weight: 700;
-    color: $form-title;
-    font-size: .9rem;
-    border-bottom: 1.5px solid rgb(218, 218, 218);
-    background-color: #dedcdc;
-  }
-  .role_opt{
-    padding: .65rem .85rem;
-    font-weight: 700;
-    font-size: .9rem;
-    color: rgb(78, 93, 109);
-    border-bottom: 1.5px solid rgb(218, 218, 218);
-    transition: .25s ease;
-
-    &:hover{
-      cursor: pointer;
-      background-color: #eecca7;
-      color: $bg;
-    }
-  }
-  .first{
-    border-radius: 1rem 1rem 0 0;
-  }
-  .last{
-    border-bottom: none;
-    border-radius: 0 0 1rem 1rem;
-  }
-}
-
-.hidden{
-  display: none;
 }
 
 .btn {
@@ -266,6 +275,9 @@ form.sign-in-form {
   }
 }
 
+.hidden {
+  display: none;
+}
 .auth_btn{
   width: 150px;
 }

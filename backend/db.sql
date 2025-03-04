@@ -8,6 +8,7 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     phone VARCHAR(255)  UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
+    lab ENUM('cezeri', 'design_studio', 'medtech') NOT NULL,
     role ENUM('admin', 'technician', 'student', 'lab_manager') NOT NULL,
     approved BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

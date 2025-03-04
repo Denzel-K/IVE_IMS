@@ -55,17 +55,36 @@
           <input type="text" placeholder="Phone (+2547... | 07...)" name="phone" />
         </div>
 
-        <div class="custom_option">
-          <img src="assets/icons/role.svg" alt="form_icon">
-          <input type="text" placeholder="Select role" name="role" />
-          <img src="assets/icons/dropdown.svg" alt="dropdown" class="dropdown">
-        </div>
-        
-        <div class="role_options hidden">
-          <div class="role_opt_head first">Select role</div>
-          <div class="role_opt">Lab Manager</div>
-          <div class="role_opt">Technician</div>
-          <div class="role_opt last">Student</div>
+        <div class="custom_fields">
+          <div class="lab_opt_box">
+            <div class="custom_option">
+              <img src="assets/icons/lab.svg" alt="form_icon">
+              <input type="text" placeholder="Lab" name="lab" />
+              <img src="assets/icons/dropdown.svg" alt="dropdown" class="dropdown dropdownlabs">
+            </div>
+            
+            <div class="drop_options lab_options hidden">
+              <div class="lab_opt_head first">Select Lab</div>
+              <div class="lab_opt">Cezeri</div>
+              <div class="lab_opt">Design Studio</div>
+              <div class="lab_opt last">MedTech</div>
+            </div>
+          </div>
+
+          <div class="role_opt_box">
+            <div class="custom_option">
+              <img src="assets/icons/role.svg" alt="form_icon">
+              <input type="text" placeholder="Role" name="role" />
+              <img src="assets/icons/dropdown.svg" alt="dropdown" class="dropdown dropdownroles">
+            </div>
+            
+            <div class="drop_options role_options hidden">
+              <div class="role_opt_head first">Select role</div>
+              <div class="role_opt">Lab Manager</div>
+              <div class="role_opt">Technician</div>
+              <div class="role_opt last">Student</div>
+            </div>
+          </div>
         </div>
 
         <div class="input-field">

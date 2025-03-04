@@ -53,16 +53,16 @@ sign_in_btn.addEventListener("click", () => {
   container.classList.remove("sign-up-mode");
 });
 
-// Custom options/dropdown
-const dropdown = document.querySelector('.dropdown');
+// Custom role options/dropdown
+const dropdownroles = document.querySelector('.dropdownroles');
 const roleOptions = document.querySelector('.role_options');
 const roleInput = document.querySelector('input[name="role"]');
 const roleOptionItems = document.querySelectorAll('.role_opt');
 
 // Toggle the dropdown menu on click
-dropdown.addEventListener('click', () => {
+dropdownroles.addEventListener('click', () => {
   roleOptions.classList.toggle('hidden');
-  dropdown.classList.toggle('dropped');
+  dropdownroles.classList.toggle('dropped');
 });
 
 // Update the input field when a role is selected
@@ -70,9 +70,31 @@ roleOptionItems.forEach(option => {
   option.addEventListener('click', function () {
     roleInput.value = this.textContent; 
     roleOptions.classList.add('hidden');
-    dropdown.classList.remove('dropped'); 
+    dropdownroles.classList.remove('dropped'); 
   });
 });
+
+// Custom lab options/dropdown
+const dropdownlabs = document.querySelector('.dropdownlabs');
+const labOptions = document.querySelector('.lab_options');
+const labInput = document.querySelector('input[name="lab"]');
+const labOptionItems = document.querySelectorAll('.lab_opt');
+
+// Toggle the dropdown menu on click
+dropdownlabs.addEventListener('click', () => {
+  labOptions.classList.toggle('hidden');
+  dropdownlabs.classList.toggle('dropped');
+});
+
+// Update the input field when a role is selected
+labOptionItems.forEach(option => {
+  option.addEventListener('click', function () {
+    labInput.value = this.textContent; 
+    labOptions.classList.add('hidden');
+    dropdownlabs.classList.remove('dropped'); 
+  });
+});
+
 
 
 // Form submission
@@ -107,6 +129,7 @@ regForm.addEventListener("submit", async (e) => {
   const email = regForm.email.value.trim();
   const phone = regForm.phone.value.trim();
   const role = regForm.role.value.trim();
+  const lab = regForm.lab.value.trim()
   const password = regForm.password.value.trim();
   const errorsDiv = regForm.querySelector(".signup_errors");
 
@@ -117,6 +140,7 @@ regForm.addEventListener("submit", async (e) => {
   if (!isValidEmail(email)) errors.push("Invalid email address.");
   if (!isValidPhone(phone)) errors.push("Invalid phone number (Use +2547XXXXXXXX or 07XXXXXXXX).");
   if (role === "") errors.push("Please select a role.");
+  if (lab === "") errors.push("Please select a lab.");
   if (!isValidPassword(password)) errors.push("Password must be at least 6 characters.");
 
   if (errors.length > 0) {
@@ -129,7 +153,7 @@ regForm.addEventListener("submit", async (e) => {
     const response = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, phone, password, role }),
+      body: JSON.stringify({ name, email, phone, password, lab, role }),
     });
 
     const data = await response.json();

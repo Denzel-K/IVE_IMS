@@ -802,11 +802,20 @@ form.sign-in-form {
   font-weight: 500;
 }
 
-.custom_option {
+.custom_fields {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   max-width: 380px;
   width: 100%;
+}
+.custom_fields > div {
+  width: 48%;
+}
+.custom_fields .custom_option {
+  width: 100%;
   background-color: #f0f0f0;
-  margin: 10px 0;
   height: 55px;
   border-radius: 55px;
   display: grid;
@@ -815,12 +824,12 @@ form.sign-in-form {
   position: relative;
   border: 1.5px solid #d4d4d4;
 }
-.custom_option img {
+.custom_fields .custom_option img {
   transition: 0.5s;
-  width: 24px;
+  width: 20px;
   margin: auto;
 }
-.custom_option input {
+.custom_fields .custom_option input {
   background: none;
   outline: none;
   border: none;
@@ -828,35 +837,35 @@ form.sign-in-form {
   font-weight: 600;
   font-size: 1rem;
   color: #333;
+  margin-left: 0.45rem;
 }
-.custom_option input::placeholder {
+.custom_fields .custom_option input::placeholder {
   color: #aaa;
   font-weight: 500;
 }
-.custom_option .dropdown {
+.custom_fields .custom_option .dropdown {
   opacity: 0.7;
   transition: 0.5s ease;
 }
-.custom_option .dropdown:hover {
+.custom_fields .custom_option .dropdown:hover {
   cursor: pointer;
   opacity: 0.85;
 }
-.custom_option .dropdown.dropped {
+.custom_fields .custom_option .dropdown.dropped {
   transform: rotateZ(180deg);
 }
-
-.role_options {
+.custom_fields .drop_options {
   padding: 0;
   border-radius: 1rem;
   background-color: #eeeeee;
   border: 1.5px solid rgb(219, 218, 218);
-  max-width: 360px;
+  max-width: 190px;
   width: 100%;
   position: absolute;
-  bottom: -1.3rem;
+  bottom: -2.95rem;
   z-index: 1000;
 }
-.role_options .role_opt_head {
+.custom_fields .drop_options .role_opt_head, .custom_fields .drop_options .lab_opt_head {
   padding: 0.45rem 0.85rem;
   font-weight: 700;
   color: hsl(2, 73%, 68%);
@@ -864,7 +873,7 @@ form.sign-in-form {
   border-bottom: 1.5px solid rgb(218, 218, 218);
   background-color: #dedcdc;
 }
-.role_options .role_opt {
+.custom_fields .drop_options .role_opt, .custom_fields .drop_options .lab_opt {
   padding: 0.65rem 0.85rem;
   font-weight: 700;
   font-size: 0.9rem;
@@ -872,20 +881,19 @@ form.sign-in-form {
   border-bottom: 1.5px solid rgb(218, 218, 218);
   transition: 0.25s ease;
 }
-.role_options .role_opt:hover {
+.custom_fields .drop_options .role_opt:hover, .custom_fields .drop_options .lab_opt:hover {
   cursor: pointer;
   background-color: #eecca7;
   color: hsl(205, 16%, 15%);
 }
-.role_options .first {
+.custom_fields .drop_options .first {
   border-radius: 1rem 1rem 0 0;
 }
-.role_options .last {
+.custom_fields .drop_options .last {
   border-bottom: none;
   border-radius: 0 0 1rem 1rem;
 }
-
-.hidden {
+.custom_fields .hidden {
   display: none;
 }
 
@@ -904,6 +912,10 @@ form.sign-in-form {
 }
 .btn:hover {
   background-color: #f36144;
+}
+
+.hidden {
+  display: none;
 }
 
 .auth_btn {
