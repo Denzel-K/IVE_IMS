@@ -5,106 +5,184 @@ exports.landingPage = (req, res) => {
 }
 
 exports.dashboardGet = (req, res) => {
-  const { id, name, email, role } = req.user;
+  const { id, name, email, lab, role } = req.user;
 
   res.render('dashboard', {
     pageTitle: "Dashboard",
     credentials: {
-      id, name, email, role
+      id, name, email, lab, role
     }
   });
 }
 
-exports.inventoryGet = (req, res) => {
-  const { id, name, email, role } = req.user;
-
-  res.render('inventory', {
-    pageTitle: "Inventory Management", 
-    credentials: {
-    id, name, email, role
-  }});
-}
-
-
 exports.projectsGet = (req, res) => {
-  const { id, name, email, role } = req.user;
+  const { id, name, email, lab, role } = req.user;
 
   Project.getAllProjects(role, id, (err, projects) => {
     if (err) return res.status(500).json({ message: "Database error" });
 
     res.render('projects', {
       pageTitle: "Project Management",
-      credentials: { id, name, email, role },
+      credentials: { id, name, email, lab, role },
       projects,
     });
   });
 };
 
-exports.bookingsGet = (req, res) => {
-  const { id, name, email, role } = req.user;
-
-  res.render('bookings', {
-    pageTitle: "Bookings", 
-    credentials: {
-      id, name, email, role
-    }
-  });
-}
-
 exports.settingsGet = (req, res) => {
-  const { id, name, email, role } = req.user;
+  const { id, name, email, lab, role } = req.user;
 
   res.render('settings', {
     pageTitle: "Settings", 
     credentials: {
-      id, name, email, role
+      id, name, email, lab, role
     }
   });
 }
 
 exports.accountsGet = (req, res) => {
-  const { id, name, email, role } = req.user;
+  const { id, name, email, lab, role } = req.user;
 
   res.render('accounts', {
-    pageTitle: "Account Management", 
+    pageTitle: "User Management", 
     credentials: {
-      id, name, email, role
+      id, name, email, lab, role
     }
   });
 }
 
 
-exports.assetsharingGet = (req, res) => {
-  const { id, name, email, role } = req.user;
+// Design Studio
+exports.ds_inventoryGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
 
-  res.render('asset_sharing', {
-    pageTitle: "Asset sharing", 
+  res.render('design_studio/ds_inventory', {
+    pageTitle: "Inventory", 
     credentials: {
-      id, name, email, role
+      id, name, email, lab, role
     }
   });
 }
 
+exports.ds_bookingsGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
 
-exports.consumablesGet = (req, res) => {
-  const { id, name, email, role } = req.user;
-
-  res.render('consumables', {
-    pageTitle: "Consumables", 
+  res.render('design_studio/ds_bookings', {
+    pageTitle: "Bookings", 
     credentials: {
-      id, name, email, role
+      id, name, email, lab, role
     }
   });
 }
 
+exports.ds_eq_sharingGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
 
-exports.inventorylogsGet = (req, res) => {
-  const { id, name, email, role } = req.user;
-
-  res.render('inventory_logs', {
-    pageTitle: "Inventory Logs", 
+  res.render('design_studio/ds_eq_sharing', {
+    pageTitle: "Equipment Sharing", 
     credentials: {
-      id, name, email, role
+      id, name, email, lab, role
+    }
+  });
+}
+
+exports.ds_projectsGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
+
+  res.render('design_studio/ds_projects', {
+    pageTitle: "Projects", 
+    credentials: {
+      id, name, email, lab, role
+    }
+  });
+}
+
+// Cezeri
+exports.cz_inventoryGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
+
+  res.render('cezeri/cz_inventory', {
+    pageTitle: "Inventory", 
+    credentials: {
+      id, name, email, lab, role
+    }
+  });
+}
+
+exports.cz_bookingsGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
+
+  res.render('cezeri/cz_bookings', {
+    pageTitle: "Bookings", 
+    credentials: {
+      id, name, email, lab, role
+    }
+  });
+}
+
+exports.cz_eq_sharingGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
+
+  res.render('cezeri/cz_eq_sharing', {
+    pageTitle: "Equipment Sharing", 
+    credentials: {
+      id, name, email, lab, role
+    }
+  });
+}
+
+exports.cz_projectsGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
+
+  res.render('cezeri/cz_projects', {
+    pageTitle: "Projects", 
+    credentials: {
+      id, name, email, lab, role
+    }
+  });
+}
+
+// Medtech
+exports.mt_inventoryGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
+
+  res.render('medtech/mt_inventory', {
+    pageTitle: "Inventory", 
+    credentials: {
+      id, name, email, lab, role
+    }
+  });
+}
+
+exports.mt_bookingsGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
+
+  res.render('medtech/mt_bookings', {
+    pageTitle: "Bookings", 
+    credentials: {
+      id, name, email, lab, role
+    }
+  });
+}
+
+exports.mt_eq_sharingGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
+
+  res.render('medtech/mt_eq_sharing', {
+    pageTitle: "Equipment Sharing", 
+    credentials: {
+      id, name, email, lab, role
+    }
+  });
+}
+
+exports.mt_projectsGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user;
+
+  res.render('medtech/mt_projects', {
+    pageTitle: "Projects", 
+    credentials: {
+      id, name, email, lab, role
     }
   });
 }

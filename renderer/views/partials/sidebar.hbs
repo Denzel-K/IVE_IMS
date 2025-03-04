@@ -17,73 +17,168 @@
     </div>
   </div>
 
-  <div class="pages">
-    <a href="/dashboardGet" class="page_link">
-      <span>
-        <img src="assets/pagelinks/dashboard.svg" alt="dashboard">
-      </span>
-      <span>Dashboard</span>
-    </a>
-
-    <a href="/inventoryGet" class="page_link">
-      <span>
-        <img src="assets/pagelinks/track.svg" alt="sales_analytics">
-      </span>
-      <span>Inventory</span>
-    </a>
-    {{!-- 
-    <div class="page_group">
-      <h5 class="p_g_head">INVENTORY</h5>
-      
-
-      <a href="/consumablesGet" class="page_link">
+  {{#if (eq credentials.lab "design_studio")}}
+    <div class="pages">
+      <a href="/dashboardGet" class="page_link">
         <span>
-          <img src="assets/pagelinks/consumables.svg" alt="sales_analytics">
+          <img src="assets/pagelinks/dashboard.svg" alt="dashboard">
         </span>
-        <span>Consumables</span>
+        <span>Dashboard</span>
       </a>
 
-      <a href="/inventorylogsGet" class="page_link">
+      <a href="/ds_inventoryGet" class="page_link">
         <span>
-          <img src="assets/pagelinks/logs.svg" alt="sales_analytics">
+          <img src="assets/pagelinks/track.svg" alt="sales_analytics">
         </span>
-        <span>Logs</span>
+        <span>Inventory</span>
       </a>
-    </div> --}}
 
-    <a href="/assetsharingGet" class="page_link">
-      <span>
-        <img src="assets/pagelinks/asset-sharing.svg" alt="sales_analytics">
-      </span>
-      <span>Asset sharing</span>
-    </a>
+      <a href="/ds_eq_sharingGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/asset-sharing.svg" alt="sales_analytics">
+        </span>
+        <span>Asset sharing</span>
+      </a>
 
-    <a href="/projectsGet" class="page_link">
-      <span>
-        <img src="assets/pagelinks/collections-folder.svg" alt="collections-folder">
-      </span>
-      <span>Projects</span>
-    </a>
+      <a href="/ds_projectsGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/collections-folder.svg" alt="collections-folder">
+        </span>
+        <span>Projects</span>
+      </a>
 
-    <a href="/bookingsGet" class="page_link">
-      <span>
-        <img src="assets/pagelinks/insights.svg" alt="insights">
-      </span>
-      <span>Bookings</span>
-    </a>
+      <a href="/ds_bookingsGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/insights.svg" alt="insights">
+        </span>
+        <span>Bookings</span>
+      </a>
 
-    <a href="/settingsGet" class="page_link ndlast">
-      <span>
-        <img src="assets/pagelinks/settings.svg" alt="settings">
-      </span>
-      <span>Settings</span>
-    </a>
+      <a href="/settingsGet" class="page_link ndlast">
+        <span>
+          <img src="assets/pagelinks/settings.svg" alt="settings">
+        </span>
+        <span>Settings</span>
+      </a>
 
-    <a href="/accountsGet" class="page_link">
-      <span>
-        <img src="assets/pagelinks/account_management.svg" alt="account_management">
-      </span>
-      <span>Account Management</span>
-    </a>
-  </div>
+      {{#if (eq credentials.role "admin")}}
+        <a href="/accountsGet" class="page_link">
+          <span>
+            <img src="assets/pagelinks/account_management.svg" alt="account_management">
+          </span>
+          <span>User Management</span>
+        </a>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if (eq credentials.lab "cezeri")}}
+    <div class="pages">
+      <a href="/dashboardGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/dashboard.svg" alt="dashboard">
+        </span>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="/cz_inventoryGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/track.svg" alt="sales_analytics">
+        </span>
+        <span>Inventory</span>
+      </a>
+
+      <a href="/cz_eq_sharingGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/asset-sharing.svg" alt="sales_analytics">
+        </span>
+        <span>Asset sharing</span>
+      </a>
+
+      <a href="/cz_projectsGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/collections-folder.svg" alt="collections-folder">
+        </span>
+        <span>Projects</span>
+      </a>
+
+      <a href="/cz_bookingsGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/insights.svg" alt="insights">
+        </span>
+        <span>Bookings</span>
+      </a>
+
+      <a href="/settingsGet" class="page_link ndlast">
+        <span>
+          <img src="assets/pagelinks/settings.svg" alt="settings">
+        </span>
+        <span>Settings</span>
+      </a>
+
+      {{#if (eq credentials.role "admin")}}
+        <a href="/accountsGet" class="page_link">
+          <span>
+            <img src="assets/pagelinks/account_management.svg" alt="account_management">
+          </span>
+          <span>User Management</span>
+        </a>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{#if (eq credentials.lab "medtech")}}
+    <div class="pages">
+      <a href="/dashboardGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/dashboard.svg" alt="dashboard">
+        </span>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="/mt_inventoryGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/track.svg" alt="sales_analytics">
+        </span>
+        <span>Inventory</span>
+      </a>
+
+      <a href="/mt_eq_sharingGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/asset-sharing.svg" alt="sales_analytics">
+        </span>
+        <span>Asset sharing</span>
+      </a>
+
+      <a href="/mt_projectsGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/collections-folder.svg" alt="collections-folder">
+        </span>
+        <span>Projects</span>
+      </a>
+
+      <a href="/mt_bookingsGet" class="page_link">
+        <span>
+          <img src="assets/pagelinks/insights.svg" alt="insights">
+        </span>
+        <span>Bookings</span>
+      </a>
+
+      <a href="/settingsGet" class="page_link ndlast">
+        <span>
+          <img src="assets/pagelinks/settings.svg" alt="settings">
+        </span>
+        <span>Settings</span>
+      </a>
+
+      {{#if (eq credentials.role "admin")}}
+        <a href="/accountsGet" class="page_link">
+          <span>
+            <img src="assets/pagelinks/account_management.svg" alt="account_management">
+          </span>
+          <span>User Management</span>
+        </a>
+      {{/if}}
+    </div>
+  {{/if}}
 </section>

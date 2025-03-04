@@ -12,6 +12,7 @@ const generateToken = (user, res) => {
         process.env.JWT_SECRET,
         { expiresIn: '1h' }
     );
+    console.log(token);
 
     console.log("JWT created successfully :)");
     

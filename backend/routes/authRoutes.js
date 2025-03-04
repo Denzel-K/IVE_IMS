@@ -41,7 +41,7 @@ router.get('/pending-users', authMiddleware(['admin']), (req, res) => {
     });
 });
 
-router.post('/approve-user/:id', authMiddleware(['admin']), (req, res) => {
+router.post('/approve-user/:id', (req, res) => {
     const userId = req.params.id;
     console.log(`🔍 Approving User ID: ${userId}`);
     
