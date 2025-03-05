@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const createProjectForm = document.getElementById("createProjectForm");
   const projectName = document.getElementById("projectName");
   const projectDescription = document.getElementById("projectDescription");
+  const projectItems = document.getElementById("projectItems");
   const projectsList = document.querySelector(".projects-list");
   const filterButtons = document.querySelectorAll(".filter-btn");
 
@@ -24,11 +25,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const newProject = {
       name: projectName.value.trim(),
       description: projectDescription.value.trim(),
+      lab: document.querySelector('#new_proj_btn').getAttribute('data-lab'),
+      items: projectItems.value.trim(),
       start_date: startDate.value,
       end_date: endDate.value,
     };
   
-    if (!newProject.name || !newProject.description || !newProject.start_date || !newProject.end_date) {
+    if (!newProject.name || !newProject.description || !newProject.items || !newProject.start_date || !newProject.end_date) {
       alert("Please fill in all fields.");
       return;
     }

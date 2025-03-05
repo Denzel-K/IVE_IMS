@@ -30,13 +30,15 @@ const Project = {
         db.query(sql, params, callback);
     },
 
-    createProject: (name, description, owner_id, start_date, end_date, status, callback) => {
-        console.log("📌 Creating Project with:", { name, description, owner_id, start_date, end_date, status });
+    createProject: (name, description, lab, items, owner_id, start_date, end_date, status, callback) => {
+        console.log("📌 Creating Project with:", { name, description, items, owner_id, start_date, end_date, status });
 
-        const sql = "INSERT INTO projects (name, description, owner_id, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?)";
+        const sql = "INSERT INTO projects (name, description, lab,items, owner_id, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         const params = [
             name,
             description,
+            lab,
+            items,
             owner_id,
             formatDate(start_date),
             formatDate(end_date),  

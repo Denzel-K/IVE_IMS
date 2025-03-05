@@ -8,8 +8,134 @@
 
     <div class="dynamic_body">
       {{!-- Your sections and divs go here --}}
+      <section class="projects-container">
+        <div class="project_head">
+          <h2> {{#if (eq credentials.role "admin")}}All{{else}}My{{/if}} projects</h2>
+          <button type="button" class="new_project_btn">
+            <span>
+              {{!-- <img src="assets/icons/new-project.svg" alt="new"> --}}
+              <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path class="add_svg_path" fill-rule="evenodd" clip-rule="evenodd" d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22ZM12 8.25C12.4142 8.25 12.75 8.58579 12.75 9V11.25H15C15.4142 11.25 15.75 11.5858 15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H12.75L12.75 15C12.75 15.4142 12.4142 15.75 12 15.75C11.5858 15.75 11.25 15.4142 11.25 15V12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H11.25L11.25 9C11.25 8.58579 11.5858 8.25 12 8.25Z" fill="#00afd4"/>
+              </svg>
+            </span>
+            <span>Create</span>
+          </button>
+        </div>
 
+        <div class="project-filters">
+          <button class="filter-btn active" data-status="all">All</button>
+          <button class="filter-btn" data-status="active">Active</button>
+          <button class="filter-btn" data-status="completed">Completed</button>
+          <button class="filter-btn" data-status="terminated">Terminated</button>
+        </div>
+
+        {{#if projects.length}}
+          {{#if (eq credentials.role "admin")}}
+            <table class="projects-table">
+              <thead>
+                  <tr>
+                    {{!-- <th>#</th> --}}
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Owner</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {{#each projects}}
+                      <tr data-id="{{id}}" data-status="{{status}}">
+                        {{!-- <td>{{id}}</td> --}}
+                        <td class="name_td">{{name}}</td>
+                        <td>{{description}}</td>
+                        <td><span class="status-label">{{capitalizeFirst status}}</span></td>
+                        <td>{{formatDate start_date}}</td>
+                        <td>{{formatDate end_date}}</td>
+                        <td>{{owner_name}}</td>
+                      </tr>
+                  {{/each}}
+              </tbody>
+            </table>
+          {{else}}
+            <div class="projects-list">
+              {{#each projects}}
+                <div class="project-card" data-status="{{status}}" data-id="{{id}}">
+                  <div class="project-card-head">
+                    <h4>{{name}}</h4>
+                    <span class="status-label">{{capitalizeFirst status}}</span>
+                  </div>
+
+                  <p>{{description}}</p>
+
+                  {{!-- <div class="update_p_stat_box">
+                    <h5>Update status</h5>
+                    <select class="update-status">
+                      <option value="active" {{#if (eq status "active")}}selected{{/if}}>Active</option>
+
+                      <option value="completed" {{#if (eq status "completed")}}selected{{/if}}>Completed</option>
+
+                      <option value="terminated" {{#if (eq status "terminated")}}selected{{/if}}>Terminated</option>
+                    </select>
+                  </div> --}}
+                </div>
+              {{/each}}
+            </div>
+          {{/if}}
+        {{else}}
+          <div class="no_projects">
+            <p>You have no projects yet</p>
+            <img src="assets/icons/empty-project.svg" alt="project">
+          </div>
+        {{/if}}
+
+      </section>
   </section>
 </section>
 
+<div class="custom_modal add_project_modal hidden">
+  <div class="dialog">
+    <div class="modal_head">
+      <h3>New project</h3>
+      <span class="close_modal" id="close_project_modal">
+        <img src="assets/icons/close-circle.svg" alt="close-circle">
+      </span>
+    </div>
+
+    <form id="createProjectForm" class="create-project-form">
+      <label for="project-name">Name</label>
+      <input type="text" id="projectName" placeholder="Project Name" />
+      
+      <label for="project-description">Description</label>
+      <textarea id="projectDescription" placeholder="Project Description"></textarea>
+
+      <label for="project-items">Items</label>
+      <textarea id="projectItems" placeholder="What do you need?"></textarea>
+
+      <div class="date-fields">
+        <span>
+          <label for="project-description">Start Date</label>
+          <input type="date" id="startDate" />
+        </span>
+
+        <span>
+          <label for="project-description">End Date</label>
+          <input type="date" id="endDate" />
+        </span>
+      </div>
+
+      <select id="projectStatus" class="hidden">
+        <option value="pending">Pending</option>
+        <option value="active">Active</option>
+        <option value="completed">Completed</option>
+      </select>
+      
+      <div class="submit_box">
+        <button type="submit">Create Project</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script src="js/shared.js"></script>
+<script src="/js/projects.js"></script>

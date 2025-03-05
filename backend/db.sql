@@ -55,6 +55,8 @@ CREATE TABLE projects (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
+    lab VARCHAR(25) NOT NULL,
+    items VARCHAR(255) NOT NULL,
     status ENUM('active', 'completed', 'terminated') DEFAULT 'active',
     start_date DATE,
     end_date DATE,

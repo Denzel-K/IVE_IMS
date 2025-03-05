@@ -1,3 +1,5 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
 <section class="skeleton">
   {{>sidebar}}
 
@@ -86,9 +88,7 @@
             <img src="assets/icons/empty-project.svg" alt="project">
           </div>
         {{/if}}
-
       </section>
-    </div>
   </section>
 </section>
 
@@ -107,6 +107,9 @@
       
       <label for="project-description">Description</label>
       <textarea id="projectDescription" placeholder="Project Description"></textarea>
+
+      <label for="project-items">Items</label>
+      <textarea id="projectItems" placeholder="What do you need?"></textarea>
 
       <div class="date-fields">
         <span>
@@ -127,7 +130,7 @@
       </select>
       
       <div class="submit_box">
-        <button type="submit">Create Project</button>
+        <button type="submit" data-lab="{{credentials.lab}}" id="new_proj_btn">Create Project</button>
       </div>
     </form>
   </div>

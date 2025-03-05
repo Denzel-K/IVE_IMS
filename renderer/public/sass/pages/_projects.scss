@@ -14,6 +14,7 @@
       color: rgb(91, 93, 107);
       font-size: 1.25rem;
       margin-top: -4px;
+      font-weight: 600;
     }
     .new_project_btn{
       background-color: rgb(245, 247, 248);
@@ -125,7 +126,8 @@
         width: 100%;
       
         h4 {
-          font-size: 1.3rem;
+          font-size: 1.12rem;
+          font-weight: 600;
           color: rgb(84, 89, 114);
           max-width: 65%; // Ensure it doesn't take up full space
           white-space: nowrap;
@@ -169,7 +171,7 @@
       
 
       p {
-        font-size: 1rem;
+        font-size: .9rem;
         color: color.scale($light-bg, $lightness: -50%);
         margin-top: 12px;
       }
@@ -216,11 +218,13 @@
 
     th, td {
       border: 1px solid #ddd;
-      padding: 1rem .8rem;
       text-align: left;
+      font-size:14px;
     }
     td{
       color: rgb(70, 70, 70);
+      padding: 1rem .8rem;
+
     }
     .name_td{
       font-weight: 600;
@@ -230,6 +234,7 @@
     th {
       background-color: #f4f4f4;
       color: rgb(73, 73, 73);
+      padding: .25rem .48rem;
     }
 
     .status-label {
@@ -260,7 +265,6 @@
         white-space: nowrap;
     }
   }
-
 
   .no_projects{
     width: 100%;
@@ -294,6 +298,8 @@
   @include boxShadow(0px 4px 12px rgba(0, 0, 0, 0.08));
   @include flex(column, start, start);
   margin: 1.5rem 0 2rem 0;
+  max-height: 450px;
+  overflow-y: auto;
 
   h3 {
     font-size: 1.6rem;
@@ -374,7 +380,7 @@
 }
 
 
-.new_inventory_btn{
+.new_stuff_btn{
   background-color: rgb(245, 247, 248);
   border: 2px solid #00afd4;
   border-radius: 8px;

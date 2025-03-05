@@ -1232,6 +1232,7 @@ form.sign-in-form {
   color: rgb(91, 93, 107);
   font-size: 1.25rem;
   margin-top: -4px;
+  font-weight: 600;
 }
 .projects-container .project_head .new_project_btn {
   background-color: rgb(245, 247, 248);
@@ -1341,7 +1342,8 @@ form.sign-in-form {
   width: 100%;
 }
 .projects-container .projects-list .project-card .project-card-head h4 {
-  font-size: 1.3rem;
+  font-size: 1.12rem;
+  font-weight: 600;
   color: rgb(84, 89, 114);
   max-width: 65%;
   white-space: nowrap;
@@ -1382,7 +1384,7 @@ form.sign-in-form {
   }
 }
 .projects-container .projects-list .project-card p {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: rgb(122.5, 122.5, 122.5);
   margin-top: 12px;
 }
@@ -1422,11 +1424,12 @@ form.sign-in-form {
 }
 .projects-container .projects-table th, .projects-container .projects-table td {
   border: 1px solid #ddd;
-  padding: 1rem 0.8rem;
   text-align: left;
+  font-size: 14px;
 }
 .projects-container .projects-table td {
   color: rgb(70, 70, 70);
+  padding: 1rem 0.8rem;
 }
 .projects-container .projects-table .name_td {
   font-weight: 600;
@@ -1435,6 +1438,7 @@ form.sign-in-form {
 .projects-container .projects-table th {
   background-color: #f4f4f4;
   color: rgb(73, 73, 73);
+  padding: 0.25rem 0.48rem;
 }
 .projects-container .projects-table .status-label {
   padding: 5px 10px;
@@ -1498,6 +1502,8 @@ form.sign-in-form {
   justify-content: start;
   align-items: start;
   margin: 1.5rem 0 2rem 0;
+  max-height: 450px;
+  overflow-y: auto;
 }
 .create-project-form h3 {
   font-size: 1.6rem;
@@ -1572,7 +1578,7 @@ form.sign-in-form {
   transform: scale(1.05);
 }
 
-.new_inventory_btn {
+.new_stuff_btn {
   background-color: rgb(245, 247, 248);
   border: 2px solid #00afd4;
   border-radius: 8px;
@@ -1583,13 +1589,13 @@ form.sign-in-form {
   align-items: center;
   transition: 0.25s ease;
 }
-.new_inventory_btn span:nth-child(1) svg {
+.new_stuff_btn span:nth-child(1) svg {
   width: 20px;
   height: 20px;
   transition: 0.25s ease;
   opacity: 0.85;
 }
-.new_inventory_btn span:nth-child(2) {
+.new_stuff_btn span:nth-child(2) {
   margin-left: 0.7rem;
   font-size: 14px;
   font-weight: 600;
@@ -1597,22 +1603,22 @@ form.sign-in-form {
   transition: 0.25s ease;
   color: #086375;
 }
-.new_inventory_btn .add_svg_path {
+.new_stuff_btn .add_svg_path {
   transition: 0.25s ease;
 }
-.new_inventory_btn:hover {
+.new_stuff_btn:hover {
   cursor: pointer;
   background-color: #00afd4;
   border: 2px solid #1f788a;
 }
-.new_inventory_btn:hover span:nth-child(1) svg {
+.new_stuff_btn:hover span:nth-child(1) svg {
   scale: 1.065;
   opacity: 1;
 }
-.new_inventory_btn:hover span:nth-child(2) {
+.new_stuff_btn:hover span:nth-child(2) {
   color: #f7f7f7;
 }
-.new_inventory_btn:hover .add_svg_path {
+.new_stuff_btn:hover .add_svg_path {
   fill: #f5f5f5;
 }
 /*# sourceMappingURL=main.css.map */
