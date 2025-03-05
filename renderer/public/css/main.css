@@ -1554,6 +1554,42 @@ form.sign-in-form {
   width: 100%;
   opacity: 0.85;
 }
+.create-project-form #teamMembers {
+  width: 100%;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.create-project-form #teamMembers label {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+.create-project-form #teamMembers label:hover {
+  border-color: #007bff;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+}
+.create-project-form #teamMembers input[type=checkbox] {
+  margin-right: 1rem;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: #007bff;
+}
+.create-project-form #teamMembers .student-name {
+  font-size: 0.85em;
+  color: #8b8b8b;
+  margin-top: -16px;
+}
 .create-project-form .submit_box {
   width: 100%;
   display: flex;

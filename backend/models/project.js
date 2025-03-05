@@ -50,6 +50,24 @@ const Project = {
 
     updateProjectStatus: (id, status, callback) => {
         db.query("UPDATE projects SET status = ? WHERE id = ?", [status, id], callback);
+    },
+
+    getStudentsByLab: (lab, callback) => {
+        const sql = `
+            SELECT id, name 
+            FROM users 
+            WHERE lab = ? AND role = 'student'
+        `;
+        db.query(sql, [lab], callback);
+    },
+
+    addTeamMembers: (projectId, teamMembers, callback) => {
+        const sql = `
+            INSERT INTO project_team (project_id, user_id) 
+            VALUES ?
+        `;
+        const values = teamMembers.map(member => [projectId, member]);
+        db.query(sql, [values], callback);
     }
 };
 

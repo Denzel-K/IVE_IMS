@@ -6,7 +6,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   new_project_btn.addEventListener('click', () => {
     add_project_modal.classList.remove('hidden');
+
+  //Fetch teammates
+  const lab = document.getElementById('new_proj_btn').getAttribute('data-lab');
+  const teamMembersContainer = document.getElementById('teamMembers');
+
+  fetch(`/api/projects/teammates`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json(); // Parse the JSON response
+    })
+    .then(students => {
+      students.forEach(student => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = 'teamMembers';
+        checkbox.value = student.id;
+
+        const studentName = document.createElement('span');
+        studentName.className = 'student-name';
+        studentName.textContent = student.name;
+
+        label.appendChild(checkbox);
+        label.appendChild(studentName);
+        teamMembersContainer.appendChild(label);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching students:', error);
+      alert('Failed to fetch team members. Please try again.');
+    });
   });
+
   close_project_modal.addEventListener('click', () => {
     add_project_modal.classList.add('hidden');
   })
@@ -19,40 +53,48 @@ document.addEventListener("DOMContentLoaded", () => {
   const filterButtons = document.querySelectorAll(".filter-btn");
 
   // Create a new project
-  createProjectForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-  
-    const newProject = {
-      name: projectName.value.trim(),
-      description: projectDescription.value.trim(),
-      lab: document.querySelector('#new_proj_btn').getAttribute('data-lab'),
-      items: projectItems.value.trim(),
-      start_date: startDate.value,
-      end_date: endDate.value,
-    };
-  
-    if (!newProject.name || !newProject.description || !newProject.items || !newProject.start_date || !newProject.end_date) {
-      alert("Please fill in all fields.");
-      return;
-    }
-  
-    try {
-      const response = await fetch("/api/projects/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newProject),
-      });
-  
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
-  
-      alert("Project created successfully!");
-      location.reload();
-    } 
-    catch (error) {
-      alert("Error creating project: " + error.message);
-    }
-  });
+createProjectForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  // Get the selected team members
+  const teamMembers = Array.from(document.querySelectorAll('input[name="teamMembers"]:checked'))
+    .map(checkbox => checkbox.value);
+
+  // Create the new project object
+  const newProject = {
+    name: projectName.value.trim(),
+    description: projectDescription.value.trim(),
+    lab: document.querySelector('#new_proj_btn').getAttribute('data-lab'),
+    items: projectItems.value.trim(),
+    start_date: startDate.value,
+    end_date: endDate.value,
+    teamMembers: teamMembers // Add the selected team members
+  };
+
+  // Validate required fields
+  if (!newProject.name || !newProject.description || !newProject.items || !newProject.start_date || !newProject.end_date) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  try {
+    // Send the project data to the server
+    const response = await fetch("/api/projects/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newProject),
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message);
+
+    alert("Project created successfully!");
+    location.reload();
+  } 
+  catch (error) {
+    alert("Error creating project: " + error.message);
+  }
+});
   
   // Change project status (admin only)
   projectsList.addEventListener("change", async (e) => {
