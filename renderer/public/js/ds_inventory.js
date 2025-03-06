@@ -23,9 +23,11 @@ if (equipmentTypeField) {
 }
 
 // Function to fetch inventory data from the backend
+// Function to fetch inventory data from the backend
 async function fetchInventory() {
+    const lab = 'design_studio';
     try {
-        const response = await fetch('http://localhost:3000/api/inventory/list');
+        const response = await fetch(`http://localhost:3500/api/inventory/my-lab/${lab}`);
         if (!response.ok) {
             throw new Error('Failed to fetch inventory data');
         }
@@ -36,7 +38,7 @@ async function fetchInventory() {
         return [];
     }
 }
-
+// Function to render inventory data on the page
 // Function to render inventory data on the page
 async function renderInventory() {
     const inventoryGrid = document.querySelector('.grid.grid-cols-3.gap-4.mt-6');
@@ -79,7 +81,7 @@ async function renderInventory() {
         inventoryGrid.appendChild(categoryCard);
     }
 }
-
+// Helper function to get the status class based on the status
 // Helper function to get the status class based on the status
 function getStatusClass(status) {
     switch (status) {
@@ -93,11 +95,10 @@ function getStatusClass(status) {
             return 'bg-gray-100 text-gray-800 rounded-full';
     }
 }
-
 // Function to add a new equipment to the backend
 async function addEquipment(formData) {
     try {
-        const response = await fetch('http://localhost:3000/api/inventory/add', {
+        const response = await fetch('http://localhost:3500/api/inventory/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -116,15 +117,17 @@ async function addEquipment(formData) {
 }
 
 // Form Submission
+// Form Submission
 const addEquipmentForm = document.getElementById('addEquipmentForm');
 if (addEquipmentForm) {
     addEquipmentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const formData = {
             name: document.getElementById('equipmentName').value,
             type: document.getElementById('equipmentType').value,
             status: document.getElementById('equipmentStatus').value,
+            quantity: parseInt(document.getElementById('equipmentQuantity').value), // Add quantity
         };
 
         if (['electrical', 'mechanical'].includes(formData.type)) {
@@ -132,14 +135,28 @@ if (addEquipmentForm) {
             formData.manufacturer = document.getElementById('manufacturer').value;
         }
 
-        // Add the new equipment to the backend
-        const result = await addEquipment(formData);
-        if (result) {
-            // Refresh the inventory list
-            await renderInventory();
-            // Clear the form and close the modal
+        try {
+            const response = await fetch('http://localhost:3500/api/inventory/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include the JWT token
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to add equipment');
+            }
+
+            const result = await response.json();
+            alert(`Equipment added successfully! Unique Code: ${result.uniqueCode}`);
             addEquipmentForm.reset();
             modal.classList.add('hidden');
+            await renderInventory(); // Refresh the inventory list
+        } catch (error) {
+            console.error('Error adding equipment:', error);
+            alert('Failed to add equipment. Please try again.');
         }
     });
 }

@@ -154,3 +154,17 @@ CREATE TABLE workspace_usage_history (
 );
 
 
+-- Insert sample data into the equipment table
+INSERT INTO equipment (name, type, unique_code, status, power_rating, manufacturer, lab, quantity)
+VALUES
+    ('Oscilloscope', 'electrical', 'EQ-123456789', 'available', '100W', 'Tektronidesign-studiox', 'cezeri', 5),
+    ('Centrifuge', 'mechanical', 'EQ-987654321', 'in-use', '500W', 'Eppendorf', 'design-studio', 2),
+    ('Microscope', 'electrical', 'EQ-456789123', 'maintenance', '50W', 'Nikon', 'cezeri', 3),
+    ('Pipettes', 'consumables', 'EQ-321654987', 'available', NULL, 'Gilson', 'design-studio', 10),
+    ('Autoclave', 'mechanical', 'EQ-789123456', 'available', '1500W', 'Tuttnauer', 'cezeri', 1),
+    ('Hot Plate', 'electrical', 'EQ-654987321', 'in-use', '200W', 'Corning', 'design-studio', 4),
+    ('Vortex Mixer', 'mechanical', 'EQ-147258369', 'available', '100W', 'Scientific Industries', 'medtech', 2),
+    ('Glassware Set', 'consumables', 'EQ-369258147', 'available', NULL, 'Pyrex', 'cezeri', 20),
+    ('Spectrophotometer', 'electrical', 'EQ-258369147', 'maintenance', '300W', 'Thermo Fisher', 'medtech', 1),
+    ('Microcentrifuge', 'mechanical', 'EQ-951753852', 'in-use', '250W', 'Beckman Coulter', 'medtech', 3);
+cezeri-lab

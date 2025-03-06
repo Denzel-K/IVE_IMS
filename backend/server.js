@@ -5,19 +5,15 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const pageRoutes = require('./routes/pageRoutes');
 const authRoutes = require('./routes/authRoutes');
-const inventoryRoutes = require('./routes/inventoryRoutes');
-const maintenanceRoutes = require('./routes/maintenanceRoutes');
-const assetRoutes = require('./routes/assetRoutes');
-const reservationRoutes = require('./routes/reservationRoutes');
 const projectsRoutes = require('./routes/projectRoutes');
-const cron = require('node-cron');
-const { sendMaintenanceReminders } = require('./controllers/maintenanceController');
+// const cron = require('node-cron');
+// const { sendMaintenanceReminders } = require('./controllers/maintenanceController');
 const path = require('path');
 const hbs = require('express-handlebars');
 const Handlebars = require('handlebars');
 const morgan = require('morgan');
-const workspaceRoutes = require("./routes/workspaceRoutes");
-
+const cezeriRoutes = require('./routes/cezeriRoutes');
+// const designRoutes = require('./routes/designRoutes');
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 
@@ -70,20 +66,17 @@ app.use(express.static(path.join(__dirname, '../renderer/public')));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(pageRoutes);
-app.use('/api', authRoutes);
-app.use('/api/assets', assetRoutes);
-app.use('/api/inventory', inventoryRoutes);
-app.use('/api/maintenance', maintenanceRoutes);
-app.use('/api/projects', projectsRoutes);
-app.use(reservationRoutes);
-app.use("/api/workspaces", workspaceRoutes);
+app.use(authRoutes);
+app.use(projectsRoutes);
+app.use(cezeriRoutes);
+// app.use(designRoutes)
 
 
 // Setup Cron schedule - Run every day at 9 AM
-cron.schedule('0 9 * * *', () => {
-  console.log('Checking for maintenance...');
-  sendMaintenanceReminders();
-});
+// cron.schedule('0 9 * * *', () => {
+//   console.log('Checking for maintenance...');
+//   sendMaintenanceReminders();
+// });
 
 
 const port = process.env.PORT || 3500;

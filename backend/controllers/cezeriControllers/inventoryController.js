@@ -1,12 +1,15 @@
-const Equipment = require('../../models/designModels/Equipment');
+const Equipment = require('../../models/cezeriModels/Equipment');
 const db = require("../../config/db");
 
 // ✅ Add Equipment (Admin & Lab Manager)
 exports.addEquipment = (req, res) => {
-    const { name, type, status, powerRating, manufacturer, lab, quantity } = req.body;
+    const { name, type, status, powerRating, manufacturer, quantity } = req.body;
 
-    if (!name || !type || !status) {
-        return res.status(400).json({ message: 'Name, Type, and Status are required' });
+    // Extract lab from the JWT token
+    const lab = req.user.lab;
+
+    if (!name || !type || !status || !lab || !quantity) {
+        return res.status(400).json({ message: 'Name, Type, Status, Lab, and Quantity are required' });
     }
 
     const uniqueCode = `EQ-${Date.now()}-${Math.floor(Math.random() * 1000)}`;

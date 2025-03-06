@@ -1,7 +1,7 @@
 const db = require("../../config/db");
 
 exports.getAvailableEquipment = (req, res) => {
-    const sql = `SELECT id, lab, name, quantity, status FROM equipment WHERE status = 'available'`;
+    const sql = `SELECT id, equipment_name, from_lab, to_lab, quantity, status FROM equipment_requests WHERE status = 'approved'`;
 
     db.query(sql, (err, results) => {
         if (err) {

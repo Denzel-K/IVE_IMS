@@ -4,9 +4,9 @@ const projectController = require('../controllers/projectController'); // Ensure
 
 const router = express.Router();
 
-router.get('/', authMiddleware(), projectController.getProjects);
-router.post('/create', authMiddleware(), projectController.createProject);
-router.patch('/:id/status', authMiddleware(), projectController.updateProjectStatus);
-router.get('/teammates', authMiddleware(), projectController.getStudentsByLab);
+router.get('/api/projects/', authMiddleware(), projectController.getProjects);
+router.post('/api/projects/create', authMiddleware(), projectController.createProject);
+router.patch('/api/projects/:id/status', authMiddleware(), projectController.updateProjectStatus);
+router.get('/api/projects/teammates', authMiddleware(), projectController.getStudentsByLab);
 
 module.exports = router;

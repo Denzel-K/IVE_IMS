@@ -6,27 +6,27 @@ const sendEmail = require('../config/emailService.js');
 
 const router = express.Router();
 
-router.post('/register', register);
-router.post('/login', login);
-router.get('/logout', logout);
+router.post('/api/register', register);
+router.post('/api/login', login);
+router.get('/api/logout', logout);
 
-router.get('/admin', authMiddleware(['admin']), (req, res) => {
+router.get('/api/admin', authMiddleware(['admin']), (req, res) => {
     res.json({ message: 'Welcome Admin!', user: req.user });
 });
 
-router.get('/technician', authMiddleware(['technician']), (req, res) => {
+router.get('/api/technician', authMiddleware(['technician']), (req, res) => {
     res.json({ message: 'Welcome Technician!', user: req.user });
 });
 
-router.get('/student', authMiddleware(['student']), (req, res) => {
+router.get('/api/student', authMiddleware(['student']), (req, res) => {
     res.json({ message: 'Welcome Student!', user: req.user });
 });
 
-router.get('/lab_manager', authMiddleware(['lab_manager']), (req, res) => {
+router.get('/api/lab_manager', authMiddleware(['lab_manager']), (req, res) => {
     res.json({ message: 'Welcome Lab Manager!', user: req.user });
 });
 
-router.get('/pending-users', authMiddleware(['admin']), (req, res) => {
+router.get('/api/pending-users', authMiddleware(['admin']), (req, res) => {
     console.log("🔍 User Requesting Data:", req.user);
     const sql = 'SELECT id, name, email, role FROM users WHERE approved = false';
     
@@ -41,7 +41,7 @@ router.get('/pending-users', authMiddleware(['admin']), (req, res) => {
     });
 });
 
-router.post('/approve-user/:id', (req, res) => {
+router.post('/api/approve-user/:id', (req, res) => {
     const userId = req.params.id;
     console.log(`🔍 Approving User ID: ${userId}`);
     
@@ -80,6 +80,6 @@ router.post('/approve-user/:id', (req, res) => {
     });
 });
 
-router.get('/status', authMiddleware(), checkAuthStatus);
+router.get('/api/status', authMiddleware(), checkAuthStatus);
 
 module.exports = router;
