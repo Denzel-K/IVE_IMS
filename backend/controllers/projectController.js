@@ -20,30 +20,29 @@ exports.getStudentsByLab = (req, res) => {
 exports.createProject = async (req, res) => {
     const { name, description, lab, items, start_date, end_date, teamMembers } = req.body;
     const owner_id = req.user.id; // Owner is the logged-in user
-  
+
     if (!name || !description || !lab || !items || !start_date || !end_date) {
-      return res.status(400).json({ message: "All fields are required." });
+        return res.status(400).json({ message: "All fields are required." });
     }
-  
+
     const pend_status = 'active';
     try {
-      // Create the project
-      const projectResult = await Project.createProject(name, description, lab, items, owner_id, start_date, end_date, pend_status);
-  
-      const projectId = projectResult.insertId;
-  
-      // Add team members if any
-      if (teamMembers && teamMembers.length > 0) {
-        await Project.addTeamMembers(projectId, teamMembers);
-      }
-  
-      res.status(201).json({ message: "Project created successfully" });
-    } 
-    catch (err) {
-      console.log("❌ Error creating project:", err);
-      res.status(500).json({ message: "Database error" });
+        // Create the project
+        const projectResult = await Project.createProject(name, description, lab, items, owner_id, start_date, end_date, pend_status);
+
+        const projectId = projectResult.insertId;
+
+        // Add team members if any
+        if (teamMembers && teamMembers.length > 0) {
+            await Project.addTeamMembers(projectId, teamMembers);
+        }
+
+        res.status(201).json({ message: "Project created successfully" });
+    } catch (err) {
+        console.log("❌ Error creating project:", err);
+        res.status(500).json({ message: "Database error" });
     }
-  };
+};
 
 exports.updateProjectStatus = (req, res) => {
     const { id } = req.params;
@@ -59,5 +58,22 @@ exports.updateProjectStatus = (req, res) => {
             return res.status(500).json({ message: "Database error" });
         }
         res.json({ message: "Project status updated successfully" });
+    });
+};
+
+exports.updateApprovalStatus = (req, res) => {
+    const { id } = req.params;
+    const { approval_stat } = req.body;
+
+    if (!['pending', 'approved', 'declined'].includes(approval_stat)) {
+        return res.status(400).json({ message: "Invalid approval status" });
+    }
+
+    Project.updateApprovalStatus(id, approval_stat, (err) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ message: "Database error" });
+        }
+        res.json({ message: "Project approval status updated successfully" });
     });
 };

@@ -1,0 +1,77 @@
+<section class="skeleton">
+  {{>sidebar}}
+
+  <section class="parent_container">
+    {{>dynamic_head}}
+
+    <div class="dynamic_body">
+      {{!-- Your sections and divs go here --}}
+     <div class="det_cont">
+        <div class="breadcrumb">
+          <a href="/projectsGet">Projects </a> &gt; <span>  {{project.name}}</span>
+        </div>
+
+        <div class="project-details">
+          <h1>{{project.name}}</h1>
+          <div class="project-meta">
+            <span class="status-label">{{capitalizeFirst project.status}}</span>
+            <span>{{formatDate project.start_date}} - {{formatDate project.end_date}}</span>
+          </div>
+          <p>{{project.description}}</p>
+
+          <!-- Dropdown to change project status -->
+          <div class="status-update">
+            <label for="status-select">Update Project Status:</label>
+            <select id="status-select" data-project-id="{{project.id}}">
+              <option value="active" {{#if (eq project.status "active")}}selected{{/if}}>Active</option>
+              <option value="completed" {{#if (eq project.status "completed")}}selected{{/if}}>Completed</option>
+              <option value="terminated" {{#if (eq project.status "terminated")}}selected{{/if}}>Terminated</option>
+            </select>
+          </div>
+
+          <div class="t_members_box">
+            <h3>Team Members</h3>
+            <ul class="team-members">
+              {{#each teamMembers}}
+              <li>{{this.name}}</li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<script src="js/shared.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const statusSelect = document.getElementById("status-select");
+
+    if (statusSelect) {
+      statusSelect.addEventListener("change", async (e) => {
+        const projectId = e.target.getAttribute("data-project-id");
+        const newStatus = e.target.value;
+
+        try {
+          const response = await fetch(`/api/projects/${projectId}/status`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ status: newStatus }),
+          });
+
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.message);
+
+          alert("Project status updated successfully!");
+          window.location.reload(); // Reload the page to reflect the changes
+        } catch (error) {
+          console.error("Error updating project status:", error);
+          alert("Failed to update project status: " + error.message);
+        }
+      });
+    }
+  });
+</script>

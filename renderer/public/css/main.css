@@ -1234,49 +1234,6 @@ form.sign-in-form {
   margin-top: -4px;
   font-weight: 600;
 }
-.projects-container .project_head .new_project_btn {
-  background-color: rgb(245, 247, 248);
-  border: 2px solid #00afd4;
-  border-radius: 8px;
-  padding: 0.35rem 0.55rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  transition: 0.25s ease;
-}
-.projects-container .project_head .new_project_btn span:nth-child(1) svg {
-  width: 20px;
-  height: 20px;
-  transition: 0.25s ease;
-  opacity: 0.85;
-}
-.projects-container .project_head .new_project_btn span:nth-child(2) {
-  margin-left: 0.7rem;
-  font-size: 14px;
-  font-weight: 600;
-  margin-top: -2.6px;
-  transition: 0.25s ease;
-  color: #086375;
-}
-.projects-container .project_head .new_project_btn .add_svg_path {
-  transition: 0.25s ease;
-}
-.projects-container .project_head .new_project_btn:hover {
-  cursor: pointer;
-  background-color: #00afd4;
-  border: 2px solid #1f788a;
-}
-.projects-container .project_head .new_project_btn:hover span:nth-child(1) svg {
-  scale: 1.065;
-  opacity: 1;
-}
-.projects-container .project_head .new_project_btn:hover span:nth-child(2) {
-  color: #f7f7f7;
-}
-.projects-container .project_head .new_project_btn:hover .add_svg_path {
-  fill: #f5f5f5;
-}
 .projects-container .project-filters {
   display: flex;
   flex-direction: row;
@@ -1286,13 +1243,13 @@ form.sign-in-form {
   margin: 25px 0;
 }
 .projects-container .project-filters .filter-btn {
-  padding: 0.35rem 0.8rem;
+  padding: 0.25rem 0.65rem;
   border: 1px solid #00b58e;
   background: rgb(241, 241, 241);
   color: #00b58e;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   transition: all 0.3s ease;
   font-weight: bold;
 }
@@ -1334,6 +1291,15 @@ form.sign-in-form {
   transform: translateY(-3px);
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.25);
 }
+.projects-container .projects-list .project-card[data-status=active] {
+  border-left-color: #4ecb4c;
+}
+.projects-container .projects-list .project-card[data-status=completed] {
+  border-left-color: #2196f3;
+}
+.projects-container .projects-list .project-card[data-status=terminated] {
+  border-left-color: #ed2149;
+}
 .projects-container .projects-list .project-card .project-card-head {
   display: flex;
   flex-direction: row;
@@ -1370,16 +1336,31 @@ form.sign-in-form {
   white-space: nowrap;
   z-index: 10;
 }
-.projects-container .projects-list .project-card .project-card-head .status-label {
-  padding: 5px 10px;
+.projects-container .projects-list .project-card .project-card-head .approval-stat-label {
+  padding: 4px 8px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: bold;
   margin-top: -4px;
 }
+.projects-container .projects-list .project-card .project-card-head .approval-stat-label[data-approval-stat=pending] {
+  background-color: #f2c65f;
+  color: #ff6a00;
+  font-size: 10px;
+}
+.projects-container .projects-list .project-card .project-card-head .approval-stat-label[data-approval-stat=approved] {
+  background-color: #93f297;
+  color: #055306;
+  font-size: 10px;
+}
+.projects-container .projects-list .project-card .project-card-head .approval-stat-label[data-approval-stat=declined] {
+  background-color: #f7867e;
+  color: #811035;
+  font-size: 10px;
+}
 @media (max-width: 1040px) {
-  .projects-container .projects-list .project-card .project-card-head .status-label {
-    font-size: 12px;
+  .projects-container .projects-list .project-card .project-card-head .approval-stat-label {
+    font-size: 10px;
     margin-top: -6px;
   }
 }
@@ -1387,18 +1368,6 @@ form.sign-in-form {
   font-size: 0.9rem;
   color: rgb(122.5, 122.5, 122.5);
   margin-top: 12px;
-}
-.projects-container .projects-list .project-card[data-status=active] .status-label {
-  background-color: lightgreen;
-  color: darkgreen;
-}
-.projects-container .projects-list .project-card[data-status=completed] .status-label {
-  background-color: lightblue;
-  color: navy;
-}
-.projects-container .projects-list .project-card[data-status=terminated] .status-label {
-  background-color: rgb(248, 162.5, 177);
-  color: rgb(255, 0, 85);
 }
 .projects-container .projects-list .project-card .update_p_stat_box {
   margin-top: 1rem;
@@ -1441,22 +1410,10 @@ form.sign-in-form {
   padding: 0.25rem 0.48rem;
 }
 .projects-container .projects-table .status-label {
-  padding: 5px 10px;
+  padding: 4px 8px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: bold;
-}
-.projects-container .projects-table tr[data-status=active] .status-label {
-  background-color: lightgreen;
-  color: darkgreen;
-}
-.projects-container .projects-table tr[data-status=completed] .status-label {
-  background-color: lightblue;
-  color: navy;
-}
-.projects-container .projects-table tr[data-status=terminated] .status-label {
-  background-color: rgb(248, 162.5, 177);
-  color: rgb(255, 0, 85);
 }
 @media (max-width: 768px) {
   .projects-container .projects-table {
@@ -1464,6 +1421,53 @@ form.sign-in-form {
     overflow-x: auto;
     white-space: nowrap;
   }
+}
+.projects-container .projects-table .approval-stat-label {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: bold;
+}
+.projects-container .projects-table .approval-stat-label[data-approval-stat=pending] {
+  background-color: #f2c65f;
+  color: #ff6a00;
+  font-size: 10px;
+}
+.projects-container .projects-table .approval-stat-label[data-approval-stat=approved] {
+  background-color: #93f297;
+  color: #055306;
+  font-size: 10px;
+}
+.projects-container .projects-table .approval-stat-label[data-approval-stat=declined] {
+  background-color: #f7867e;
+  color: #811035;
+  font-size: 10px;
+}
+.projects-container .projects-table .actions {
+  display: flex;
+  gap: 8px;
+}
+.projects-container .projects-table .actions button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+}
+.projects-container .projects-table .actions button.approve-btn {
+  background-color: #4caf50;
+  color: white;
+}
+.projects-container .projects-table .actions button.approve-btn:hover {
+  background-color: #45a049;
+}
+.projects-container .projects-table .actions button.decline-btn {
+  background-color: #f44336;
+  color: white;
+}
+.projects-container .projects-table .actions button.decline-btn:hover {
+  background-color: #e53935;
 }
 .projects-container .no_projects {
   width: 100%;
@@ -1618,7 +1622,7 @@ form.sign-in-form {
   background-color: rgb(245, 247, 248);
   border: 2px solid #00afd4;
   border-radius: 8px;
-  padding: 0.35rem 0.55rem;
+  padding: 0.25rem 0.45rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -1626,16 +1630,15 @@ form.sign-in-form {
   transition: 0.25s ease;
 }
 .new_stuff_btn span:nth-child(1) svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   transition: 0.25s ease;
   opacity: 0.85;
 }
 .new_stuff_btn span:nth-child(2) {
   margin-left: 0.7rem;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  margin-top: -2.6px;
   transition: 0.25s ease;
   color: #086375;
 }
@@ -1656,5 +1659,95 @@ form.sign-in-form {
 }
 .new_stuff_btn:hover .add_svg_path {
   fill: #f5f5f5;
+}
+
+.det_cont {
+  width: 100%;
+  padding: 1rem;
+}
+.det_cont .breadcrumb {
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 20px;
+  color: #666;
+  font-size: 14px;
+}
+.det_cont .breadcrumb a {
+  color: rgb(236, 119, 95);
+  text-decoration: none;
+}
+.det_cont .breadcrumb a:hover {
+  text-decoration: underline;
+}
+.det_cont .project-details {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 12px;
+  background-color: #eeeaea;
+  border-radius: 10px;
+}
+.det_cont .project-details h1 {
+  font-size: 1.46rem;
+  color: rgb(98, 103, 126);
+  margin-bottom: 10px;
+}
+.det_cont .project-details .project-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.det_cont .project-details .project-meta .status-label {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.det_cont .project-details .project-meta span {
+  font-size: 0.9rem;
+  color: gray;
+}
+.det_cont .project-details p {
+  font-size: 1rem;
+  color: rgb(122.5, 122.5, 122.5);
+  line-height: 1.5;
+}
+.det_cont .project-details .status-update {
+  margin-top: 20px;
+}
+.det_cont .project-details .status-update label {
+  font-size: 1rem;
+  color: rgb(98, 103, 126);
+  margin-right: 10px;
+}
+.det_cont .project-details .status-update select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: white;
+  cursor: pointer;
+}
+.det_cont .project-details .status-update select:focus {
+  outline: none;
+  border-color: rgb(236, 119, 95);
+}
+.det_cont .project-details .t_members_box {
+  border: 1.6px solid rgb(207, 207, 207);
+  border-radius: 12px;
+  padding: 1rem 0.8rem;
+  margin-top: 20px;
+}
+.det_cont .project-details .t_members_box h3 {
+  font-size: 1.16rem;
+  color: rgb(120, 125, 149);
+}
+.det_cont .project-details .t_members_box .team-members {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+.det_cont .project-details .t_members_box .team-members li {
+  margin-bottom: 5px;
+  font-size: 14px;
 }
 /*# sourceMappingURL=main.css.map */

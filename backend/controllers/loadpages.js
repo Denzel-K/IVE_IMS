@@ -17,10 +17,17 @@ exports.dashboardGet = (req, res) => {
 
 exports.projectsGet = (req, res) => {
   const { id, name, email, lab, role } = req.user;
+  const { filterType, filterValue } = req.query; // Get filter type and value from query string
 
-  Project.getAllProjects(role, id, (err, projects) => {
+  // Determine the filter type based on the user role
+  const filter = role === "lab_manager" ? "approval_stat" : "status";
+  const value = filterValue || "all"; // Default to "all" if no filter is provided
+
+  // Fetch projects with the filter
+  Project.getAllProjects(role, id, filter, value, (err, projects) => {
     if (err) return res.status(500).json({ message: "Database error" });
 
+    // Render the projects view with the filtered projects
     res.render('projects', {
       pageTitle: "Project Management",
       credentials: { id, name, email, lab, role },

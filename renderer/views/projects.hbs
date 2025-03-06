@@ -11,7 +11,7 @@
       <section class="projects-container">
         <div class="project_head">
           <h2> {{#if (eq credentials.role "admin")}}All{{else}}My{{/if}} projects</h2>
-          <button type="button" class="new_project_btn">
+          <button type="button" class="new_stuff_btn new_project_btn">
             <span>
               {{!-- <img src="assets/icons/new-project.svg" alt="new"> --}}
               <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -22,65 +22,115 @@
           </button>
         </div>
 
-        <div class="project-filters">
-          <button class="filter-btn active" data-status="all">All</button>
-          <button class="filter-btn" data-status="active">Active</button>
-          <button class="filter-btn" data-status="completed">Completed</button>
-          <button class="filter-btn" data-status="terminated">Terminated</button>
-        </div>
+        {{#if (eq credentials.role "lab_manager")}}
+          <div class="project-filters">
+            <button class="filter-btn appr_stat_filter active" data-status="all">All</button>
+            <button class="filter-btn appr_stat_filter" data-status="pending">Pending</button>
+            <button class="filter-btn appr_stat_filter" data-status="approved">Approved</button>
+            <button class="filter-btn appr_stat_filter" data-status="declined">Declined</button>
+          </div>
+        {{else}}
+        {{#if (eq credentials.role "admin")}}
+          <div class="project-filters">
+            <button class="filter-btn appr_stat_filter active" data-status="all">All</button>
+            <button class="filter-btn appr_stat_filter" data-status="pending">Pending</button>
+            <button class="filter-btn appr_stat_filter" data-status="approved">Approved</button>
+            <button class="filter-btn appr_stat_filter" data-status="declined">Declined</button>
+          </div>
+        {{else}}
+            <div class="project-filters">
+              <button class="filter-btn proj_stat_filter active" data-status="all">All</button>
+              <button class="filter-btn proj_stat_filter" data-status="active">Active</button>
+              <button class="filter-btn proj_stat_filter" data-status="completed">Completed</button>
+              <button class="filter-btn proj_stat_filter" data-status="terminated">Terminated</button>
+            </div>
+          {{/if}}
+        {{/if}}
 
         {{#if projects.length}}
-          {{#if (eq credentials.role "admin")}}
+          {{#if (eq credentials.role "lab_manager")}}
+            {{!-- Lab Manager View --}}
             <table class="projects-table">
               <thead>
-                  <tr>
-                    {{!-- <th>#</th> --}}
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Owner</th>
-                  </tr>
+                <tr>
+                  <th>Name</th>
+                  <th>Project Status</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Owner</th>
+                  <th>Actions</th>
+                </tr>
               </thead>
               <tbody>
-                  {{#each projects}}
-                      <tr data-id="{{id}}" data-status="{{status}}">
-                        {{!-- <td>{{id}}</td> --}}
-                        <td class="name_td">{{name}}</td>
-                        <td>{{description}}</td>
-                        <td><span class="status-label">{{capitalizeFirst status}}</span></td>
-                        <td>{{formatDate start_date}}</td>
-                        <td>{{formatDate end_date}}</td>
-                        <td>{{owner_name}}</td>
-                      </tr>
-                  {{/each}}
+                {{#each projects}}
+                  <tr data-id="{{id}}" data-status="{{status}}">
+                    <td class="name_td">{{name}}</td>
+                    <td>
+                      <span class="approval-stat-label">{{capitalizeFirst approval_stat}}</span>
+                    </td>
+                    <td>{{formatDate start_date}}</td>
+                    <td>{{formatDate end_date}}</td>
+                    <td>{{owner_name}}</td>
+                    <td>
+                      <div class="actions">
+                        <button class="approve-btn" data-id="{{id}}">Approve</button>
+                        <button class="decline-btn" data-id="{{id}}">Decline</button>
+                      </div>
+                    </td>
+                  </tr>
+                {{/each}}
               </tbody>
             </table>
           {{else}}
-            <div class="projects-list">
-              {{#each projects}}
-                <div class="project-card" data-status="{{status}}" data-id="{{id}}">
-                  <div class="project-card-head">
-                    <h4>{{name}}</h4>
-                    <span class="status-label">{{capitalizeFirst status}}</span>
+            {{#if (eq credentials.role "admin")}}
+              {{!-- Admin View --}}
+              <table class="projects-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Project Status</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Owner</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each projects}}
+                    <tr data-id="{{id}}" data-status="{{status}}">
+                      <td class="name_td">{{name}}</td>
+                      <td>
+                        <span class="approval-stat-label">{{capitalizeFirst approval_stat}}</span>
+                      </td>
+                      <td>{{formatDate start_date}}</td>
+                      <td>{{formatDate end_date}}</td>
+                      <td>{{owner_name}}</td>
+                      <td>
+                        <div class="actions">
+                          <button class="approve-btn" data-id="{{id}}">Approve</button>
+                          <button class="decline-btn" data-id="{{id}}">Decline</button>
+                        </div>
+                      </td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            {{else}}
+              {{!-- Student View --}}
+              <div class="projects-list">
+                {{#each projects}}
+                  <div class="project-card" data-status="{{status}}" data-id="{{id}}">
+                    <div class="project-card-head">
+                      <h4>{{name}}</h4>
+                      <span class="approval-stat-label" data-approval-stat="{{approval_stat}}">
+                        {{capitalizeFirst approval_stat}}
+                      </span>
+                    </div>
+                    <p>{{description}}</p>
                   </div>
-
-                  <p>{{description}}</p>
-
-                  {{!-- <div class="update_p_stat_box">
-                    <h5>Update status</h5>
-                    <select class="update-status">
-                      <option value="active" {{#if (eq status "active")}}selected{{/if}}>Active</option>
-
-                      <option value="completed" {{#if (eq status "completed")}}selected{{/if}}>Completed</option>
-
-                      <option value="terminated" {{#if (eq status "terminated")}}selected{{/if}}>Terminated</option>
-                    </select>
-                  </div> --}}
-                </div>
-              {{/each}}
-            </div>
+                {{/each}}
+              </div>
+            {{/if}}
           {{/if}}
         {{else}}
           <div class="no_projects">
