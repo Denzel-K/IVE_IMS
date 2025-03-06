@@ -36,6 +36,29 @@ exports.projectsGet = (req, res) => {
   });
 };
 
+exports.projectDetailsGet = (req, res) => {
+  const { id, name, email, lab, role } = req.user; // Logged-in user details
+  const projectId = req.params.id; // Project ID from the URL
+
+  // Fetch project details
+  Project.getProjectById(projectId, (err, project) => {
+    if (err) return res.status(500).json({ message: "Database error" });
+
+    // Fetch team members for the project
+    Project.getTeamMembers(projectId, (err, teamMembers) => {
+      if (err) return res.status(500).json({ message: "Database error" });
+
+      // Render the project details page
+      res.render("project_details", {
+        pageTitle: "Project Details",
+        credentials: { id, name, email, lab, role }, // Logged-in user details
+        project, // Project details
+        teamMembers, // Team members
+      });
+    });
+  });
+};
+
 exports.settingsGet = (req, res) => {
   const { id, name, email, lab, role } = req.user;
 
