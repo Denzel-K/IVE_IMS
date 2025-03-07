@@ -6,9 +6,9 @@
 
     <div class="dynamic_body">
       {{!-- Your sections and divs go here --}}
-     <div class="det_cont">
+      <div class="det_cont">
         <div class="breadcrumb">
-          <a href="/projectsGet">Projects </a> &gt; <span>  {{project.name}}</span>
+          <a href="/projectsGet">Projects</a> &gt; <span>{{project.name}}</span>
         </div>
 
         <div class="project-details">
@@ -29,14 +29,61 @@
             </select>
           </div>
 
+          <!-- Team Members Section -->
           <div class="t_members_box">
             <h3>Team Members</h3>
             <ul class="team-members">
               {{#each teamMembers}}
-              <li>{{this.name}}</li>
+                <li>{{this.name}}</li>
               {{/each}}
             </ul>
           </div>
+
+          <!-- Resource Allocation Section -->
+          {{#if (eq credentials.role "lab_manager")}}
+            <div class="resource-allocation">
+              <h3>Resource Allocation</h3>
+
+              <!-- Assign Equipment to Project -->
+              <div class="assign-equipment">
+                <h4>Assign Equipment</h4>
+                <form id="assign-equipment-form">
+                  <label for="equipment-select">Select Equipment:</label>
+                  <select id="equipment-select" name="equipment_id">
+                    {{#each availableEquipment}}
+                      <option value="{{this.id}}">{{this.name}} ({{this.unique_code}})</option>
+                    {{/each}}
+                  </select>
+                  <button type="submit">Assign</button>
+                </form>
+              </div>
+
+              <!-- View Assigned Equipment -->
+              <div class="assigned-equipment">
+                <h4>Assigned Equipment</h4>
+                <ul>
+                  {{#each assignedEquipment}}
+                    <li>
+                      {{this.name}} ({{this.unique_code}}) - {{this.status}}
+                      <button class="unassign-btn" data-equipment-id="{{this.id}}">Unassign</button>
+                    </li>
+                  {{/each}}
+                </ul>
+              </div>
+
+              <!-- Equipment Usage and Conflicts -->
+              <div class="equipment-usage">
+                <h4>Equipment Usage</h4>
+                <ul>
+                  {{#each equipmentUsage}}
+                    <li>
+                      {{this.name}} ({{this.unique_code}}) - Used by {{this.user_name}} until {{formatDate this.end_date}}
+                    </li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          {{/if}}
         </div>
       </div>
     </div>
@@ -46,8 +93,8 @@
 <script src="js/shared.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    // Update Project Status
     const statusSelect = document.getElementById("status-select");
-
     if (statusSelect) {
       statusSelect.addEventListener("change", async (e) => {
         const projectId = e.target.getAttribute("data-project-id");
@@ -66,12 +113,69 @@
           if (!response.ok) throw new Error(data.message);
 
           alert("Project status updated successfully!");
-          window.location.reload(); // Reload the page to reflect the changes
+          window.location.reload();
         } catch (error) {
           console.error("Error updating project status:", error);
           alert("Failed to update project status: " + error.message);
         }
       });
     }
+
+    // Assign Equipment to Project
+    const assignEquipmentForm = document.getElementById("assign-equipment-form");
+    if (assignEquipmentForm) {
+      assignEquipmentForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const projectId = "{{project.id}}";
+        const equipmentId = document.getElementById("equipment-select").value;
+
+        try {
+          const response = await fetch(`/api/projects/${projectId}/assign-equipment`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ equipment_id: equipmentId }),
+          });
+
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.message);
+
+          alert("Equipment assigned successfully!");
+          window.location.reload();
+        } catch (error) {
+          console.error("Error assigning equipment:", error);
+          alert("Failed to assign equipment: " + error.message);
+        }
+      });
+    }
+
+    // Unassign Equipment from Project
+    const unassignButtons = document.querySelectorAll(".unassign-btn");
+    unassignButtons.forEach((button) => {
+      button.addEventListener("click", async (e) => {
+        const equipmentId = e.target.getAttribute("data-equipment-id");
+        const projectId = "{{project.id}}";
+
+        try {
+          const response = await fetch(`/api/projects/${projectId}/unassign-equipment`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ equipment_id: equipmentId }),
+          });
+
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.message);
+
+          alert("Equipment unassigned successfully!");
+          window.location.reload();
+        } catch (error) {
+          console.error("Error unassigning equipment:", error);
+          alert("Failed to unassign equipment: " + error.message);
+        }
+      });
+    });
   });
 </script>

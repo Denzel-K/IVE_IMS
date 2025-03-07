@@ -185,6 +185,14 @@
     border-collapse: collapse;
     margin-top: 20px;
 
+    tr{
+      transition: .25s ease;
+      &:hover{
+        cursor: pointer;
+        background-color: #e7e7e7;
+      }
+    }
+
     th, td {
       border: 1px solid #ddd;
       text-align: left;
@@ -580,6 +588,49 @@
         li {
           margin-bottom: 5px;
           font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .resource-allocation {
+    margin-top: 20px;
+  
+    h3 {
+      font-size: 1.2rem;
+      color: rgb(98, 103, 126);
+      margin-bottom: 10px;
+    }
+  
+    .assign-equipment, .assigned-equipment, .equipment-usage {
+      margin-top: 15px;
+  
+      h4 {
+        font-size: 1rem;
+        color: rgb(120, 125, 149);
+        margin-bottom: 10px;
+      }
+  
+      ul {
+        list-style: none;
+        padding: 0;
+  
+        li {
+          margin-bottom: 10px;
+          font-size: 0.9rem;
+        }
+      }
+  
+      button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #f44336;
+        color: white;
+        cursor: pointer;
+  
+        &:hover {
+          background-color: #e53935;
         }
       }
     }

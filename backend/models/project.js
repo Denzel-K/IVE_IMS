@@ -121,6 +121,48 @@ const Project = {
           callback(null, results); // Return all team members
         });
     },
+
+    getAvailableEquipment: (lab, callback) => {
+        const sql = `
+          SELECT * 
+          FROM equipment
+          WHERE lab = ? AND status = 'available'
+        `;
+        db.query(sql, [lab], (err, results) => {
+          if (err) return callback(err);
+          callback(null, results); // Return available equipment
+        });
+      },
+    
+    // Fetch assigned equipment for the project
+    getAssignedEquipment: (projectId, callback) => {
+        const sql = `
+            SELECT * 
+            FROM equipment
+            WHERE current_lab = ?
+        `;
+        db.query(sql, [projectId], (err, results) => {
+            if (err) return callback(err);
+            callback(null, results); // Return assigned equipment
+        });
+    },
+
+    // Fetch equipment usage details
+    getEquipmentUsage: (projectId, callback) => {
+        const sql = `
+          SELECT equipment.name, equipment.unique_code, users.name AS user_name, usage_logs.end_time
+          FROM usage_logs
+          JOIN equipment ON usage_logs.equipment_id = equipment.id
+          JOIN users ON usage_logs.user_id = users.id
+          WHERE usage_logs.user_id IN (
+            SELECT user_id FROM project_team WHERE project_id = ?
+          )
+        `;
+        db.query(sql, [projectId], (err, results) => {
+          if (err) return callback(err);
+          callback(null, results); // Return equipment usage details
+        });
+    },
 };
 
 module.exports = Project;

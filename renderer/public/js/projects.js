@@ -235,7 +235,17 @@ document.addEventListener("DOMContentLoaded", () => {
   projectCards.forEach((card) => {
     card.addEventListener("click", (e) => {
       const projectId = card.getAttribute("data-id");
-      window.location.href = `/project-details/${projectId}`; // Navigate to project details page
+      window.location.href = `/project-details/${projectId}`;
+    });
+  });
+
+  // Lab manager redirection to project details
+  const projectRows = document.querySelectorAll(".projects-table tbody tr");
+
+  projectRows.forEach((row) => {
+    row.addEventListener("click", (e) => {
+      const projectId = row.getAttribute("data-id");
+      window.location.href = `/project-details/${projectId}`;
     });
   });
 });

@@ -7,13 +7,44 @@ exports.landingPage = (req, res) => {
 exports.dashboardGet = (req, res) => {
   const { id, name, email, lab, role } = req.user;
 
+  // Fetch additional data based on the user's role
+  let data = {};
+  if (role === "admin") {
+    // Fetch system-wide data for admin
+    data = {
+      totalUsers: 100, // Example data
+      activeProjects: 25,
+      equipmentInUse: 10,
+    };
+  } else if (role === "lab_manager") {
+    // Fetch lab-specific data for lab manager
+    data = {
+      labName: lab,
+      pendingApprovals: 5,
+      equipmentDueForMaintenance: 3,
+    };
+  } else if (role === "technician") {
+    // Fetch equipment and maintenance data for technician
+    data = {
+      labName: lab,
+      equipmentInUse: 7,
+      maintenanceTasks: 2,
+    };
+  } else if (role === "student") {
+    // Fetch project and booking data for student
+    data = {
+      labName: lab,
+      activeProjects: 2,
+      upcomingBookings: 3,
+    };
+  }
+
   res.render('dashboard', {
     pageTitle: "Dashboard",
-    credentials: {
-      id, name, email, lab, role
-    }
+    credentials: { id, name, email, lab, role },
+    data, 
   });
-}
+};
 
 exports.projectsGet = (req, res) => {
   const { id, name, email, lab, role } = req.user;
@@ -40,25 +71,64 @@ exports.projectDetailsGet = (req, res) => {
   const { id, name, email, lab, role } = req.user; // Logged-in user details
   const projectId = req.params.id; // Project ID from the URL
 
+  console.log("📌 Fetching project details for project ID:", projectId);
+
   // Fetch project details
   Project.getProjectById(projectId, (err, project) => {
-    if (err) return res.status(500).json({ message: "Database error" });
+    if (err) {
+      console.error("❌ Error fetching project details:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
+    console.log("✅ Fetched project details:", project);
 
     // Fetch team members for the project
     Project.getTeamMembers(projectId, (err, teamMembers) => {
-      if (err) return res.status(500).json({ message: "Database error" });
+      if (err) {
+        console.error("❌ Error fetching team members:", err);
+        return res.status(500).json({ message: "Database error" });
+      }
+      console.log("✅ Fetched team members:", teamMembers);
 
-      // Render the project details page
-      res.render("project_details", {
-        pageTitle: "Project Details",
-        credentials: { id, name, email, lab, role }, // Logged-in user details
-        project, // Project details
-        teamMembers, // Team members
+      // Fetch available equipment (not assigned to any project)
+      Project.getAvailableEquipment(lab, (err, availableEquipment) => {
+        if (err) {
+          console.error("❌ Error fetching available equipment:", err);
+          return res.status(500).json({ message: "Database error" });
+        }
+        console.log("✅ Fetched available equipment:", availableEquipment);
+
+        // Fetch assigned equipment for the project
+        Project.getAssignedEquipment(projectId, (err, assignedEquipment) => {
+          if (err) {
+            console.error("❌ Error fetching assigned equipment:", err);
+            return res.status(500).json({ message: "Database error" });
+          }
+          console.log("✅ Fetched assigned equipment:", assignedEquipment);
+
+          // Fetch equipment usage details
+          Project.getEquipmentUsage(projectId, (err, equipmentUsage) => {
+            if (err) {
+              console.error("❌ Error fetching equipment usage:", err);
+              return res.status(500).json({ message: "Database error" });
+            }
+            console.log("✅ Fetched equipment usage:", equipmentUsage);
+
+            // Render the project details page with all data
+            res.render("project_details", {
+              pageTitle: "Project Details",
+              credentials: { id, name, email, lab, role }, // Logged-in user details
+              project, // Project details
+              teamMembers, // Team members
+              availableEquipment, // Available equipment
+              assignedEquipment, // Assigned equipment
+              equipmentUsage, // Equipment usage details
+            });
+          });
+        });
       });
     });
   });
 };
-
 exports.settingsGet = (req, res) => {
   const { id, name, email, lab, role } = req.user;
 

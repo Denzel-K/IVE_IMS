@@ -1391,6 +1391,13 @@ form.sign-in-form {
   border-collapse: collapse;
   margin-top: 20px;
 }
+.projects-container .projects-table tr {
+  transition: 0.25s ease;
+}
+.projects-container .projects-table tr:hover {
+  cursor: pointer;
+  background-color: #e7e7e7;
+}
 .projects-container .projects-table th, .projects-container .projects-table td {
   border: 1px solid #ddd;
   text-align: left;
@@ -1749,5 +1756,86 @@ form.sign-in-form {
 .det_cont .project-details .t_members_box .team-members li {
   margin-bottom: 5px;
   font-size: 14px;
+}
+.det_cont .resource-allocation {
+  margin-top: 20px;
+}
+.det_cont .resource-allocation h3 {
+  font-size: 1.2rem;
+  color: rgb(98, 103, 126);
+  margin-bottom: 10px;
+}
+.det_cont .resource-allocation .assign-equipment, .det_cont .resource-allocation .assigned-equipment, .det_cont .resource-allocation .equipment-usage {
+  margin-top: 15px;
+}
+.det_cont .resource-allocation .assign-equipment h4, .det_cont .resource-allocation .assigned-equipment h4, .det_cont .resource-allocation .equipment-usage h4 {
+  font-size: 1rem;
+  color: rgb(120, 125, 149);
+  margin-bottom: 10px;
+}
+.det_cont .resource-allocation .assign-equipment ul, .det_cont .resource-allocation .assigned-equipment ul, .det_cont .resource-allocation .equipment-usage ul {
+  list-style: none;
+  padding: 0;
+}
+.det_cont .resource-allocation .assign-equipment ul li, .det_cont .resource-allocation .assigned-equipment ul li, .det_cont .resource-allocation .equipment-usage ul li {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+.det_cont .resource-allocation .assign-equipment button, .det_cont .resource-allocation .assigned-equipment button, .det_cont .resource-allocation .equipment-usage button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f44336;
+  color: white;
+  cursor: pointer;
+}
+.det_cont .resource-allocation .assign-equipment button:hover, .det_cont .resource-allocation .assigned-equipment button:hover, .det_cont .resource-allocation .equipment-usage button:hover {
+  background-color: #e53935;
+}
+
+.dashboard {
+  padding: 20px;
+  font-family: "Roboto", sans-serif;
+}
+.dashboard .welcome-message {
+  margin-bottom: 30px;
+}
+.dashboard .welcome-message h1 {
+  font-size: 2rem;
+  color: #333;
+}
+.dashboard .welcome-message p {
+  font-size: 1.2rem;
+  color: #666;
+}
+.dashboard .widgets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+.dashboard .widgets .widget {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.dashboard .widgets .widget:hover {
+  transform: translateY(-5px);
+}
+.dashboard .widgets .widget h3 {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+.dashboard .widgets .widget p {
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+}
+.dashboard .admin-dashboard h2, .dashboard .lab-manager-dashboard h2, .dashboard .technician-dashboard h2, .dashboard .student-dashboard h2 {
+  font-size: 1.5rem;
+  color: #444;
+  margin-bottom: 20px;
 }
 /*# sourceMappingURL=main.css.map */

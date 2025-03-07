@@ -1,31 +1,23 @@
 const express = require('express');
 const { authMiddleware } = require('../middleware/authMiddleware');
-const projectController = require('../controllers/projectController'); // Ensure this exists
+const projectController = require('../controllers/projectController');
+const loadPages = require('../controllers/loadpages'); 
 const Project = require("../models/project");
 
 const router = express.Router();
 
-router.get('/', authMiddleware(), projectController.getProjects);
-router.post('/create', authMiddleware(), projectController.createProject);
-router.patch('/:id/status', authMiddleware(), projectController.updateProjectStatus);
-router.get('/teammates', authMiddleware(), projectController.getStudentsByLab);
-router.put('/:id/approval', authMiddleware(), projectController.updateApprovalStatus);
+router.get('/api/projects/', authMiddleware(), projectController.getProjects);
+router.post('/api/projects/create', authMiddleware(), projectController.createProject);
+router.patch('/api/projects/:id/status', authMiddleware(), projectController.updateProjectStatus);
+router.get('/api/projects/teammates', authMiddleware(), projectController.getStudentsByLab);
+router.put('/api/projects/:id/approval', authMiddleware(), projectController.updateApprovalStatus);
+router.post('/api/projects/:id/assign-equipment', projectController.assignEquipment);
+router.post('/api/projects/:id/unassign-equipment', projectController.unassignEquipment);
 
 // Fetch project details by ID
-router.get("/project-details/:id", async (req, res) => {
-  try {
-    const projectId = req.params.id;
-    const project = await Project.getProjectById(projectId); // Fetch project details
-    const teamMembers = await Project.getTeamMembers(projectId); // Fetch team members
+router.get("/project-details/:id",  authMiddleware(), loadPages.projectDetailsGet);
 
-    res.render("project-details", { project, teamMembers });
-  } catch (err) {
-    console.error("❌ Error fetching project details:", err);
-    res.status(500).json({ message: "Database error" });
-  }
-});
-
-router.get("/filtered_projects", authMiddleware(), (req, res) => {
+router.get("/api/projects/filtered_projects", authMiddleware(), (req, res) => {
   const { filterType, filterValue } = req.query;
   const { role, id } = req.user;
 

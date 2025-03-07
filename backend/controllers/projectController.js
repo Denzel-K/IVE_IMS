@@ -1,4 +1,5 @@
 const Project = require('../models/project');
+const db = require('../config/db');
 
 exports.getProjects = (req, res) => {
     Project.getAllProjects((err, results) => {
@@ -76,4 +77,51 @@ exports.updateApprovalStatus = (req, res) => {
         }
         res.json({ message: "Project approval status updated successfully" });
     });
+};
+
+
+exports.assignEquipment = async (req, res) => {
+  const { id } = req.params;
+  const { equipment_id } = req.body;
+
+  try {
+    // Check if the equipment is already assigned to another project
+    const [conflict] = await db.query(
+      "SELECT * FROM equipment WHERE id = ? AND status = 'in use'",
+      [equipment_id]
+    );
+
+    if (conflict.length > 0) {
+      return res.status(400).json({ message: "Equipment is already in use." });
+    }
+
+    // Assign equipment to the project
+    await db.query(
+      "UPDATE equipment SET status = 'in use', current_lab = ? WHERE id = ?",
+      [id, equipment_id]
+    );
+
+    res.json({ message: "Equipment assigned successfully." });
+  } catch (err) {
+    console.error("Error assigning equipment:", err);
+    res.status(500).json({ message: "Database error" });
+  }
+};
+
+exports.unassignEquipment = async (req, res) => {
+  const { id } = req.params;
+  const { equipment_id } = req.body;
+
+  try {
+    // Unassign equipment from the project
+    await db.query(
+      "UPDATE equipment SET status = 'available', current_lab = NULL WHERE id = ?",
+      [equipment_id]
+    );
+
+    res.json({ message: "Equipment unassigned successfully." });
+  } catch (err) {
+    console.error("Error unassigning equipment:", err);
+    res.status(500).json({ message: "Database error" });
+  }
 };

@@ -6,6 +6,78 @@
 
     <div class="dynamic_body">
       {{!-- Your sections and divs go here --}}
+      <div class="dashboard">
+        <div class="welcome-message">
+          <h1>Welcome, {{credentials.name}}!</h1>
+          <p>You are logged in as a <strong>{{credentials.role}}</strong> in the <strong>{{credentials.lab}}</strong> lab.</p>
+        </div>
+
+        {{#if (eq credentials.role "admin")}}
+          <!-- Admin Dashboard -->
+          <div class="admin-dashboard">
+            <h2>Admin Dashboard</h2>
+            <div class="widgets">
+              <div class="widget">
+                <h3>Total Users</h3>
+                <p>{{data.totalUsers}}</p>
+              </div>
+              <div class="widget">
+                <h3>Active Projects</h3>
+                <p>{{data.activeProjects}}</p>
+              </div>
+              <div class="widget">
+                <h3>Equipment in Use</h3>
+                <p>{{data.equipmentInUse}}</p>
+              </div>
+            </div>
+          </div>
+        {{else if (eq credentials.role "lab_manager")}}
+          <!-- Lab Manager Dashboard -->
+          <div class="lab-manager-dashboard">
+            <h2>{{data.labName}} Lab Manager Dashboard</h2>
+            <div class="widgets">
+              <div class="widget">
+                <h3>Pending Approvals</h3>
+                <p>{{data.pendingApprovals}}</p>
+              </div>
+              <div class="widget">
+                <h3>Equipment Due for Maintenance</h3>
+                <p>{{data.equipmentDueForMaintenance}}</p>
+              </div>
+            </div>
+          </div>
+        {{else if (eq credentials.role "technician")}}
+          <!-- Technician Dashboard -->
+          <div class="technician-dashboard">
+            <h2>{{data.labName}} Technician Dashboard</h2>
+            <div class="widgets">
+              <div class="widget">
+                <h3>Equipment in Use</h3>
+                <p>{{data.equipmentInUse}}</p>
+              </div>
+              <div class="widget">
+                <h3>Maintenance Tasks</h3>
+                <p>{{data.maintenanceTasks}}</p>
+              </div>
+            </div>
+          </div>
+        {{else if (eq credentials.role "student")}}
+          <!-- Student Dashboard -->
+          <div class="student-dashboard">
+            <h2>{{data.labName}} Student Dashboard</h2>
+            <div class="widgets">
+              <div class="widget">
+                <h3>Active Projects</h3>
+                <p>{{data.activeProjects}}</p>
+              </div>
+              <div class="widget">
+                <h3>Upcoming Bookings</h3>
+                <p>{{data.upcomingBookings}}</p>
+              </div>
+            </div>
+          </div>
+        {{/if}}
+      </div>
     </div>
   </section>
 </section>
