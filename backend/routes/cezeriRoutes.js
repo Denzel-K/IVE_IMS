@@ -28,6 +28,16 @@ const maintenanceController = require('../controllers/cezeriControllers/maintain
     router.post('/api/equipment-sharing/request', authMiddleware(), equipmentSharingController.postEquipmentRequest); // ✅ Post a new request
     router.put('/api/equipment-sharing/approve/:id', authMiddleware(), equipmentSharingController.approveRequest); // ✅ Approve a request
     router.put('/api/equipment-sharing/reject/:id', authMiddleware(), equipmentSharingController.rejectRequest); // ✅ Reject a request
+    // Fetch Labs
+    router.get('/api/equipment-sharing/labs', authMiddleware(), equipmentSharingController.getLabs);
+
+    // Fetch Equipment by Lab
+    router.get('/api/equipment-sharing/equipment', authMiddleware(), equipmentSharingController.getEquipmentByLab);
+
+    // Fetch Items by Equipment
+    router.get('/api/equipment-sharing/items', authMiddleware(), equipmentSharingController.getItemsByEquipment);
+
+
 //................................................................................................................................................
 
 //inventory routes //

@@ -1,3 +1,5 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
 <section class="skeleton">
   {{>sidebar}}
 
@@ -49,7 +51,10 @@
         {{else if (eq credentials.role "technician")}}
           <!-- Technician Dashboard -->
           <div class="technician-dashboard">
-            <h2>{{data.labName}} Technician Dashboard</h2>
+            <!-- Search Bar -->
+            <div class="mb-6">
+                <input type="text" placeholder="Search equipment or tasks..." class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
             <div class="widgets">
               <div class="widget">
                 <h3>Equipment in Use</h3>
@@ -60,6 +65,55 @@
                 <p>{{data.maintenanceTasks}}</p>
               </div>
             </div>
+                <section class="p-2">
+                  <!-- Widgets -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <!-- Upcoming Maintenance Alerts -->
+                      <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                          <h3 class="text-lg font-semibold mb-4 text-indigo-800 flex items-center gap-2">
+                              <i class="fas fa-exclamation-circle text-red-500"></i>
+                              Upcoming Maintenance
+                          </h3>
+                          <ul id="maintenance-alerts" class="space-y-2">
+                              <!-- Populated by JavaScript -->
+                          </ul>
+                      </div>
+
+                      <!-- Current Bookings -->
+                      <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                          <h3 class="text-lg font-semibold mb-4 text-indigo-800 flex items-center gap-2">
+                              <i class="fas fa-calendar-check text-green-500"></i>
+                              Current Bookings
+                          </h3>
+                          <ul id="current-bookings" class="space-y-2">
+                              <!-- Populated by JavaScript -->
+                          </ul>
+                      </div>
+
+                      <!-- Pending Maintenance Requests -->
+                      <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                          <h3 class="text-lg font-semibold mb-4 text-indigo-800 flex items-center gap-2">
+                              <i class="fas fa-tools text-yellow-500"></i>
+                              Pending Maintenance
+                          </h3>
+                          <ul id="pending-maintenance" class="space-y-2">
+                              <!-- Populated by JavaScript -->
+                          </ul>
+                      </div>
+
+                      <!-- Recent Activity Logs -->
+                      <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                          <h3 class="text-lg font-semibold mb-4 text-indigo-800 flex items-center gap-2">
+                              <i class="fas fa-history text-blue-500"></i>
+                              Recent Activity
+                          </h3>
+                          <ul id="recent-activity" class="space-y-2">
+                              <!-- Populated by JavaScript -->
+                          </ul>
+                      </div>
+                  </div>
+              </section>
+
           </div>
         {{else if (eq credentials.role "student")}}
           <!-- Student Dashboard -->
@@ -83,3 +137,4 @@
 </section>
 
 <script src="js/shared.js"></script>
+<script src="js/tech_dash.js"></script>

@@ -56,7 +56,7 @@ exports.projectsGet = (req, res) => {
 
   // Fetch projects with the filter
   Project.getAllProjects(role, id, filter, value, (err, projects) => {
-    if (err) return res.status(500).json({ message: "Database error" });
+    if (err) return res.status(500).json({ message: "Database error", err });
 
     // Render the projects view with the filtered projects
     res.render('projects', {

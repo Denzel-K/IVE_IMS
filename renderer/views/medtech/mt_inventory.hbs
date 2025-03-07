@@ -9,7 +9,128 @@
     <div class="dynamic_body">
       {{!-- Your sections and divs go here --}}
 
+      {{#if (eq credentials.role "lab_manager")}}
+    <!-- Main Content -->
+    <section class="p-8">
+        <h1 class="text-2xl font-semibold mb-6">Inventory Management</h1>
+        <!-- Inventory Content -->
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <input type="text" placeholder="Search equipment..." class="p-2 border rounded-lg">
+                <button type="button" class="p-2 bg-blue-500 text-white rounded-lg">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <!-- <button data-action="add-equipment" class="flex items-center gap-2 p-2 bg-blue-100 border-2 border-blue-500 rounded-lg hover:bg-blue-500 hover:text-white">
+                <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22ZM12 8.25C12.4142 8.25 12.75 8.58579 12.75 9V11.25H15C15.4142 11.25 15.75 11.5858 15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H12.75L12.75 15C12.75 15.4142 12.4142 15.75 12 15.75C11.5858 15.75 11.25 15.4142 11.25 15V12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H11.25L11.25 9C11.25 8.58579 11.5858 8.25 12 8.25Z"/>
+                </svg>
+                <span>Add Equipment</span>
+            </button> -->
+
+<!-- Add Equipment Button -->
+<button class="add-equipment-btn bg-gray-50 border-2 border-blue-500 rounded-lg px-4 py-2 flex items-center gap-2 hover:bg-blue-500 hover:border-blue-700 hover:text-white transition-all duration-300">
+    <svg width="20" height="20" viewBox="0 0 24 24" class="text-blue-500 hover:text-white transition-colors duration-300">
+        <path d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22ZM12 8.25C12.4142 8.25 12.75 8.58579 12.75 9V11.25H15C15.4142 11.25 15.75 11.5858 15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H12.75L12.75 15C12.75 15.4142 12.4142 15.75 12 15.75C11.5858 15.75 11.25 15.4142 11.25 15V12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H11.25L11.25 9C11.25 8.58579 11.5858 8.25 12 8.25Z"/>
+    </svg>
+    <span class="text-blue-700 font-semibold text-sm hover:text-white transition-colors duration-300">Add Equipment</span>
+</button>
+
+<!-- Equipment Modal -->
+<div class="equipment-modal hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="modal-content bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <!-- Modal Header -->
+        <div class="modal-header flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold">Add New Equipment</h3>
+            <button class="close-modal text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
+        </div>
+
+<form id="addEquipmentForm" class="flex flex-col gap-4">
+    <!-- Equipment Name and Type -->
+    <div class="form-row grid grid-cols-2 gap-4">
+        <input type="text" id="equipmentName" placeholder="Equipment Name" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+        <select id="equipmentType" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+            <option value="electrical">Electrical Tools</option>
+            <option value="mechanical">Mechanical Tools</option>
+            <option value="consumables">Consumables</option>
+        </select>
+    </div>
+
+    <!-- Equipment Status -->
+    <div class="form-row">
+        <select id="equipmentStatus" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+            <option value="available">Available</option>
+            <option value="in-use">In Use</option>
+            <option value="maintenance">Under Maintenance</option>
+        </select>
+    </div>
+
+    <!-- Quantity -->
+    <div class="form-row">
+        <input type="number" id="equipmentQuantity" placeholder="Quantity" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+    </div>
+
+    <!-- Additional Fields (Hidden by Default) -->
+    <div id="spec-fields" class="hidden">
+        <div class="form-row grid grid-cols-2 gap-4">
+            <input type="text" id="powerRating" placeholder="Power Requirements" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+            <input type="text" id="manufacturer" placeholder="Manufacturer" class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors duration-300">Add to Inventory</button>
+</form>    
+
+
+</div>
+</div>
+        </div>
+
+        <!-- Inventory Grid -->
+        <div class="grid grid-cols-3 gap-4 mt-6">
+            <!-- Example Inventory Card -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold"><i class="fas fa-bolt"></i> Electrical Tools</h3>
+                <div class="space-y-2 mt-4">
+                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg">
+                        <h4>Ultimaker S5 3D Printer</h4>
+                        <div class="px-3 py-1 bg-green-100 text-green-800 rounded-full">Available</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg">
+                        <span>CNC Router 3020</span>
+                        <div class="px-3 py-1 bg-red-100 text-red-800 rounded-full">In Use</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold"><i class="fas fa-tools"></i> Mechanical Tools</h3>
+                <div class="space-y-2 mt-4">
+                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg">
+                        <span>Bench Drill Press</span>
+                        <div class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full">Maintenance</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold"><i class="fas fa-cubes"></i> Consumables</h3>
+                <div class="space-y-2 mt-4">
+                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-lg">
+                        <span>PLA Filament (1.75mm)</span>
+                        <div class="px-3 py-1 bg-green-100 text-green-800 rounded-full">In Stock</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+      {{/if}}
+    </div>
+
   </section>
 </section>
 
 <script src="js/shared.js"></script>
+<script src="js/mt_inventory.js"></script>

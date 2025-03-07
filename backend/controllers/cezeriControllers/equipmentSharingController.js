@@ -92,31 +92,75 @@ exports.getApprovedRequests = (req, res) => {
 };
 
 
-// ✅ Post a New Equipment Request
-exports.postEquipmentRequest = (req, res) => {
-    // Validate inputs
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ success: false, message: "Validation failed", errors: errors.array() });
-    }
+// Fetch Labs
+exports.getLabs = (req, res) => {
+    const sql = `SELECT DISTINCT lab FROM equipment`;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ message: "Database error" });
+        }
+        res.json(results.map(row => row.lab));
+    });
+};
 
+// Fetch Equipment by Lab
+exports.getEquipmentByLab = (req, res) => {
+    const { lab } = req.query;
+    const sql = `
+        SELECT id, name 
+        FROM equipment 
+        WHERE lab = ?
+    `;
+    db.query(sql, [lab], (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ message: "Database error" });
+        }
+        res.json(results);
+    });
+};
+
+// Fetch Items by Equipment
+exports.getItemsByEquipment = (req, res) => {
+    const { equipmentId } = req.query;
+    const sql = `
+        SELECT unique_code 
+        FROM equipmentitems 
+        WHERE equipment_id = ? AND status = 'available'
+    `;
+    db.query(sql, [equipmentId], (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ message: "Database error" });
+        }
+        res.json(results);
+    });
+};
+
+// ✅ Post a New Equipment Request
+// Post Equipment Request
+exports.postEquipmentRequest = (req, res) => {
     const { equipment_name, from_lab, to_lab, quantity, purpose, time_slot } = req.body;
 
-    // Additional validation for quantity
-    if (isNaN(quantity) || quantity <= 0) {
-        return res.status(400).json({ success: false, message: "Quantity must be a positive number" });
+    // Get the user ID from the authenticated user (e.g., from the session or token)
+    const requested_by = req.user.id; // Assuming you have user authentication middleware
+
+    if (!equipment_name || !from_lab || !to_lab || !quantity || !purpose || !time_slot || !requested_by) {
+        return res.status(400).json({ message: "All fields are required" });
     }
 
     const sql = `
-        INSERT INTO equipment_requests (equipment_name, from_lab, to_lab, quantity, purpose, time_slot, status) 
-        VALUES (?, ?, ?, ?, ?, ?, 'pending')
+        INSERT INTO equipment_requests 
+        (equipment_name, from_lab, to_lab, quantity, purpose, time_slot, status, requested_by) 
+        VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)
     `;
-    db.query(sql, [equipment_name, from_lab, to_lab, quantity, purpose, time_slot], (err, result) => {
+    db.query(sql, [equipment_name, from_lab, to_lab, quantity, purpose, time_slot, requested_by], (err, result) => {
         if (err) {
             console.error("Database error:", err);
-            return res.status(500).json({ success: false, message: "Database error" });
+            return res.status(500).json({ message: "Database error" });
         }
-        res.status(201).json({ success: true, message: "Request posted successfully", requestId: result.insertId });
+        res.status(201).json({ message: "Request posted successfully", requestId: result.insertId });
     });
 };
 // ✅ Approve Equipment Request

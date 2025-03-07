@@ -1,3 +1,4 @@
+<script src="https://cdn.tailwindcss.com"></script>
 <section class="skeleton">
   {{>sidebar}}
 
@@ -6,8 +7,111 @@
 
     <div class="dynamic_body">
       {{!-- Your sections and divs go here --}}
+
+            {{#if (eq credentials.role "lab_manager")}}
+      <section class="p-8">
+
+          <!-- Reserve Equipment Button -->
+          <div class="mb-8">
+              <button id="reserve-equipment-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                  Reserve Equipment
+              </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Available Equipment Section -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-xl font-semibold mb-4">Available Equipment</h2>
+                <div id="equipment-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Equipment cards will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Pending Approvals Section -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-xl font-semibold mb-4">Pending Approvals</h2>
+                <div id="pending-approvals" class="space-y-4">
+                    <!-- Pending reservations will be populated by JavaScript -->
+                </div>
+            </div>
+          </div>
+          <!-- Approved Reservations Section -->
+          <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+              <h2 class="text-xl font-semibold mb-4">Approved Reservations</h2>
+              <div id="approved-reservations" class="space-y-4">
+                  <!-- Approved reservations will be populated by JavaScript -->
+              </div>
+          </div>
+
+      </section>
+<div id="user-data" data-user-id="{{credentials.id}}"></div>
+<!-- Reservation Modal -->
+<div id="reservation-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md max-h-[70vh] overflow-y-auto">
+        <h3 class="text-lg font-semibold mb-4">Reserve Equipment</h3>
+        <form id="reservation-form">
+            <!-- Equipment Dropdown -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Equipment</label>
+                <select id="reservation-equipment" class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    <option value="" disabled selected>Select Equipment</option>
+                    <!-- Equipment options will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- Equipment Items Dropdown -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Select Item</label>
+                <select id="reservation-item" class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    <option value="" disabled selected>Select Item</option>
+                    <!-- Equipment items will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- Date Picker -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Date</label>
+                <input type="date" id="reservation-date" class="w-full p-2 border border-gray-300 rounded-lg" required>
+            </div>
+
+            <!-- Time Slot Dropdown -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Time Slot</label>
+                <select id="reservation-time" class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    <option value="" disabled selected>Select Time Slot</option>
+                    <!-- Time slot options will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- Lab Selection -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Lab</label>
+                <select id="reservation-lab" class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    <option value="design-studio">Design Studio</option>
+                    <option value="cezeri-lab">Cezeri Lab</option>
+                    <option value="medtech-lab">MedTech Lab</option>
+                </select>
+            </div>
+
+            <!-- Purpose -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Purpose</label>
+                <textarea id="reservation-purpose" class="w-full p-2 border border-gray-300 rounded-lg" rows="3" required></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                Reserve
+            </button>
+        </form>
+        <button class="close-modal mt-4 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">Close</button>
+    </div>
+</div>
+  {{/if}}
+
     </div>
   </section>
 </section>
 
 <script src="js/shared.js"></script>
+<script src="js/cz_bookings.js"></script>
