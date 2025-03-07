@@ -38,6 +38,7 @@ async function fetchInventory() {
         return [];
     }
 }
+
 // Function to render inventory data on the page
 // Function to render inventory data on the page
 async function renderInventory() {

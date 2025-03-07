@@ -170,9 +170,22 @@ async function updateReservationStatus(reservationId, status) {
         if (!response.ok) {
             throw new Error('Failed to update reservation status');
         }
-        return await response.json();
+        const data = await response.json();
+
+        // Handle the response and update the UI
+        if (data.available_count !== undefined) {
+            alert(`Reservation ${status}. Available items: ${data.available_count}`);
+        } else {
+            alert(data.message);
+        }
+
+        // Refresh the equipment list to reflect the updated available count
+        await renderEquipment();
+
+        return data;
     } catch (error) {
         console.error('Error updating reservation status:', error);
+        alert('Failed to update reservation status. Please try again.');
         return null;
     }
 }
@@ -234,6 +247,9 @@ document.getElementById('reservation-equipment').addEventListener('change', asyn
 // Handle Reservation Form Submission
 async function handleReservationFormSubmit(e) {
     e.preventDefault();
+    // Get the user ID from the data attribute
+    const userDataElement = document.getElementById('user-data');
+    const user_Id = userDataElement.getAttribute("data-user-id");
 
     const equipmentId = document.getElementById('reservation-equipment').value;
     const equipmentItemId = document.getElementById('reservation-item').value;
@@ -255,7 +271,7 @@ async function handleReservationFormSubmit(e) {
             },
             body: JSON.stringify({
                 equipment_item_id: equipmentItemId,
-                user_id: req.user.id, // Assuming user ID is available
+                user_id: user_Id, // Assuming user ID is available
                 time_slot_id: timeSlotId,
                 date: date,
                 lab: lab,
@@ -270,11 +286,15 @@ async function handleReservationFormSubmit(e) {
         const result = await response.json();
         alert(`Reservation created successfully! ID: ${result.reservation_id}`);
         document.getElementById('reservation-modal').classList.add('hidden');
+
+        // Refresh the equipment list to reflect the updated available count
+        await renderEquipment();
     } catch (error) {
         console.error('Error creating reservation:', error);
         alert('Failed to create reservation. Please try again.');
     }
 }
+
 // Initialize Page
 document.addEventListener('DOMContentLoaded', async () => {
     initializeModals();

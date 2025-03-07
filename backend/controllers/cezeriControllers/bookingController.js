@@ -15,9 +15,9 @@ exports.getAvailableTimeSlots = (req, res) => {
         AND ts.id NOT IN (
             SELECT r.time_slot_id
             FROM Reservations r
-            WHERE r.equipment_id = ? AND r.date = ?
-        )
-    `;
+            JOIN EquipmentItems ei ON r.equipment_item_id = ei.id
+            WHERE ei.equipment_id = ? AND r.date = ?
+        );`;
 
     db.query(sql, [date, equipment_id, date], (err, results) => {
         if (err) {
@@ -117,7 +117,8 @@ exports.getPendingApprovals = (req, res) => {
     const sql = `
         SELECT r.id, e.name AS equipment, t.slot_time AS time, u.email AS requestedBy, r.lab, r.purpose, r.status
         FROM Reservations r
-        JOIN Equipment e ON r.equipment_id = e.id
+        JOIN EquipmentItems ei ON r.equipment_item_id = ei.id
+        JOIN Equipment e ON ei.equipment_id = e.id
         JOIN Users u ON r.user_id = u.id
         JOIN TimeSlots t ON r.time_slot_id = t.id
         WHERE r.status = 'pending'
@@ -161,43 +162,74 @@ exports.updateReservationStatus = (req, res) => {
                 });
             }
 
-            // If the reservation is approved, update the equipment status to 'in-use'
+            // If the reservation is approved, update the equipment item status to 'in-use'
             if (status === "approved") {
-                // Get the equipment_id from the reservation
-                const getEquipmentIdSql = "SELECT equipment_id FROM Reservations WHERE id = ?";
-                db.query(getEquipmentIdSql, [id], (getEquipmentIdErr, getEquipmentIdResult) => {
-                    if (getEquipmentIdErr) {
+                // Get the equipment_item_id from the reservation
+                const getEquipmentItemIdSql = "SELECT equipment_item_id FROM Reservations WHERE id = ?";
+                db.query(getEquipmentItemIdSql, [id], (getEquipmentItemIdErr, getEquipmentItemIdResult) => {
+                    if (getEquipmentItemIdErr) {
                         return db.rollback(() => {
-                            console.error("Error fetching equipment ID:", getEquipmentIdErr);
-                            res.status(500).json({ message: "Error fetching equipment ID", error: getEquipmentIdErr });
+                            console.error("Error fetching equipment item ID:", getEquipmentItemIdErr);
+                            res.status(500).json({ message: "Error fetching equipment item ID", error: getEquipmentItemIdErr });
                         });
                     }
 
-                    const equipment_id = getEquipmentIdResult[0].equipment_id;
+                    const equipment_item_id = getEquipmentItemIdResult[0].equipment_item_id;
 
-                    // Update the equipment status to 'in-use'
-                    const updateEquipmentSql = "UPDATE Equipment SET status = 'in-use' WHERE id = ?";
-                    db.query(updateEquipmentSql, [equipment_id], (updateEquipmentErr, updateEquipmentResult) => {
-                        if (updateEquipmentErr) {
+                    // Update the equipment item status to 'in-use'
+                    const updateEquipmentItemSql = "UPDATE EquipmentItems SET status = 'in-use' WHERE id = ?";
+                    db.query(updateEquipmentItemSql, [equipment_item_id], (updateEquipmentItemErr, updateEquipmentItemResult) => {
+                        if (updateEquipmentItemErr) {
                             return db.rollback(() => {
-                                console.error("Error updating equipment:", updateEquipmentErr);
-                                res.status(500).json({ message: "Error updating equipment", error: updateEquipmentErr });
+                                console.error("Error updating equipment item:", updateEquipmentItemErr);
+                                res.status(500).json({ message: "Error updating equipment item", error: updateEquipmentItemErr });
                             });
                         }
 
-                        // Commit the transaction
-                        db.commit((commitErr) => {
-                            if (commitErr) {
+                        // Get the equipment_id from the EquipmentItems table
+                        const getEquipmentIdSql = "SELECT equipment_id FROM EquipmentItems WHERE id = ?";
+                        db.query(getEquipmentIdSql, [equipment_item_id], (getEquipmentIdErr, getEquipmentIdResult) => {
+                            if (getEquipmentIdErr) {
                                 return db.rollback(() => {
-                                    console.error("Commit error:", commitErr);
-                                    res.status(500).json({ message: "Commit error", error: commitErr });
+                                    console.error("Error fetching equipment ID:", getEquipmentIdErr);
+                                    res.status(500).json({ message: "Error fetching equipment ID", error: getEquipmentIdErr });
                                 });
                             }
 
-                            res.status(200).json({ 
-                                message: `Reservation ${status} and equipment status updated to 'in-use'`, 
-                                reservation_id: id,
-                                equipment_id
+                            const equipment_id = getEquipmentIdResult[0].equipment_id;
+
+                            // Calculate the total number of available equipment items for this equipment type
+                            const getAvailableItemsSql = `
+                                SELECT COUNT(*) AS available_count
+                                FROM EquipmentItems
+                                WHERE equipment_id = ? AND status = 'available'
+                            `;
+                            db.query(getAvailableItemsSql, [equipment_id], (getAvailableItemsErr, getAvailableItemsResult) => {
+                                if (getAvailableItemsErr) {
+                                    return db.rollback(() => {
+                                        console.error("Error fetching available equipment items:", getAvailableItemsErr);
+                                        res.status(500).json({ message: "Error fetching available equipment items", error: getAvailableItemsErr });
+                                    });
+                                }
+
+                                const available_count = getAvailableItemsResult[0].available_count;
+
+                                // Commit the transaction
+                                db.commit((commitErr) => {
+                                    if (commitErr) {
+                                        return db.rollback(() => {
+                                            console.error("Commit error:", commitErr);
+                                            res.status(500).json({ message: "Commit error", error: commitErr });
+                                        });
+                                    }
+
+                                    res.status(200).json({ 
+                                        message: `Reservation ${status} and equipment item status updated to 'in-use'`, 
+                                        reservation_id: id,
+                                        equipment_item_id,
+                                        available_count // Return the total number of available equipment items
+                                    });
+                                });
                             });
                         });
                     });
@@ -227,7 +259,8 @@ exports.getApprovedReservations = (req, res) => {
     const sql = `
         SELECT r.id, e.name AS equipment, t.slot_time AS time, u.email AS requestedBy, r.lab, r.purpose
         FROM Reservations r
-        JOIN Equipment e ON r.equipment_id = e.id
+        JOIN EquipmentItems ei ON r.equipment_item_id = ei.id
+        JOIN Equipment e ON ei.equipment_id = e.id
         JOIN Users u ON r.user_id = u.id
         JOIN TimeSlots t ON r.time_slot_id = t.id
         WHERE r.status = 'approved'
@@ -238,6 +271,7 @@ exports.getApprovedReservations = (req, res) => {
         res.json(results);
     });
 };
+
 
 // ✅ Get booking logs
 exports.getBookingLogs = (req, res) => {

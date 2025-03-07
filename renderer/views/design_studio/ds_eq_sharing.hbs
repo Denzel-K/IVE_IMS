@@ -9,7 +9,103 @@
     <div class="dynamic_body">
       {{!-- Your sections and divs go here --}}
 
+    <div id="user-data" data-current-lab="{{credentials.lab}}"></div> <!-- Set the current lab here -->
+
+    <section class="p-8">
+        <h1 class="text-2xl font-semibold mb-6 text-indigo-800">Equipment Transfer</h1>
+
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Available Equipment in Other Labs -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <h2 class="text-xl font-semibold mb-4 text-indigo-800">Available Equipment in Other Labs</h2>
+                <div id="available-equipment" class="space-y-4">
+                    <!-- Equipment cards will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Requests from Other Labs -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <h2 class="text-xl font-semibold mb-4 text-indigo-800">Requests from Other Labs</h2>
+                <div id="requests-from-labs" class="space-y-4">
+                    <!-- Requests will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Post Request for Equipment -->
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mt-8">
+            <h2 class="text-xl font-semibold mb-4 text-indigo-800">Request Equipment from Other Labs</h2>
+            <button id="post-request-btn" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105">
+                <i class="fas fa-plus mr-2"></i>Post Request
+            </button>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <!-- Equipment Details Modal -->
+    <div id="equipment-details-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto relative">
+            <button class="close-modal absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
+            <h3 class="text-xl font-semibold mb-4 text-indigo-800">Equipment Details</h3>
+            <div id="equipment-details-content">
+                <!-- Equipment details will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+<!-- Post Request Modal -->
+<div id="post-request-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto relative">
+        <button class="close-modal absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
+        <h3 class="text-xl font-semibold mb-4 text-indigo-800">Request Equipment</h3>
+        <form id="post-request-form">
+            <!-- Step 1: Select Lab -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2 text-gray-700">Select Lab</label>
+                <select id="select-lab" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" required>
+                    <!-- Labs will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- Step 2: Select Equipment -->
+            <div class="mb-4 hidden" id="equipment-section">
+                <label class="block text-sm font-medium mb-2 text-gray-700">Select Equipment</label>
+                <select id="select-equipment" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" required>
+                    <!-- Equipment will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- Step 3: Select Item -->
+            <div class="mb-4 hidden" id="item-section">
+                <label class="block text-sm font-medium mb-2 text-gray-700">Select Item</label>
+                <select id="select-item" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" required>
+                    <!-- Items will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- Step 4: Select Time Slot -->
+            <div class="mb-4 hidden" id="time-slot-section">
+                <label class="block text-sm font-medium mb-2 text-gray-700">Select Time Slot</label>
+                <input type="datetime-local" id="select-time-slot" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" required>
+            </div>
+
+            <!-- Step 5: Enter Purpose -->
+            <div class="mb-4 hidden" id="purpose-section">
+                <label class="block text-sm font-medium mb-2 text-gray-700">Purpose</label>
+                <textarea id="request-purpose" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" rows="3" required></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 hidden" id="submit-btn">
+                Submit Request
+            </button>
+        </form>
+    </div>
+</div>
+
   </section>
 </section>
 
 <script src="js/shared.js"></script>
+<script src="js/ds_eq_sharing.js"></script>

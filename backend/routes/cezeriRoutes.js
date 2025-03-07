@@ -23,17 +23,18 @@ const maintenanceController = require('../controllers/cezeriControllers/maintain
 //...............................................................................................................................//
 
 // equipment-sharing routes
-    router.get('/api/equipment-sharing/available', equipmentSharingController.getAvailableEquipment); // ✅ Get available equipment
-    router.get('/api/equipment-sharing/requests', equipmentSharingController.getEquipmentRequests); // ✅ Get requests from labs
-    router.post('/api/equipment-sharing/request', equipmentSharingController.postEquipmentRequest); // ✅ Post a new request
-    router.put('/api/equipment-sharing/approve/:id', equipmentSharingController.approveRequest); // ✅ Approve a request
-    router.put('/api/equipment-sharing/reject/:id', equipmentSharingController.rejectRequest); // ✅ Reject a request
+    router.get('/api/equipment-sharing/available', authMiddleware(), equipmentSharingController.getAvailableEquipment); // ✅ Get available equipment
+    router.get('/api/equipment-sharing/requests', authMiddleware(), equipmentSharingController.getEquipmentRequests); // ✅ Get requests from labs
+    router.post('/api/equipment-sharing/request', authMiddleware(), equipmentSharingController.postEquipmentRequest); // ✅ Post a new request
+    router.put('/api/equipment-sharing/approve/:id', authMiddleware(), equipmentSharingController.approveRequest); // ✅ Approve a request
+    router.put('/api/equipment-sharing/reject/:id', authMiddleware(), equipmentSharingController.rejectRequest); // ✅ Reject a request
 //................................................................................................................................................
 
 //inventory routes //
     router.post('/api/inventory/add', authMiddleware(), inventoryController.addEquipment);
     router.put('/api/inventory/update/:id', authMiddleware(), inventoryController.updateEquipmentStatus);
     router.get('/api/inventory/list', authMiddleware(), inventoryController.listEquipment);
+    router.get('/api/inventory/details/:id', authMiddleware(), inventoryController.getEquipmentDetails);
     router.get('/api/inventory/list/:id', authMiddleware(), inventoryController.getEquipmentById);
     router.get('/api/inventory/list/:type', authMiddleware(), inventoryController.getEquipmentByType);
     router.get('/api/inventory/list/:code', authMiddleware(), inventoryController.getEquipmentByQRCode);

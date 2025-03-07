@@ -1,18 +1,34 @@
 const db = require('../../config/db');
 
 const Equipment = {
-    // ✅ Add Equipment
-    addEquipment: (name, type, uniqueCode, status, powerRating, manufacturer, lab, quantity, callback) => {
-        const sql = 'INSERT INTO equipment (name, type, unique_code, status, power_rating, manufacturer, lab, quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        db.query(sql, [name, type, uniqueCode, status, powerRating, manufacturer, lab, quantity], callback);
-    },
+// ✅ Add Equipment
+addEquipment: async (name, type, uniqueCode, status, powerRating, manufacturer, lab, quantity) => {
+    const sql = `
+        INSERT INTO equipment (name, type, unique_code, status, power_rating, manufacturer, lab, quantity)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const [result] = await db.query(sql, [name, type, uniqueCode, status, powerRating, manufacturer, lab, quantity]);
+    return result;
+},
 
-    // ✅ Get all equipment
-    getAllEquipment: (callback) => {
-        const sql = 'SELECT * FROM equipment ORDER BY created_at DESC';
-        db.query(sql, callback);
-    },
+// ✅ Get all equipment
+getAllEquipment: async () => {
+    const sql = 'SELECT * FROM equipment ORDER BY created_at DESC';
+    const [results] = await db.query(sql);
+    return results;
+},
 
+// ✅ Get equipment with its individual items
+getEquipmentWithItems: async (equipmentId) => {
+    const query = `
+        SELECT e.*, ei.unique_code AS item_code, ei.status AS item_status
+        FROM equipment e
+        LEFT JOIN equipmentitems ei ON e.id = ei.equipment_id
+        WHERE e.id = ?
+    `;
+    const [results] = await db.query(query, [equipmentId]);
+    return results;
+},
 // // Get single equipment by ID
 //     getEquipmentById = async (id) => {
 //     return new Promise((resolve, reject) => {

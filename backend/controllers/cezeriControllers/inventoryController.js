@@ -1,7 +1,8 @@
 const Equipment = require('../../models/cezeriModels/Equipment');
 const db = require("../../config/db");
 
-// ✅ Add Equipment (Admin & Lab Manager)
+// ✅ Add Equipment
+// ✅ Add Equipment
 exports.addEquipment = (req, res) => {
     const { name, type, status, powerRating, manufacturer, quantity } = req.body;
 
@@ -12,17 +13,81 @@ exports.addEquipment = (req, res) => {
         return res.status(400).json({ message: 'Name, Type, Status, Lab, and Quantity are required' });
     }
 
+    // Generate a unique code for the equipment group
     const uniqueCode = `EQ-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    Equipment.addEquipment(name, type, uniqueCode, status, powerRating, manufacturer, lab, quantity, (err, result) => {
+    // Step 1: Insert into the `equipment` table
+    const insertEquipmentQuery = `
+        INSERT INTO equipment (name, type, unique_code, status, power_rating, manufacturer, lab, quantity)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const equipmentValues = [name, type, uniqueCode, status, powerRating, manufacturer, lab, quantity];
+
+    db.query(insertEquipmentQuery, equipmentValues, (err, equipmentResult) => {
         if (err) {
-            console.log(err);
+            console.error('Error adding equipment:', err);
             return res.status(500).json({ message: 'Database error' });
         }
-        res.status(201).json({ message: 'Equipment added successfully', uniqueCode });
+
+        const equipmentId = equipmentResult.insertId; // Get the ID of the newly inserted equipment
+
+        // Step 2: Insert individual items into `equipmentitems`
+        const insertEquipmentItemsQuery = `
+            INSERT INTO equipmentitems (equipment_id, unique_code, status)
+            VALUES (?, ?, ?)
+        `;
+
+        let itemsInserted = 0; // Counter to track how many items have been inserted
+
+        // Generate unique codes for each item
+        for (let i = 0; i < quantity; i++) {
+            const itemUniqueCode = `${uniqueCode}-${i + 1}`; // Append a suffix to make each code unique
+
+            db.query(insertEquipmentItemsQuery, [equipmentId, itemUniqueCode, status], (err) => {
+                if (err) {
+                    console.error('Error adding equipment item:', err);
+                    return res.status(500).json({ message: 'Database error' });
+                }
+
+                itemsInserted++;
+
+                // Check if all items have been inserted
+                if (itemsInserted === quantity) {
+                    res.status(201).json({ message: 'Equipment added successfully', uniqueCode });
+                }
+            });
+        }
     });
 };
 
+// ✅ Get Equipment Details
+exports.getEquipmentDetails = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const equipmentWithItems = await Equipment.getEquipmentWithItems(id);
+        if (!equipmentWithItems.length) {
+            return res.status(404).json({ message: 'Equipment not found' });
+        }
+
+        const response = {
+            id: equipmentWithItems[0].id,
+            name: equipmentWithItems[0].name,
+            type: equipmentWithItems[0].type,
+            status: equipmentWithItems[0].status,
+            quantity: equipmentWithItems[0].quantity,
+            items: equipmentWithItems.map(item => ({
+                unique_code: item.item_code,
+                status: item.item_status,
+            })),
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('Error fetching equipment details:', error);
+        res.status(500).json({ message: 'Database error' });
+    }
+};
 // // ✅ Get all equipment
 // exports.listEquipment = (req, res) => {
 //     Equipment.getAllEquipment((err, results) => {
