@@ -1,7 +1,12 @@
 const Project = require('../models/project');
+const db = require('../config/db');
 
 exports.landingPage = (req, res) => {
   res.render('index', {pageTitle: "Welcome aboard"});
+}
+
+exports.pendingApproval = (req, res) => {
+  res.render('pendingApproval', {pageTitle: "Pending Approval"});
 }
 
 exports.dashboardGet = (req, res) => {
@@ -129,6 +134,7 @@ exports.projectDetailsGet = (req, res) => {
     });
   });
 };
+
 exports.settingsGet = (req, res) => {
   const { id, name, email, lab, role } = req.user;
 
@@ -143,14 +149,21 @@ exports.settingsGet = (req, res) => {
 exports.accountsGet = (req, res) => {
   const { id, name, email, lab, role } = req.user;
 
-  res.render('accounts', {
-    pageTitle: "User Management", 
-    credentials: {
-      id, name, email, lab, role
+  // Fetch all users from the database (without updated_at)
+  const sql = 'SELECT id, name, email, role, approved, created_at FROM users';
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("❌ Database Error (Fetch Users):", err);
+      return res.status(500).json({ message: "Database error" });
     }
-  });
-}
 
+    res.render('accounts', {
+      pageTitle: "User Management",
+      credentials: { id, name, email, lab, role },
+      users: results // Pass the list of users to the view
+    });
+  });
+};
 
 // Design Studio
 exports.ds_inventoryGet = (req, res) => {

@@ -19,16 +19,16 @@
 
   {{#if (eq credentials.lab "design_studio")}}
     <div class="pages">
-      <a href="/dashboardGet" class="page_link">
+      <a href="/dashboardGet" class="page_link {{#if (eq credentials.role 'lab_manager')}}hidden{{/if}}">
         <span>
           <img src="/assets/pagelinks/dashboard.svg" alt="dashboard">
         </span>
         <span>Dashboard</span>
       </a>
 
-      <a href="/ds_inventoryGet" class="page_link">
+     <a href="/inventory" class="page_link">
         <span>
-          <img src="/assets/pagelinks/track.svg" alt="sales_analytics">
+          <img src="/assets/pagelinks/inventory.svg" alt="inventory">
         </span>
         <span>Inventory</span>
       </a>
@@ -74,16 +74,16 @@
 
   {{#if (eq credentials.lab "cezeri")}}
     <div class="pages">
-      <a href="/dashboardGet" class="page_link">
+     <a href="/dashboardGet" class="page_link {{#if (eq credentials.role 'lab_manager')}}hidden{{/if}}">
         <span>
           <img src="/assets/pagelinks/dashboard.svg" alt="dashboard">
         </span>
         <span>Dashboard</span>
       </a>
 
-      <a href="/cz_inventoryGet" class="page_link">
+      <a href="/inventory" class="page_link">
         <span>
-          <img src="/assets/pagelinks/track.svg" alt="sales_analytics">
+          <img src="/assets/pagelinks/inventory.svg" alt="inventory">
         </span>
         <span>Inventory</span>
       </a>
@@ -129,16 +129,16 @@
 
   {{#if (eq credentials.lab "medtech")}}
     <div class="pages">
-      <a href="/dashboardGet" class="page_link">
+      <a href="/dashboardGet" class="page_link {{#if (eq credentials.role 'lab_manager')}}hidden{{/if}}">
         <span>
           <img src="/assets/pagelinks/dashboard.svg" alt="dashboard">
         </span>
         <span>Dashboard</span>
       </a>
 
-      <a href="/mt_inventoryGet" class="page_link">
+     <a href="/inventory" class="page_link">
         <span>
-          <img src="/assets/pagelinks/track.svg" alt="sales_analytics">
+          <img src="/assets/pagelinks/inventory.svg" alt="inventory">
         </span>
         <span>Inventory</span>
       </a>

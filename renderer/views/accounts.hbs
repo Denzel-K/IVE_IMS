@@ -6,8 +6,71 @@
 
     <div class="dynamic_body">
       {{!-- Your sections and divs go here --}}
+      <div class="user-management">
+  <table class="projects-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Created At</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+      <tr>
+        <td class="name_td">{{this.name}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.role}}</td>
+        <td>
+          {{#if this.approved}}
+            <span class="approval-stat-label" data-approval-stat="approved">Approved</span>
+          {{else}}
+            <span class="approval-stat-label" data-approval-stat="pending">Pending</span>
+          {{/if}}
+        </td>
+        <td>{{formatDate this.created_at}}</td>
+        <td class="actions">
+          {{#unless this.approved}}
+            <button class="approve-btn" data-user-id="{{this.id}}">Approve</button>
+          {{/unless}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
     </div>
   </section>
 </section>
 
 <script src="js/shared.js"></script>
+<script>
+  // Add event listeners for approve buttons
+  document.querySelectorAll('.approve-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+      const userId = button.getAttribute('data-user-id');
+      try {
+        const response = await fetch(`/api/approve-user/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          alert('User approved successfully!');
+          window.location.reload(); // Refresh the page to reflect changes
+        } else {
+          const data = await response.json();
+          alert(data.message || 'Failed to approve user');
+        }
+      } catch (error) {
+        console.error('Error approving user:', error);
+        alert('An error occurred while approving the user');
+      }
+    });
+  });
+</script>

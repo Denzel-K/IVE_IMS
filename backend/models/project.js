@@ -136,15 +136,15 @@ const Project = {
     
     // Fetch assigned equipment for the project
     getAssignedEquipment: (projectId, callback) => {
-        const sql = `
-            SELECT * 
-            FROM equipment
-            WHERE current_lab = ?
-        `;
-        db.query(sql, [projectId], (err, results) => {
-            if (err) return callback(err);
-            callback(null, results); // Return assigned equipment
-        });
+      const sql = `
+          SELECT * 
+          FROM equipment
+          WHERE lab = ?
+      `;
+      db.query(sql, [projectId], (err, results) => {
+          if (err) return callback(err);
+          callback(null, results); // Return assigned equipment
+      });
     },
 
     // Fetch equipment usage details

@@ -14,42 +14,169 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE equipment (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    lab VARCHAR(100) NOT NULL,  -- Which lab owns this item
-    status ENUM('available', 'in use', 'maintenance', 'damaged') DEFAULT 'availabel',
-    unique_code VARCHAR(255) UNIQUE NOT NULL, -- Barcode/QR Code scanning
-    current_location VARCHAR(255) NOT NULL, -- Tracks where the item is
-    last_maintenance DATE DEFAULT NULL,
-    next_maintenance DATE DEFAULT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    current_lab VARCHAR(100) NOT NULL
-);
+-- Table structure for table `activity_logs`
+CREATE TABLE IF NOT EXISTS `activity_logs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `action` text NOT NULL,
+  `user_name` varchar(255) NOT NULL,
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE machines (
-    id INT PRIMARY KEY, -- Same ID as equipment
-    power_rating VARCHAR(50), -- e.g., "220V, 3HP"
-    manufacturer VARCHAR(255),
-    FOREIGN KEY (id) REFERENCES equipment(id) ON DELETE CASCADE
-);
+-- Table structure for table `bookinglogs`
+CREATE TABLE IF NOT EXISTS `bookinglogs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `reservation_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `equipment_id` int NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `lab` enum('design-studio','cezeri-lab','medtech-lab') NOT NULL,
+  `purpose` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `reservation_id` (`reservation_id`),
+  KEY `user_id` (`user_id`),
+  KEY `equipment_id` (`equipment_id`),
+  CONSTRAINT `bookinglogs_ibfk_1` FOREIGN KEY (`reservation_id`) REFERENCES `reservations` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `bookinglogs_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `bookinglogs_ibfk_3` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE maintenance_reminders (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    equipment_id INT NOT NULL,
-    reminder_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pending', 'completed') DEFAULT 'pending',
-    FOREIGN KEY (equipment_id) REFERENCES equipment(id) ON DELETE CASCADE
-);
+-- Table structure for table `equipment`
+CREATE TABLE IF NOT EXISTS `equipment` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` enum('electrical','mechanical','consumables') NOT NULL,
+  `unique_code` varchar(255) NOT NULL,
+  `status` enum('available','in-use','maintenance') DEFAULT 'available',
+  `power_rating` varchar(100) DEFAULT NULL,
+  `manufacturer` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `lab` varchar(255) NOT NULL,
+  `quantity` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_code` (`unique_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE asset_transfers (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    equipment_id INT NOT NULL,
-    from_lab VARCHAR(100) NOT NULL,
-    to_lab VARCHAR(100) NOT NULL,
-    transfer_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (equipment_id) REFERENCES equipment(id) ON DELETE CASCADE
-);
+-- Table structure for table `equipment_requests`
+CREATE TABLE IF NOT EXISTS `equipment_requests` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `equipment_name` varchar(255) NOT NULL,
+  `from_lab` varchar(255) NOT NULL,
+  `to_lab` varchar(255) NOT NULL,
+  `quantity` int NOT NULL,
+  `purpose` text NOT NULL,
+  `time_slot` varchar(50) NOT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
+  `requested_by` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `requested_by` (`requested_by`),
+  CONSTRAINT `equipment_requests_ibfk_1` FOREIGN KEY (`requested_by`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Table structure for table `equipmentitems`
+CREATE TABLE IF NOT EXISTS `equipmentitems` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `equipment_id` int NOT NULL,
+  `unique_code` varchar(255) NOT NULL,
+  `status` enum('available','in-use','maintenance') DEFAULT 'available',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_code` (`unique_code`),
+  KEY `equipment_id` (`equipment_id`),
+  CONSTRAINT `equipmentitems_ibfk_1` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Table structure for table `maintenance_logs`
+CREATE TABLE IF NOT EXISTS `maintenance_logs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `equipment_id` int NOT NULL,
+  `technician_id` int NOT NULL,
+  `last_maintenance` date NOT NULL,
+  `next_maintenance` date NOT NULL,
+  `maintenance_type` enum('routine','repair','calibration') NOT NULL,
+  `issue` text NOT NULL,
+  `status` enum('completed','pending','in-progress') NOT NULL DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `equipment_id` (`equipment_id`),
+  KEY `technician_id` (`technician_id`),
+  CONSTRAINT `maintenance_logs_ibfk_1` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `maintenance_logs_ibfk_2` FOREIGN KEY (`technician_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Table structure for table `maintenance_requests`
+CREATE TABLE IF NOT EXISTS `maintenance_requests` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `equipment_id` int NOT NULL,
+  `requested_by` int NOT NULL,
+  `issue` text NOT NULL,
+  `status` enum('pending','completed') DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `equipment_id` (`equipment_id`),
+  KEY `requested_by` (`requested_by`),
+  CONSTRAINT `maintenance_requests_ibfk_1` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `maintenance_requests_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Table structure for table `misuse_reports`
+CREATE TABLE IF NOT EXISTS `misuse_reports` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `equipment_id` int NOT NULL,
+  `reported_by` int NOT NULL,
+  `issue` text NOT NULL,
+  `reported_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `reported_by` (`reported_by`),
+  KEY `equipment_id` (`equipment_id`),
+  CONSTRAINT `misuse_reports_ibfk_1` FOREIGN KEY (`reported_by`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `misuse_reports_ibfk_2` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `Reservations` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `equipment_item_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `time_slot_id` int NOT NULL,
+  `date` date NOT NULL,
+  `lab` varchar(255) NOT NULL,
+  `purpose` text NOT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `equipment_item_id` (`equipment_item_id`),
+  KEY `user_id` (`user_id`),
+  KEY `time_slot_id` (`time_slot_id`),
+  CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`equipment_item_id`) REFERENCES `EquipmentItems` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `reservations_ibfk_3` FOREIGN KEY (`time_slot_id`) REFERENCES `timeslots` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Table structure for table `timeslots`
+CREATE TABLE IF NOT EXISTS `timeslots` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `slot_time` varchar(50) NOT NULL,
+  `available` tinyint(1) DEFAULT '1',
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Table structure for table `usage_logs`
+CREATE TABLE IF NOT EXISTS `usage_logs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `equipment_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `equipment_id` (`equipment_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `usage_logs_ibfk_1` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `usage_logs_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 CREATE TABLE projects (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,8 +185,10 @@ CREATE TABLE projects (
     lab VARCHAR(25) NOT NULL,
     items VARCHAR(255) NOT NULL,
     status ENUM('active', 'completed', 'terminated') DEFAULT 'active',
+    approval_stat ENUM('pending', 'approved', 'declined') DEFAULT 'pending',
     start_date DATE,
     end_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     owner_id INT NOT NULL,
     FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -71,100 +200,3 @@ CREATE TABLE project_team (
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-
-ALTER TABLE projects ADD COLUMN admin_approval ENUM('pending', 'approved', 'denied') DEFAULT 'pending';
-ALTER TABLE projects ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-
-CREATE TABLE reservations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    equipment_id INT NOT NULL,
-    project_id INT NOT NULL,
-    reserved_by INT NOT NULL,
-    start_time DATETIME NOT NULL,
-    end_time DATETIME NOT NULL,
-    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
-    FOREIGN KEY (equipment_id) REFERENCES equipment(id) ON DELETE CASCADE,
-    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (reserved_by) REFERENCES users(id) ON DELETE CASCADE
-);
-
-CREATE TABLE project_files (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    project_id INT NOT NULL,
-    file_name VARCHAR(255) NOT NULL,
-    file_path VARCHAR(500) NOT NULL,
-    uploaded_by INT NOT NULL,
-    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE CASCADE
-);
-
-CREATE TABLE timeslots (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    equipment_id INT NOT NULL, -- Replacing resource_id with equipment_id
-    start_time DATETIME NOT NULL,
-    end_time DATETIME NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (equipment_id) REFERENCES equipment(id) -- Assuming an 'equipment' table exists
-);
-
-CREATE TABLE usage_history (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    equipment_id INT NOT NULL,
-    user_id INT NOT NULL,
-    start_time DATETIME NOT NULL,
-    end_time DATETIME NOT NULL,
-    FOREIGN KEY (equipment_id) REFERENCES equipment(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
-ALTER TABLE usage_history ADD COLUMN workspace_id INT NOT NULL;
-
-CREATE TABLE workspaces (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    capacity INT NOT NULL,
-    availabel BOOLEAN DEFAULT TRUE
-);
-
-CREATE TABLE workspace_reservations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    workspace_id INT NOT NULL,
-    project_id INT NOT NULL,
-    reserved_by INT NOT NULL,
-    start_time DATETIME NOT NULL,
-    end_time DATETIME NOT NULL,
-    status ENUM('pending', 'approved', 'cancelled') DEFAULT 'pending',
-    FOREIGN KEY (workspace_id) REFERENCES workspaces(id),
-    FOREIGN KEY (reserved_by) REFERENCES users(id),
-    FOREIGN KEY (project_id) REFERENCES projects(id)
-);
-
-CREATE TABLE workspace_usage_history (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    workspace_id INT NOT NULL,
-    user_id INT NOT NULL,
-    start_time DATETIME NOT NULL,
-    end_time DATETIME NOT NULL,
-    FOREIGN KEY (workspace_id) REFERENCES workspaces(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
-
--- Insert sample data into the equipment table
-INSERT INTO equipment (name, type, unique_code, status, power_rating, manufacturer, lab, quantity)
-VALUES
-    ('Oscilloscope', 'electrical', 'EQ-123456789', 'available', '100W', 'Tektronidesign-studiox', 'cezeri', 5),
-    ('Centrifuge', 'mechanical', 'EQ-987654321', 'in-use', '500W', 'Eppendorf', 'design-studio', 2),
-    ('Microscope', 'electrical', 'EQ-456789123', 'maintenance', '50W', 'Nikon', 'cezeri', 3),
-    ('Pipettes', 'consumables', 'EQ-321654987', 'available', NULL, 'Gilson', 'design-studio', 10),
-    ('Autoclave', 'mechanical', 'EQ-789123456', 'available', '1500W', 'Tuttnauer', 'cezeri', 1),
-    ('Hot Plate', 'electrical', 'EQ-654987321', 'in-use', '200W', 'Corning', 'design-studio', 4),
-    ('Vortex Mixer', 'mechanical', 'EQ-147258369', 'available', '100W', 'Scientific Industries', 'medtech', 2),
-    ('Glassware Set', 'consumables', 'EQ-369258147', 'available', NULL, 'Pyrex', 'cezeri', 20),
-    ('Spectrophotometer', 'electrical', 'EQ-258369147', 'maintenance', '300W', 'Thermo Fisher', 'medtech', 1),
-    ('Microcentrifuge', 'mechanical', 'EQ-951753852', 'in-use', '250W', 'Beckman Coulter', 'medtech', 3);
-cezeri-lab

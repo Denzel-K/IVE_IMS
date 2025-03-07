@@ -133,30 +133,25 @@ regForm.addEventListener("submit", async (e) => {
   const password = regForm.password.value.trim();
   const errorsDiv = regForm.querySelector(".signup_errors");
 
-  // Ensure strig consistency for lab
+  // Ensure string consistency for lab
   let newLab;
-  if (lab == "Design Studio"){
+  if (lab == "Design Studio") {
     newLab = "design_studio";
-  }
-  else if (lab == "Cezeri"){
+  } else if (lab == "Cezeri") {
     newLab = "cezeri";
-  }
-  else if (lab == "MedTech"){
+  } else if (lab == "MedTech") {
     newLab = "medtech";
   }
 
-  // Ensure strig consistency for role
+  // Ensure string consistency for role
   let newRole;
-  if (role == "Lab Manager"){
+  if (role == "Lab Manager") {
     newRole = "lab_manager";
-  }
-  else if (role == "Student"){
+  } else if (role == "Student") {
     newRole = "student";
-  }
-  else if (role == "Technician"){
+  } else if (role == "Technician") {
     newRole = "technician";
   }
-
 
   let errors = [];
 
@@ -182,12 +177,18 @@ regForm.addEventListener("submit", async (e) => {
     });
 
     const data = await response.json();
-    if (!response.ok){
+    if (!response.ok) {
       console.log("Registration failed.");
       throw new Error(data.message || "Registration failed.");
     }
     regForm.reset(); // Clear form
-    window.location.href = "/dashboardGet";
+
+    // Redirect based on role
+    if (data.user.role === "lab_manager") {
+      window.location.href = "/inventory";
+    } else {
+      window.location.href = "/pendingApproval";
+    }
   } 
   catch (error) {
     displayErrors(errorsDiv, [error.message]);
@@ -225,13 +226,22 @@ loginForm.addEventListener("submit", async (e) => {
     if (!response.ok) throw new Error(data.message || "Login failed.");
 
     loginForm.reset(); // Clear form
-    window.location.href = "/dashboardGet"; 
+
+    // Redirect based on role
+    if (data.user.role === "lab_manager") {
+      window.location.href = "/inventory";
+    } 
+    else if (data.user.role === "admin") {
+      window.location.href = "/accountsGet";
+    }
+    else {
+      window.location.href = "/dashboardGet";
+    }
   } 
   catch (error) {
     displayErrors(errorsDiv, [error.message]);
   }
 });
-
 
 // Reset pasword modal
 const init_pass_reset = document.querySelector('#init-pass-reset');

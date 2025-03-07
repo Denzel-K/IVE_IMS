@@ -8,82 +8,86 @@
       {{!-- Your sections and divs go here --}}
       <div class="det_cont">
         <div class="breadcrumb">
-          <a href="/projectsGet">Projects</a> &gt; <span>{{project.name}}</span>
+            <a href="/projectsGet">Projects</a> &gt; <span>{{project.name}}</span>
         </div>
 
         <div class="project-details">
-          <h1>{{project.name}}</h1>
-          <div class="project-meta">
-            <span class="status-label">{{capitalizeFirst project.status}}</span>
-            <span>{{formatDate project.start_date}} - {{formatDate project.end_date}}</span>
-          </div>
-          <p>{{project.description}}</p>
-
-          <!-- Dropdown to change project status -->
-          <div class="status-update">
-            <label for="status-select">Update Project Status:</label>
-            <select id="status-select" data-project-id="{{project.id}}">
-              <option value="active" {{#if (eq project.status "active")}}selected{{/if}}>Active</option>
-              <option value="completed" {{#if (eq project.status "completed")}}selected{{/if}}>Completed</option>
-              <option value="terminated" {{#if (eq project.status "terminated")}}selected{{/if}}>Terminated</option>
-            </select>
-          </div>
-
-          <!-- Team Members Section -->
-          <div class="t_members_box">
-            <h3>Team Members</h3>
-            <ul class="team-members">
-              {{#each teamMembers}}
-                <li>{{this.name}}</li>
-              {{/each}}
-            </ul>
-          </div>
-
-          <!-- Resource Allocation Section -->
-          {{#if (eq credentials.role "lab_manager")}}
-            <div class="resource-allocation">
-              <h3>Resource Allocation</h3>
-
-              <!-- Assign Equipment to Project -->
-              <div class="assign-equipment">
-                <h4>Assign Equipment</h4>
-                <form id="assign-equipment-form">
-                  <label for="equipment-select">Select Equipment:</label>
-                  <select id="equipment-select" name="equipment_id">
-                    {{#each availableEquipment}}
-                      <option value="{{this.id}}">{{this.name}} ({{this.unique_code}})</option>
-                    {{/each}}
-                  </select>
-                  <button type="submit">Assign</button>
-                </form>
-              </div>
-
-              <!-- View Assigned Equipment -->
-              <div class="assigned-equipment">
-                <h4>Assigned Equipment</h4>
-                <ul>
-                  {{#each assignedEquipment}}
-                    <li>
-                      {{this.name}} ({{this.unique_code}}) - {{this.status}}
-                      <button class="unassign-btn" data-equipment-id="{{this.id}}">Unassign</button>
-                    </li>
-                  {{/each}}
-                </ul>
-              </div>
-
-              <!-- Equipment Usage and Conflicts -->
-              <div class="equipment-usage">
-                <h4>Equipment Usage</h4>
-                <ul>
-                  {{#each equipmentUsage}}
-                    <li>
-                      {{this.name}} ({{this.unique_code}}) - Used by {{this.user_name}} until {{formatDate this.end_date}}
-                    </li>
-                  {{/each}}
-                </ul>
-              </div>
+            <h1>{{project.name}}</h1>
+            <div class="project-meta">
+                <span class="status-label">{{capitalizeFirst project.status}}</span>
+                <span>{{formatDate project.start_date}} - {{formatDate project.end_date}}</span>
             </div>
-          {{/if}}
+            <p>{{project.description}}</p>
+
+            <!-- Dropdown to change project status -->
+            <div class="status-update">
+                <label for="status-select">Update Project Status:</label>
+                <select id="status-select" data-project-id="{{project.id}}">
+                    <option value="active" {{#if (eq project.status "active")}}selected{{/if}}>Active</option>
+                    <option value="completed" {{#if (eq project.status "completed")}}selected{{/if}}>Completed</option>
+                    <option value="terminated" {{#if (eq project.status "terminated")}}selected{{/if}}>Terminated</option>
+                </select>
+            </div>
+
+            <!-- Team Members Section -->
+            <div class="t_members_box">
+                <h3>Team Members</h3>
+                <ul class="team-members">
+                    {{#each teamMembers}}
+                    <li>{{this.name}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            <!-- Resource Allocation Section -->
+            {{#if (eq credentials.role "lab_manager")}}
+              <div class="resource-allocation">
+                <h3>Resource Allocation</h3>
+
+                <!-- Assign Equipment to Project -->
+                <div class="assign-equipment card">
+                  <h4>Assign Equipment</h4>
+                  <form id="assign-equipment-form" class="form">
+                    <div class="form-group">
+                      <label for="equipment-select">Select Equipment:</label>
+                      <select id="equipment-select" name="equipment_id" class="form-control">
+                        {{#each availableEquipment}}
+                        <option value="{{this.id}}">{{this.name}} ({{this.unique_code}})</option>
+                        {{/each}}
+                      </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Assign</button>
+                  </form>
+                </div>
+
+                <!-- View Assigned Equipment -->
+                <div class="assigned-equipment card">
+                  <h4>Assigned Equipment</h4>
+                  <ul class="equipment-list">
+                    {{#each assignedEquipment}}
+                    <li class="equipment-item">
+                      <span class="equipment-name">{{this.name}} ({{this.unique_code}})</span>
+                      <span class="equipment-status">{{this.status}}</span>
+                      <button class="btn btn-danger unassign-btn" data-equipment-id="{{this.id}}">Unassign</button>
+                    </li>
+                    {{/each}}
+                  </ul>
+                </div>
+
+                <!-- Equipment Usage and Conflicts -->
+                <div class="equipment-usage card">
+                  <h4>Equipment Usage</h4>
+                  <ul class="usage-list">
+                    {{#each equipmentUsage}}
+                    <li class="usage-item">
+                      <span class="equipment-name">{{this.name}} ({{this.unique_code}})</span>
+                      <span class="usage-details">Used by {{this.user_name}} until {{formatDate this.end_date}}</span>
+                    </li>
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            {{/if}}
         </div>
       </div>
     </div>

@@ -71,57 +71,83 @@ exports.updateApprovalStatus = (req, res) => {
     }
 
     Project.updateApprovalStatus(id, approval_stat, (err) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ message: "Database error" });
-        }
-        res.json({ message: "Project approval status updated successfully" });
+      if (err) {
+          console.log(err);
+          return res.status(500).json({ message: "Database error" });
+      }
+      res.json({ message: "Project approval status updated successfully" });
     });
 };
 
 
-exports.assignEquipment = async (req, res) => {
+exports.assignEquipment = (req, res) => {
   const { id } = req.params;
   const { equipment_id } = req.body;
 
-  try {
-    // Check if the equipment is already assigned to another project
-    const [conflict] = await db.query(
-      "SELECT * FROM equipment WHERE id = ? AND status = 'in use'",
-      [equipment_id]
-    );
+  // Check if the equipment is already assigned to another project
+  db.query(
+    "SELECT * FROM equipment WHERE id = ? AND status = 'in-use'",
+    [equipment_id],
+    (err, conflict) => {
+      if (err) {
+        console.error("Error checking equipment status:", err);
+        return res.status(500).json({ message: "Database error" });
+      }
 
-    if (conflict.length > 0) {
-      return res.status(400).json({ message: "Equipment is already in use." });
+      if (conflict.length > 0) {
+        return res.status(400).json({ message: "Equipment is already in use." });
+      }
+
+      // Assign equipment to the project
+      db.query(
+        "UPDATE equipment SET status = 'in-use', lab = ? WHERE id = ?",
+        [id, equipment_id],
+        (err) => {
+          if (err) {
+            console.error("Error assigning equipment:", err);
+            return res.status(500).json({ message: "Database error" });
+          }
+
+          res.json({ message: "Equipment assigned successfully." });
+        }
+      );
     }
-
-    // Assign equipment to the project
-    await db.query(
-      "UPDATE equipment SET status = 'in use', current_lab = ? WHERE id = ?",
-      [id, equipment_id]
-    );
-
-    res.json({ message: "Equipment assigned successfully." });
-  } catch (err) {
-    console.error("Error assigning equipment:", err);
-    res.status(500).json({ message: "Database error" });
-  }
+  );
 };
 
-exports.unassignEquipment = async (req, res) => {
+exports.unassignEquipment = (req, res) => {
   const { id } = req.params;
   const { equipment_id } = req.body;
 
-  try {
-    // Unassign equipment from the project
-    await db.query(
-      "UPDATE equipment SET status = 'available', current_lab = NULL WHERE id = ?",
-      [equipment_id]
-    );
+  // Fetch original lab before unassigning
+  db.query(
+    "SELECT lab FROM equipment WHERE id = ?",
+    [equipment_id],
+    (err, results) => {
+      if (err) {
+        console.error("Error fetching lab info:", err);
+        return res.status(500).json({ message: "Database error" });
+      }
 
-    res.json({ message: "Equipment unassigned successfully." });
-  } catch (err) {
-    console.error("Error unassigning equipment:", err);
-    res.status(500).json({ message: "Database error" });
-  }
+      if (results.length === 0) {
+        return res.status(404).json({ message: "Equipment not found." });
+      }
+
+      const originalLab = results[0].lab;
+
+      // Unassign equipment from the project
+      db.query(
+        "UPDATE equipment SET status = 'available', lab = ? WHERE id = ?",
+        [originalLab, equipment_id],
+        (err) => {
+          if (err) {
+            console.error("Error unassigning equipment:", err);
+            return res.status(500).json({ message: "Database error" });
+          }
+
+          res.json({ message: "Equipment unassigned successfully." });
+        }
+      );
+    }
+  );
 };
